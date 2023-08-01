@@ -2,8 +2,10 @@ import React from "react";
 import CurrentLeague from "./CurrentLeague";
 
 export default function LeagueEntry({ league }) {
+  const lowercaseTitle = league.league_name.toLowerCase();
+
   const differenceInTime =
-    new Date(league.starting_date) - new Date(league.end_date);
+    new Date(league.end_date) - new Date(league.starting_date);
 
   let remainingDays;
   if (differenceInTime >= 0) {
@@ -13,11 +15,17 @@ export default function LeagueEntry({ league }) {
   }
 
   return (
-    <li>
-      <h2>{league.league_name}</h2>
-      <div>
-        <button>Edit</button>
-        <button>Delete</button>
+    <div className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
+      <div className="flex justify-between">
+        <h2>{league.league_name}</h2>
+        <div className="flex gap-2">
+          <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded">
+            Edit
+          </button>
+          <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded">
+            Delete
+          </button>
+        </div>
       </div>
       <p>
         Start date: {league.starting_date} | End date: {league.end_date}
@@ -26,11 +34,11 @@ export default function LeagueEntry({ league }) {
       <p>Midway point: {league.midway_point}</p>
       <p>Number of groups in league: {league.league_events}</p>
 
-      <h3>
-        {remainingDays} left days for the {league.league_name}
-      </h3>
+      <h3>{remainingDays} days left to play in this league.</h3>
 
-      <button>Add event/group to {league.league_name}</button>
-    </li>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        Add group to {lowercaseTitle} league
+      </button>
+    </div>
   );
 }

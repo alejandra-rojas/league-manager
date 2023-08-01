@@ -25,11 +25,19 @@ function App() {
 
   return (
     <div>
-      <h1>Highbury and Islington Leagues</h1>
-      <div className="button-container">
-        <button>Login</button>
-        <button>Add New</button>
-        <button>Sign Out</button>
+      <h1 className="text-3xl font-bold underline">
+        Highbury and Islington Leagues
+      </h1>
+      <div className="inline-flex">
+        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
+          Login
+        </button>
+        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4">
+          Create League
+        </button>
+        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
+          Sign Out
+        </button>
       </div>
       <h2>Current Leagues</h2>
       {sortedLeagues?.map((league) => (
