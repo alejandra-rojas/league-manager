@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import LeagueEntry from "./components/LeagueEntry";
 import Modal from "./components/Modal";
 import Header from "./components/Header";
+import Auth from "./components/Auth";
 
 function App() {
   const [leagues, setLeagues] = useState(null);
+
+  const authToken = false;
 
   const getData = async () => {
     try {
@@ -29,7 +32,8 @@ function App() {
 
   return (
     <div>
-      <Header getData={getData} />
+      {!authToken && <Auth />}
+      {authToken && <Header getData={getData} />}
       <h2>Current Leagues</h2>
       {sortedLeagues?.map((league) => (
         <LeagueEntry key={league.id} league={league} getData={getData} />
