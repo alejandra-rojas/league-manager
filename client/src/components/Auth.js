@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 
 function Auth() {
-  const [isLogIn, setIsLogIn] = useState(false);
+  const [isLogIn, setIsLogIn] = useState(true);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
+
   const [error, setError] = useState(null);
 
   const viewLogin = (status) => {
     setError(null);
     setIsLogIn(status);
+  };
+
+  const handleSubmit = async (e, endpoint) => {
+    e.preventDefault();
+    if (!isLogIn && password !== confirmPassword) {
+      setError("Make sure passwords match!");
+      return;
+    }
+
+    await fetch(`${process.env.REACT_APP_SERVERURL}/${endpoint}`);
   };
 
   return (
@@ -38,6 +52,9 @@ function Auth() {
             className={
               "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
             }
+            onClick={(e) => {
+              handleSubmit(e, isLogIn ? "login" : "signup");
+            }}
           />
           {error && <p>{error}</p>}
         </form>
