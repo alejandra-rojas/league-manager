@@ -17,6 +17,22 @@ export default function LeagueEntry({ league, getData }) {
     remainingDays = 0;
   }
 
+  const deleteLeague = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.status === 200) {
+        getData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
       <div className="flex justify-between">
@@ -28,7 +44,10 @@ export default function LeagueEntry({ league, getData }) {
           >
             Edit
           </button>
-          <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded">
+          <button
+            onClick={() => deleteLeague()}
+            className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+          >
             Delete
           </button>
         </div>

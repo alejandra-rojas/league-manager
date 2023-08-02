@@ -32,5 +32,33 @@ app.post("/leagues", async (req, res) => {
 });
 
 //EDIT A LEAGUE
+app.put("/leagues/:id", async (req, res) => {
+  const { id } = req.params;
+  const { league_name, starting_date, midway_point, end_date } = req.body;
+  try {
+    const editLeague = await pool.query(
+      "UPDATE leagues SET league_name = $1, starting_date = $2, midway_point = $3, end_date = $4 WHERE id = $5;",
+      [league_name, starting_date, midway_point, end_date, id]
+    );
+    res.json(editLeague);
+  } catch (error) {
+    console.log("UPDATE ERROR");
+    console.error(error);
+  }
+});
+
+//DELETE A LEAGUE
+app.delete("/leagues/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteLeague = await pool.query(
+      "DELETE FROM leagues WHERE id = $1;",
+      [id]
+    );
+    res.json(deleteLeague);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));

@@ -5,7 +5,7 @@ function Modal({ mode, setShowModal, getData, league }) {
 
   const [data, setData] = useState({
     league_name: editMode ? league.league_name : "",
-    starting_date: editMode ? league.starting_date : "2023-01-01",
+    starting_date: editMode ? league.starting_date : "",
     midway_point: editMode ? league.midway_point : "",
     end_date: editMode ? league.end_date : "",
   });
@@ -20,7 +20,7 @@ function Modal({ mode, setShowModal, getData, league }) {
       });
 
       if (response.status === 200) {
-        console.log("worked");
+        console.log("Created new league succesfully!");
         setShowModal(false);
         getData();
       }
@@ -32,7 +32,20 @@ function Modal({ mode, setShowModal, getData, league }) {
   const editData = async (e) => {
     e.preventDefault();
     try {
-      await fetch(`http://localhost:8000/leagues/${league.id}`);
+      const response = await fetch(
+        `http://localhost:8000/leagues/${league.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("edited");
+        setShowModal(false);
+        getData();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -111,7 +124,9 @@ function Modal({ mode, setShowModal, getData, league }) {
           <br />
 
           <input
-            className={mode}
+            className={
+              "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+            }
             type="submit"
             onClick={editMode ? editData : postData}
           />
