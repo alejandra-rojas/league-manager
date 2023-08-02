@@ -13,11 +13,14 @@ function Modal({ mode, setShowModal, getData, league }) {
   const postData = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/leagues", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.status === 200) {
         console.log("Created new league succesfully!");
@@ -33,7 +36,7 @@ function Modal({ mode, setShowModal, getData, league }) {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:8000/leagues/${league.id}`,
+        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

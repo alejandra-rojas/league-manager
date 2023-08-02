@@ -8,7 +8,9 @@ function App() {
 
   const getData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/leagues`);
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues`
+      );
       const json = await response.json();
       setLeagues(json);
     } catch (error) {
