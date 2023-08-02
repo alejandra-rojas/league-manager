@@ -32,6 +32,9 @@ function App() {
 
   return (
     <div>
+      <h1 className="text-3xl font-bold underline">
+        Highbury and Islington Leagues
+      </h1>
       {!authToken && <Auth />}
       {authToken && <Header getData={getData} />}
       <h2>Current Leagues</h2>

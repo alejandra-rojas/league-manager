@@ -6,9 +6,6 @@ export default function Header({ getData }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">
-        Highbury and Islington Leagues
-      </h1>
       <div className="inline-flex">
         <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
           Login
