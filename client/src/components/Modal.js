@@ -1,0 +1,124 @@
+import React, { useState } from "react";
+
+function Modal({ mode, setShowModal, getData, league }) {
+  const editMode = mode === "edit" ? true : false;
+
+  const [data, setData] = useState({
+    league_name: editMode ? league.league_name : "",
+    starting_date: editMode ? league.starting_date : "2023-01-01",
+    midway_point: editMode ? league.midway_point : "",
+    end_date: editMode ? league.end_date : "",
+  });
+
+  const postData = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/leagues", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.status === 200) {
+        console.log("worked");
+        setShowModal(false);
+        getData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const editData = async (e) => {
+    e.preventDefault();
+    try {
+      await fetch(`http://localhost:8000/leagues/${league.id}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleChange = (e) => {
+    console.log("changing", e);
+    const { name, value } = e.target;
+
+    setData((data) => ({
+      ...data,
+      [name]: value,
+    }));
+
+    console.log(data);
+  };
+
+  return (
+    <div className="flex justify-end absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-75 ">
+      <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
+        <div className="flex justify-between pb-3">
+          <h3 className="text-xl font-bold">{mode} a new league</h3>
+          <button
+            className="border"
+            onClick={() => {
+              setShowModal(false);
+            }}
+          >
+            X
+          </button>
+        </div>
+        <form className="flex-col">
+          <label htmlFor="leagueName">League name:</label>
+          <input
+            id="leagueName"
+            required
+            maxLength={30}
+            placeholder="ex: 'Women Doubles"
+            name="league_name"
+            value={data.league_name}
+            onChange={handleChange}
+            className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
+          />
+          <br />
+          <label htmlFor="startDate">Start date:</label>
+          <input
+            id="startDate"
+            required
+            type="date"
+            name="starting_date"
+            value={data.starting_date}
+            onChange={handleChange}
+            className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
+          />
+          <br />
+          <label htmlFor="midPoint">Midway point:</label>
+          <input
+            id="midPoint"
+            name="midway_point"
+            required
+            type="date"
+            value={data.midway_point}
+            onChange={handleChange}
+            className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
+          />
+          <br />
+          <label htmlFor="endDate">End date:</label>
+          <input
+            id="endDate"
+            name="end_date"
+            required
+            type="date"
+            value={data.end_date}
+            onChange={handleChange}
+            className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
+          />
+          <br />
+
+          <input
+            className={mode}
+            type="submit"
+            onClick={editMode ? editData : postData}
+          />
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Modal;

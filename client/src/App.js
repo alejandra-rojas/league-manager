@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import LeagueEntry from "./components/LeagueEntry";
+import Modal from "./components/Modal";
+import Header from "./components/Header";
 
 function App() {
   const [leagues, setLeagues] = useState(null);
@@ -25,23 +27,10 @@ function App() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">
-        Highbury and Islington Leagues
-      </h1>
-      <div className="inline-flex">
-        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
-          Login
-        </button>
-        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4">
-          Create League
-        </button>
-        <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
-          Sign Out
-        </button>
-      </div>
+      <Header getData={getData} />
       <h2>Current Leagues</h2>
       {sortedLeagues?.map((league) => (
-        <LeagueEntry key={league.id} league={league} />
+        <LeagueEntry key={league.id} league={league} getData={getData} />
       ))}
 
       <h2>Finished leagues</h2>

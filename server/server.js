@@ -4,6 +4,7 @@ const cors = require("cors");
 const app = express();
 const pool = require("./db");
 app.use(cors());
+app.use(express.json());
 
 // GET ALL LEAGUES
 app.get("/leagues", async (req, res) => {
@@ -15,8 +16,21 @@ app.get("/leagues", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.send("hello");
+// CREATE NEW LEAGUE
+app.post("/leagues", async (req, res) => {
+  const { league_name, starting_date, midway_point, end_date } = req.body;
+  console.log(league_name, starting_date, midway_point, end_date);
+  try {
+    const newLeague = await pool.query(
+      `INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ($1, $2, $3, $4)`,
+      [league_name, starting_date, midway_point, end_date]
+    );
+    res.json(newLeague);
+  } catch (error) {
+    console.error(err);
+  }
 });
+
+//EDIT A LEAGUE
 
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import CurrentLeague from "./CurrentLeague";
+import Modal from "./Modal";
 
-export default function LeagueEntry({ league }) {
+export default function LeagueEntry({ league, getData }) {
+  const [showModal, setShowModal] = useState(false);
+
   const lowercaseTitle = league.league_name.toLowerCase();
 
   const differenceInTime =
@@ -19,7 +22,10 @@ export default function LeagueEntry({ league }) {
       <div className="flex justify-between">
         <h2>{league.league_name}</h2>
         <div className="flex gap-2">
-          <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+          >
             Edit
           </button>
           <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded">
@@ -34,11 +40,21 @@ export default function LeagueEntry({ league }) {
       <p>Midway point: {league.midway_point}</p>
       <p>Number of groups in league: {league.league_events}</p>
 
-      <h3>{remainingDays} days left to play in this league.</h3>
+      <h3>
+        {remainingDays} days left to play in this league -- needs adjustment
+      </h3>
 
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
         Add group to {lowercaseTitle} league
       </button>
+      {showModal && (
+        <Modal
+          mode={"edit"}
+          setShowModal={setShowModal}
+          getData={getData}
+          league={league}
+        />
+      )}
     </div>
   );
 }
