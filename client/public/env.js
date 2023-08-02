@@ -29,7 +29,7 @@ window.env = {
   "npm_config_init_module": "/Users/alerojas/.npm-init.js",
   "USER_ZDOTDIR": "/Users/alerojas",
   "__CFBundleIdentifier": "com.microsoft.VSCode",
-  "npm_command": "start",
+  "npm_command": "run-script",
   "PWD": "/Users/alerojas/Documents/league-manager/client",
   "npm_lifecycle_event": "start",
   "EDITOR": "vi",
