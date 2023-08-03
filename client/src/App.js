@@ -8,7 +8,7 @@ import { useCookies } from "react-cookie";
 function App() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const authToken = cookies.AuthToken;
-  const adminEmail = cookies.AdminEmail;
+  const adminEmail = cookies.Email;
   const [leagues, setLeagues] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -32,8 +32,14 @@ function App() {
   }, []) */
 
   useEffect(() => getData, []);
-
   console.log(leagues);
+
+  //Upcoming leagues
+  const today = new Date();
+  const upcomingLeagues = leagues.filter((league) => {
+    const leagueStartDate = new Date(league.starting_date);
+    return leagueStartDate >= today;
+  });
 
   //Sort by league starting date
   const sortedLeagues = leagues?.sort(
@@ -64,8 +70,14 @@ function App() {
           <p></p>
         </>
       )}
+
       <h2>Current Leagues</h2>
       {sortedLeagues?.map((league) => (
+        <LeagueEntry key={league.id} league={league} getData={getData} />
+      ))}
+
+      <h2>Upcoming Leagues</h2>
+      {upcomingLeagues?.map((league) => (
         <LeagueEntry key={league.id} league={league} getData={getData} />
       ))}
 
