@@ -1,8 +1,10 @@
 CREATE DATABASE leaguesdata;
 
-CREATE TABLE admin (
+CREATE TABLE admin_users (
     admin_email VARCHAR (255) PRIMARY KEY,
     hashed_password VARCHAR(255));
+
+INSERT INTO admin_users  (admin_email, hashed_password) VALUES($1, $2)
 
 CREATE TABLE leagues (
     id SERIAL PRIMARY KEY,
