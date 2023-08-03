@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "./Modal";
+import LeagueModal from "./LeagueModal";
 import { useCookies } from "react-cookie";
 
 export default function Header({ getData }) {
@@ -34,7 +34,11 @@ export default function Header({ getData }) {
         </div>
       </div>
       {showModal && (
-        <Modal mode={"create"} setShowModal={setShowModal} getData={getData} />
+        <LeagueModal
+          mode={"create"}
+          setShowModal={setShowModal}
+          getData={getData}
+        />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Modal({ mode, setShowModal, getData, league }) {
+function LeagueModal({ mode, setShowModal, getData, league }) {
   const editMode = mode === "edit" ? true : false;
 
   const [data, setData] = useState({
@@ -182,4 +182,4 @@ function Modal({ mode, setShowModal, getData, league }) {
   );
 }
 
-export default Modal;
+export default LeagueModal;

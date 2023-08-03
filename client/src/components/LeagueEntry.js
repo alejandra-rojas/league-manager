@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Modal from "./Modal";
+import LeagueModal from "./LeagueModal";
 
 export default function LeagueEntry({ league, getData, message }) {
   const [showModal, setShowModal] = useState(false);
@@ -76,7 +76,7 @@ export default function LeagueEntry({ league, getData, message }) {
             Add group to {lowercaseTitle} league
           </button>
           {showModal && (
-            <Modal
+            <LeagueModal
               mode={"edit"}
               setShowModal={setShowModal}
               getData={getData}
