@@ -4,12 +4,12 @@ import { useCookies } from "react-cookie";
 
 export default function Header({ getData }) {
   const [cookies, setCookie, removeCookie] = useCookies(null);
-  const adminEmail = cookies.AdminEmail;
+  const adminEmail = cookies.Email;
   const [showModal, setShowModal] = useState(false);
 
   const signOut = () => {
     console.log("loged out");
-    removeCookie("AdminEmail");
+    removeCookie("Email");
     removeCookie("AuthToken");
     window.location.reload();
   };

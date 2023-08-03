@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 function Auth({ setShowLogin }) {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const [isLogIn, setIsLogIn] = useState(true);
-  const [adminEmail, setAdminEmail] = useState(null);
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [error, setError] = useState(null);
@@ -26,7 +26,7 @@ function Auth({ setShowLogin }) {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adminEmail, password }),
+        body: JSON.stringify({ email, password }),
       }
     );
 
@@ -35,9 +35,8 @@ function Auth({ setShowLogin }) {
     if (data.detail) {
       setError(data.detail);
     } else {
-      setCookie("AdminEmail", data.adminEmail);
+      setCookie("Email", data.email);
       setCookie("AuthToken", data.token);
-
       window.location.reload();
     }
   };
@@ -61,7 +60,7 @@ function Auth({ setShowLogin }) {
             type="email"
             placeholder="email"
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            onChange={(e) => setAdminEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
@@ -86,7 +85,7 @@ function Auth({ setShowLogin }) {
               handleSubmit(e, isLogIn ? "login" : "signup");
             }}
           />
-          {error && <p>{error}</p>}
+          {error && <p className="text-red-500">{error}</p>}
         </form>
         <div className="flex justify-end">
           {isLogIn && (
