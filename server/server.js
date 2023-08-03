@@ -116,4 +116,19 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// GET ALL EVENTS FOR ONE LEAGUE
+app.get("/leagues/:id/events", async (req, res) => {
+  const leagueId = req.params.id; // Extract the league ID from the request URL
+  try {
+    const events = await pool.query(
+      "SELECT event_id, event_name, participating_teams FROM events WHERE league_id = $1",
+      [leagueId]
+    );
+    res.json(events.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
