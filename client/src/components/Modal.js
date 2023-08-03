@@ -8,6 +8,7 @@ function Modal({ mode, setShowModal, getData, league }) {
     starting_date: editMode ? league.starting_date : "",
     midway_point: editMode ? league.midway_point : "",
     end_date: editMode ? league.end_date : "",
+    isfinished: league.isfinished,
   });
 
   const postData = async (e) => {
@@ -55,11 +56,13 @@ function Modal({ mode, setShowModal, getData, league }) {
   };
   const handleChange = (e) => {
     console.log("changing", e);
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
+    const newValue = type === "checkbox" ? checked : value;
 
     setData((data) => ({
       ...data,
-      [name]: value,
+      [name]: newValue,
     }));
 
     console.log(data);
@@ -125,6 +128,20 @@ function Modal({ mode, setShowModal, getData, league }) {
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
           <br />
+          {mode === "edit" && (
+            <>
+              <input
+                id="isFinished"
+                type="checkbox"
+                name="isfinished"
+                checked={data.isfinished}
+                onChange={handleChange}
+              />
+              <label htmlFor="isFinished">
+                The league is finished and all the results are entered
+              </label>
+            </>
+          )}
 
           <input
             className={

@@ -37,11 +37,12 @@ app.post("/leagues", async (req, res) => {
 //EDIT A LEAGUE
 app.put("/leagues/:id", async (req, res) => {
   const { id } = req.params;
-  const { league_name, starting_date, midway_point, end_date } = req.body;
+  const { league_name, starting_date, midway_point, end_date, isfinished } =
+    req.body;
   try {
     const editLeague = await pool.query(
-      "UPDATE leagues SET league_name = $1, starting_date = $2, midway_point = $3, end_date = $4 WHERE id = $5;",
-      [league_name, starting_date, midway_point, end_date, id]
+      "UPDATE leagues SET league_name = $1, starting_date = $2, midway_point = $3, end_date = $4, isfinished = $5 WHERE id = $6;",
+      [league_name, starting_date, midway_point, end_date, isfinished, id]
     );
     res.json(editLeague);
   } catch (error) {

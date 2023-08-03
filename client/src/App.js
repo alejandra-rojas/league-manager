@@ -36,15 +36,24 @@ function App() {
 
   //Upcoming leagues
   const today = new Date();
-  const upcomingLeagues = leagues?.filter((league) => {
-    const leagueStartDate = new Date(league.starting_date);
-    return leagueStartDate >= today;
-  });
+  const upcomingLeagues = leagues
+    ?.filter((league) => !league.isfinished)
+    .filter((league) => {
+      const leagueStartDate = new Date(league.starting_date);
+      return leagueStartDate >= today;
+    });
 
-  //Sort by league starting date
-  const sortedLeagues = leagues?.sort(
-    (a, b) => new Date(a.starting_date) - new Date(b.starting_date)
-  );
+  //Ongoing leagues sorted by  starting date
+
+  const sortedLeagues = leagues
+    ?.filter((league) => {
+      const leagueStartDate = new Date(league.starting_date);
+      return leagueStartDate <= today;
+    })
+    .sort((a, b) => new Date(a.starting_date) - new Date(b.starting_date));
+
+  //Finished leagues
+  const finishedLeagues = leagues?.filter((league) => league.isfinished);
 
   return (
     <div>
@@ -76,12 +85,17 @@ function App() {
         <LeagueEntry key={league.id} league={league} getData={getData} />
       ))}
 
-      <h2>Upcoming Leagues</h2>
+      <h2>Upcoming Leagues - Todays date hasnt reached the start date</h2>
       {upcomingLeagues?.map((league) => (
         <LeagueEntry key={league.id} league={league} getData={getData} />
       ))}
 
-      <h2>Finished leagues</h2>
+      <h2>
+        Finished leagues // those with their isfinished attribute set to true
+      </h2>
+      {finishedLeagues?.map((league) => (
+        <LeagueEntry key={league.id} league={league} getData={getData} />
+      ))}
     </div>
   );
 }
