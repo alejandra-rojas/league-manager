@@ -13,7 +13,7 @@ CREATE TABLE leagues (
     midway_point VARCHAR(10),
     end_date VARCHAR(10),
     league_events text ARRAY,
-    finished BOOLEAN
+    isFinished BOOLEAN
 );
 
 INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ('WOMENS DOUBLES', '2023-08-01', '2023-08-15', '2023-08-29');
