@@ -18,22 +18,6 @@ export default function LeagueEntry({ league, getData, message }) {
     remainingDays = 0;
   }
 
-  const deleteLeague = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.status === 200) {
-        getData();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const getEventsData = async () => {
     try {
       const response = await fetch(
@@ -60,12 +44,6 @@ export default function LeagueEntry({ league, getData, message }) {
             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
           >
             Edit
-          </button>
-          <button
-            onClick={() => deleteLeague()}
-            className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-          >
-            Delete
           </button>
         </div>
       </div>
