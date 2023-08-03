@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 app.use(cors());
 app.use(express.json());
 
@@ -60,5 +63,55 @@ app.delete("/leagues/:id", async (req, res) => {
     console.error(error);
   }
 });
+
+//LOGIN
+app.post("/login", async (req, res) => {
+  const { adminEmail, password } = req.body;
+  try {
+    const adminUsers = await pool.query(
+      "SELECT * FROM admin WHERE admin_email = $1",
+      [adminEmail]
+    );
+
+    if (!adminUsers.rows.length)
+      return res.json({ detail: "Admin user does not exist" });
+
+    const success = await bcrypt.compare(
+      password,
+      adminUsers.rows[0].hashedPassword
+    );
+    const token = jwt.sign({ adminEmail }, "secret", { expiresIn: "1hr" });
+
+    if (success) {
+      res.json({ admin_email: adminUsers[0].adminEmail, token });
+    } else {
+      res.jeson({ detail: "login failed" });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+//SIGNUP
+/* app.post("/signup", async (req, res) => {
+  const { adminEmail, password } = req.body;
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(password, salt);
+  try {
+    const adminSignUp = await pool.query(
+      "INSERT INTO admin_users (admin_email, hashed_password) VALUES ($1, $2)",
+      [adminEmail, hashedPassword]
+    );
+
+    const token = jwt.sign({ adminEmail }, "secret", { expiresIn: "1hr" });
+
+    res.json({ adminEmail, token });
+  } catch (error) {
+    console.error(error);
+    if (err) {
+      res.json({ detail: err.detail });
+    }
+  }
+}); */
 
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
