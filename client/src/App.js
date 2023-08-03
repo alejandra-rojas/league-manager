@@ -36,7 +36,7 @@ function App() {
 
   //Upcoming leagues
   const today = new Date();
-  const upcomingLeagues = leagues.filter((league) => {
+  const upcomingLeagues = leagues?.filter((league) => {
     const leagueStartDate = new Date(league.starting_date);
     return leagueStartDate >= today;
   });
