@@ -44,7 +44,6 @@ function App() {
     });
 
   //Ongoing leagues sorted by  starting date
-
   const sortedLeagues = leagues
     ?.filter((league) => {
       const leagueStartDate = new Date(league.starting_date);
@@ -80,22 +79,39 @@ function App() {
         </>
       )}
 
-      <h2>Current Leagues</h2>
-      {sortedLeagues?.map((league) => (
-        <LeagueEntry key={league.id} league={league} getData={getData} />
-      ))}
-
-      <h2>Upcoming Leagues - Todays date hasnt reached the start date</h2>
-      {upcomingLeagues?.map((league) => (
-        <LeagueEntry key={league.id} league={league} getData={getData} />
-      ))}
-
-      <h2>
-        Finished leagues // those with their isfinished attribute set to true
-      </h2>
-      {finishedLeagues?.map((league) => (
-        <LeagueEntry key={league.id} league={league} getData={getData} />
-      ))}
+      <div className="flex flex-col gap-20">
+        <div>
+          <h2>
+            Current Leagues - Not finished and todays date is within the range
+            of start/end date
+          </h2>
+          {sortedLeagues?.map((league) => (
+            <LeagueEntry
+              key={league.id}
+              league={league}
+              getData={getData}
+              message={"days left of play"}
+            />
+          ))}
+        </div>
+        <div>
+          <h2>Upcoming Leagues - Todays date has not reached the start date</h2>
+          {upcomingLeagues?.map((league) => (
+            <LeagueEntry
+              key={league.id}
+              league={league}
+              getData={getData}
+              message={"days left to join"}
+            />
+          ))}
+        </div>
+        <div>
+          <h2>Finished leagues // isfinished attribute = true</h2>
+          {finishedLeagues?.map((league) => (
+            <LeagueEntry key={league.id} league={league} getData={getData} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
