@@ -8,7 +8,7 @@ function Modal({ mode, setShowModal, getData, league }) {
     starting_date: editMode ? league.starting_date : "",
     midway_point: editMode ? league.midway_point : "",
     end_date: editMode ? league.end_date : "",
-    isfinished: league.isfinished,
+    isfinished: editMode ? league.end_date : "",
   });
 
   const postData = async (e) => {
