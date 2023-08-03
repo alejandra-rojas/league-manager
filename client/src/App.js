@@ -12,8 +12,6 @@ function App() {
   const [leagues, setLeagues] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
 
-  //const authToken = false;
-
   const getData = async () => {
     try {
       const response = await fetch(
@@ -25,6 +23,13 @@ function App() {
       console.error(error);
     }
   };
+
+  // Getting data only if we are logged in
+  /*   useEffect(()=>{
+    if(authToken){
+      getData()
+    }
+  }, []) */
 
   useEffect(() => getData, []);
 
