@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 
-export default function LeagueEntry({ league, getData }) {
+export default function LeagueEntry({ league, getData, message }) {
   const [showModal, setShowModal] = useState(false);
-
   const lowercaseTitle = league.league_name.toLowerCase();
+  const [leagueEvents, setLeagueEvents] = useState(null);
+
+  const isFinished = league.isfinished;
 
   const differenceInTime =
     new Date(league.end_date) - new Date(league.starting_date);
@@ -32,6 +34,22 @@ export default function LeagueEntry({ league, getData }) {
     }
   };
 
+  const getEventsData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}/events`
+      );
+      const json = await response.json();
+      setLeagueEvents(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => getEventsData, []);
+
+  console.log(leagueEvents);
+
   return (
     <div className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
       <div className="flex justify-between">
@@ -51,27 +69,43 @@ export default function LeagueEntry({ league, getData }) {
           </button>
         </div>
       </div>
-      <p>
-        Start date: {league.starting_date} | End date: {league.end_date}
-      </p>
+      <div className="pt-4 pb-6 border-solid border-black-20 border-b-2 mb-6">
+        <p>
+          Start date: {league.starting_date} | End date: {league.end_date}
+        </p>
 
-      <p>Midway point: {league.midway_point}</p>
-      <p>Number of groups in league: {league.league_events}</p>
+        <p>Midway point: {league.midway_point}</p>
+        <p>Number of groups in league: {league.league_events}</p>
 
-      <h3>
-        {remainingDays} days left to play in this league -- needs adjustment
-      </h3>
+        {!isFinished && (
+          <h3>
+            {remainingDays} {message}
+          </h3>
+        )}
+      </div>
+      {!isFinished && (
+        <>
+          {leagueEvents && (
+            <p className="mb-6">
+              There are no events/groups scheduled in this league
+            </p>
+          )}
 
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-        Add group to {lowercaseTitle} league
-      </button>
-      {showModal && (
-        <Modal
-          mode={"edit"}
-          setShowModal={setShowModal}
-          getData={getData}
-          league={league}
-        />
+          {leagueEvents && (
+            <p>There are {leagueEvents.length} events in this league </p>
+          )}
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            Add group to {lowercaseTitle} league
+          </button>
+          {showModal && (
+            <Modal
+              mode={"edit"}
+              setShowModal={setShowModal}
+              getData={getData}
+              league={league}
+            />
+          )}
+        </>
       )}
     </div>
   );
