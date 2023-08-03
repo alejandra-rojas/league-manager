@@ -68,6 +68,22 @@ function Modal({ mode, setShowModal, getData, league }) {
     console.log(data);
   };
 
+  const deleteLeague = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.status === 200) {
+        getData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="flex justify-end absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-75 ">
       <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
@@ -130,16 +146,26 @@ function Modal({ mode, setShowModal, getData, league }) {
           <br />
           {mode === "edit" && (
             <>
-              <input
-                id="isFinished"
-                type="checkbox"
-                name="isfinished"
-                checked={data.isfinished}
-                onChange={handleChange}
-              />
-              <label htmlFor="isFinished">
-                The league is finished and all the results are entered
-              </label>
+              <div>
+                <input
+                  id="isFinished"
+                  type="checkbox"
+                  name="isfinished"
+                  checked={data.isfinished}
+                  onChange={handleChange}
+                />
+                <label htmlFor="isFinished">
+                  The league is finished and all the results are entered
+                </label>
+              </div>
+              <div>
+                <button
+                  onClick={() => deleteLeague()}
+                  className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+                >
+                  Delete
+                </button>
+              </div>
             </>
           )}
 
