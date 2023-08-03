@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
+import GroupEntry from "./GroupEntry";
 
 export default function LeagueEntry({ league, getData, message }) {
   const [showModal, setShowModal] = useState(false);
@@ -64,15 +65,14 @@ export default function LeagueEntry({ league, getData, message }) {
       {!isFinished && (
         <>
           {leagueEvents && (
-            <p className="mb-6">
-              There are no events/groups scheduled in this league
-            </p>
+            <>
+              <p>There are {leagueEvents.length} events in this league </p>
+              {leagueEvents?.map((group) => (
+                <GroupEntry key={group.event_id} group={group} />
+              ))}
+            </>
           )}
-
-          {leagueEvents && (
-            <p>There are {leagueEvents.length} events in this league </p>
-          )}
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full">
             Add group to {lowercaseTitle} league
           </button>
           {showModal && (
