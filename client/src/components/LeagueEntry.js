@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CurrentLeague from "./CurrentLeague";
 import Modal from "./Modal";
 
 export default function LeagueEntry({ league, getData }) {
