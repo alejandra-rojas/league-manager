@@ -116,7 +116,22 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// CREATE NEW GROUP OR EVENT
+// GET ALL EVENTS FOR ONE LEAGUE
+app.get("/leagues/:id/events", async (req, res) => {
+  const leagueId = req.params.id; // Extract the league ID from the request URL
+  try {
+    const events = await pool.query(
+      "SELECT event_id, event_name, participating_teams FROM events WHERE league_id = $1",
+      [leagueId]
+    );
+    res.json(events.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// CREATE NEW EVENT
 app.post("/leagues/:id/events", async (req, res) => {
   const { event_name } = req.body;
   const leagueId = req.params.id; // Extract the league ID from the request URL
@@ -132,18 +147,57 @@ app.post("/leagues/:id/events", async (req, res) => {
   }
 });
 
-// GET ALL EVENTS FOR ONE LEAGUE
-app.get("/leagues/:id/events", async (req, res) => {
-  const leagueId = req.params.id; // Extract the league ID from the request URL
+// GET ALL EVENTS
+app.get("/events", async (req, res) => {
   try {
-    const events = await pool.query(
-      "SELECT event_id, event_name, participating_teams FROM events WHERE league_id = $1",
-      [leagueId]
-    );
+    const events = await pool.query("SELECT * FROM events");
     res.json(events.rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//EDIT EVENT
+app.put("/events/:id", async (req, res) => {
+  const { id } = req.params;
+  const { event_name } = req.body;
+  try {
+    const editEvent = await pool.query(
+      "UPDATE events SET event_name = $1 WHERE event_id = $2;",
+      [event_name, id]
+    );
+    res.json(editEvent);
+  } catch (error) {
+    console.error(error);
+  }
+
+  /*   const { id } = req.params;
+  const { league_name, starting_date, midway_point, end_date, isfinished } =
+    req.body;
+  try {
+    const editLeague = await pool.query(
+      "UPDATE leagues SET league_name = $1, starting_date = $2, midway_point = $3, end_date = $4, isfinished = $5 WHERE id = $6;",
+      [league_name, starting_date, midway_point, end_date, isfinished, id]
+    );
+    res.json(editLeague);
+  } catch (error) {
+    console.log("UPDATE ERROR");
+    console.error(error);
+  } */
+});
+
+//DELETE EVENT
+app.delete("/events/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteEvent = await pool.query(
+      "DELETE FROM events WHERE event_id = $1;",
+      [id]
+    );
+    res.json(deleteEvent);
+  } catch (error) {
+    console.error(error);
   }
 });
 
