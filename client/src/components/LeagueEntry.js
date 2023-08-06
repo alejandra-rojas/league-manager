@@ -7,7 +7,7 @@ import EventEntry from "./EventEntry";
 
 export default function LeagueEntry({ league, getData, message }) {
   const [showModal, setShowModal] = useState(false);
-  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
   const lowercaseTitle = league.league_name.toLowerCase();
   const [leagueEvents, setLeagueEvents] = useState(null);
 
@@ -74,7 +74,7 @@ export default function LeagueEntry({ league, getData, message }) {
             </>
           )}
           <button
-            onClick={() => setShowGroupModal(true)}
+            onClick={() => setShowEventModal(true)}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
           >
             Add group to {lowercaseTitle} league
@@ -90,10 +90,10 @@ export default function LeagueEntry({ league, getData, message }) {
         />
       )}
 
-      {showGroupModal && (
+      {showEventModal && (
         <EventModal
           mode={"new"}
-          setShowGroupModal={setShowGroupModal}
+          setShowEventModal={setShowEventModal}
           league={league}
           getEventsData={getEventsData}
           leagueEvents={leagueEvents}
