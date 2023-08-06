@@ -2,10 +2,9 @@ import React, { useState } from "react";
 
 function EventModal({
   mode,
-  setShowGroupModal,
+  setShowEventModal,
   league,
   getEventsData,
-  leagueEvents,
   gevent,
 }) {
   const editGroupMode = mode === "edit" ? true : false;
@@ -13,6 +12,18 @@ function EventModal({
   const [data, setData] = useState({
     event_name: editGroupMode ? gevent.event_name : "",
   });
+
+  const handleChange = (e) => {
+    console.log("changing", e);
+    const { name, value } = e.target;
+
+    setData((data) => ({
+      ...data,
+      [name]: value,
+    }));
+
+    console.log(data);
+  };
 
   const postGroupData = async (e) => {
     e.preventDefault();
@@ -27,7 +38,7 @@ function EventModal({
       );
       if (response.status === 200) {
         console.log("Created new event succesfully!");
-        setShowGroupModal(false);
+        setShowEventModal(false);
         getEventsData();
       }
     } catch (error) {
@@ -35,21 +46,42 @@ function EventModal({
     }
   };
 
-  const editGroupData = () => {};
-
-  const handleChange = (e) => {
-    console.log("changing", e);
-    const { name, value } = e.target;
-
-    setData((data) => ({
-      ...data,
-      [name]: value,
-    }));
-
-    console.log(data);
+  const editGroupData = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+      if (response.status === 200) {
+        console.log("event was edited!");
+        setShowEventModal(false);
+        getEventsData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const deleteEvent = () => {};
+  const deleteEvent = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.status === 200) {
+        getEventsData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex justify-end absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-75 ">
@@ -59,7 +91,7 @@ function EventModal({
           <button
             className="border"
             onClick={() => {
-              setShowGroupModal(false);
+              setShowEventModal(false);
             }}
           >
             X
