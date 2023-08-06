@@ -116,6 +116,22 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// CREATE NEW GROUP OR EVENT
+app.post("/leagues/:id/events", async (req, res) => {
+  const { event_name } = req.body;
+  const leagueId = req.params.id; // Extract the league ID from the request URL
+  console.log(event_name);
+  try {
+    const newEvent = await pool.query(
+      `INSERT INTO events(league_id, event_name) VALUES ($1, $2)`,
+      [leagueId, event_name]
+    );
+    res.json(newEvent);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 // GET ALL EVENTS FOR ONE LEAGUE
 app.get("/leagues/:id/events", async (req, res) => {
   const leagueId = req.params.id; // Extract the league ID from the request URL
