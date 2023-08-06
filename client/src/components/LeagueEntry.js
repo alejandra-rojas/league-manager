@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
-import GroupEntry from "./GroupEntry";
+import GroupEntry from "./EventEntry";
+import GroupModal from "./EventModal";
+import EventModal from "./EventModal";
+import EventEntry from "./EventEntry";
 
 export default function LeagueEntry({ league, getData, message }) {
   const [showModal, setShowModal] = useState(false);
+  const [showGroupModal, setShowGroupModal] = useState(false);
   const lowercaseTitle = league.league_name.toLowerCase();
   const [leagueEvents, setLeagueEvents] = useState(null);
 
@@ -30,10 +34,7 @@ export default function LeagueEntry({ league, getData, message }) {
       console.error(error);
     }
   };
-
   useEffect(() => getEventsData, []);
-
-  console.log(leagueEvents);
 
   return (
     <div className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
@@ -67,23 +68,36 @@ export default function LeagueEntry({ league, getData, message }) {
           {leagueEvents && (
             <>
               <p>There are {leagueEvents.length} events in this league </p>
-              {leagueEvents?.map((group) => (
-                <GroupEntry key={group.event_id} group={group} />
+              {leagueEvents?.map((gevent) => (
+                <EventEntry key={gevent.event_id} gevent={gevent} />
               ))}
             </>
           )}
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full">
+          <button
+            onClick={() => setShowGroupModal(true)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
+          >
             Add group to {lowercaseTitle} league
           </button>
-          {showModal && (
-            <LeagueModal
-              mode={"edit"}
-              setShowModal={setShowModal}
-              getData={getData}
-              league={league}
-            />
-          )}
         </>
+      )}
+      {showModal && (
+        <LeagueModal
+          mode={"edit"}
+          setShowModal={setShowModal}
+          getData={getData}
+          league={league}
+        />
+      )}
+
+      {showGroupModal && (
+        <EventModal
+          mode={"new"}
+          setShowGroupModal={setShowGroupModal}
+          league={league}
+          getEventsData={getEventsData}
+          leagueEvents={leagueEvents}
+        />
       )}
     </div>
   );
