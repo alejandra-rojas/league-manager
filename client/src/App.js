@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import LeagueEntry from "./components/LeagueEntry";
-import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Auth from "./components/Auth";
 import { useCookies } from "react-cookie";
@@ -9,9 +8,17 @@ function App() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const authToken = cookies.AuthToken;
   const adminEmail = cookies.Email;
-  const [leagues, setLeagues] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
+  const [leagues, setLeagues] = useState(null);
 
+  // Getting data only if we are logged in
+  /*   useEffect(()=>{
+    if(authToken){
+      getData()
+    }
+  }, []) */
+
+  //Getting leagues data
   const getData = async () => {
     try {
       const response = await fetch(
@@ -24,15 +31,11 @@ function App() {
     }
   };
 
-  // Getting data only if we are logged in
-  /*   useEffect(()=>{
-    if(authToken){
-      getData()
-    }
-  }, []) */
-
   useEffect(() => getData, []);
-  console.log(leagues);
+
+  //Getting events data
+
+  //Getting players/teams data
 
   //Upcoming leagues
   const today = new Date();
