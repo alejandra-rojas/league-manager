@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
 
 function EventEntry({ gevent }) {
-  const [showGroupModal, setShowGroupModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
   const [groupEvents, setGroupEvents] = useState(null);
 
   const getEventsData = async () => {
@@ -24,13 +24,13 @@ function EventEntry({ gevent }) {
     <div className="bg-gray-300 p-3 mb-2 flex justify-between items-center">
       <h3>{gevent.event_name}</h3>
       <div className="flex gap-3">
-        <button onClick={() => setShowGroupModal(true)}>Edit</button>
+        <button onClick={() => setShowEventModal(true)}>Edit</button>
         <p className="p-1 border">+</p>
       </div>
-      {showGroupModal && (
+      {showEventModal && (
         <EventModal
           mode={"edit"}
-          setShowGroupModal={setShowGroupModal}
+          setShowEventModal={setShowEventModal}
           getEventsData={getEventsData}
           gevent={gevent}
         />
