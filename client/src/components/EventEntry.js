@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
 
-function EventEntry({ gevent }) {
+function EventEntry({ gevent, getEventsData }) {
   const [showEventModal, setShowEventModal] = useState(false);
   const [groupEvents, setGroupEvents] = useState(null);
-
-  const getEventsData = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVERURL}/leagues/${gevent.event_id}/events`
-      );
-      const json = await response.json();
-      setGroupEvents(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => getEventsData, []);
 
   console.log(gevent);
   return (

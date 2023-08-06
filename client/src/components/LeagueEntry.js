@@ -69,7 +69,11 @@ export default function LeagueEntry({ league, getData, message }) {
             <>
               <p>There are {leagueEvents.length} events in this league </p>
               {leagueEvents?.map((gevent) => (
-                <EventEntry key={gevent.event_id} gevent={gevent} />
+                <EventEntry
+                  key={gevent.event_id}
+                  gevent={gevent}
+                  getEventsData={getEventsData}
+                />
               ))}
             </>
           )}

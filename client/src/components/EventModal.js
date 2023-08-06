@@ -58,7 +58,7 @@ function EventModal({
         }
       );
       if (response.status === 200) {
-        console.log("event was edited!");
+        console.log("Event was edited!");
         setShowEventModal(false);
         getEventsData();
       }
