@@ -110,6 +110,15 @@ function EventModal({
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
           <br />
+
+          <input
+            className={
+              "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+            }
+            type="submit"
+            onClick={editGroupMode ? editGroupData : postGroupData}
+          />
+
           {mode === "edit" && (
             <>
               <div>
@@ -122,14 +131,6 @@ function EventModal({
               </div>
             </>
           )}
-
-          <input
-            className={
-              "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-            }
-            type="submit"
-            onClick={editGroupMode ? editGroupData : postGroupData}
-          />
         </form>
       </div>
     </div>
