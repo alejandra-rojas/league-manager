@@ -25,7 +25,7 @@ app.post("/leagues", async (req, res) => {
   console.log(league_name, starting_date, midway_point, end_date);
   try {
     const newLeague = await pool.query(
-      `INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ($1, $2, $3, $4)`,
+      "INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ($1, $2, $3, $4)",
       [league_name, starting_date, midway_point, end_date]
     );
     res.json(newLeague);
@@ -138,7 +138,7 @@ app.post("/leagues/:id/events", async (req, res) => {
   console.log(event_name);
   try {
     const newEvent = await pool.query(
-      `INSERT INTO events(league_id, event_name) VALUES ($1, $2)`,
+      "INSERT INTO events(league_id, event_name) VALUES ($1, $2)",
       [leagueId, event_name]
     );
     res.json(newEvent);
@@ -198,6 +198,61 @@ app.delete("/events/:id", async (req, res) => {
     res.json(deleteEvent);
   } catch (error) {
     console.error(error);
+  }
+});
+
+//PLAYERS SEARCH
+
+// player_firstname player_lastname => %{}%
+// || is used in sql to concat
+// ILIKE case insensitive
+app.get("/players", async (req, res) => {
+  const { name } = req.query;
+  try {
+    const players = await pool.query(
+      "SELECT * FROM players WHERE player_firstname || ' ' || player_lastname ILIKE $1",
+      [`%${name}%`]
+    );
+    res.json(players.rows);
+  } catch (error) {
+    console.error(err.message);
+  }
+});
+
+//TEAMS SEARCH
+app.get("/teams", async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const query = `
+      SELECT
+          t.team_id,
+          t.player1_id,
+          p1.player_firstname AS player1_firstname,
+          p1.player_lastname AS player1_lastname,
+          t.player2_id,
+          p2.player_firstname AS player2_firstname,
+          p2.player_lastname AS player2_lastname
+      FROM
+          teams t
+      JOIN
+          players p1 ON t.player1_id = p1.player_id
+      JOIN
+          players p2 ON t.player2_id = p2.player_id
+      WHERE
+          p1.player_firstname ILIKE $1 OR p1.player_lastname ILIKE $1
+          OR
+          p2.player_firstname ILIKE $1 OR p2.player_lastname ILIKE $1;
+    `;
+
+    const values = [`%${name}%`];
+
+    const teamsResult = await pool.query(query, values);
+
+    res.json(teamsResult.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
   }
 });
 
