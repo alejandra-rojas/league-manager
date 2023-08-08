@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LeagueModal from "./LeagueModal";
 import { useCookies } from "react-cookie";
+import PlayerTeamModal from "./PlayerTeamModal";
 
 export default function Header({ getData }) {
   const [cookies, setCookie, removeCookie] = useCookies(null);
@@ -25,6 +26,9 @@ export default function Header({ getData }) {
           >
             Create League
           </button>
+          <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 ">
+            Add Player/Team
+          </button>
           <button
             className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
             onClick={() => signOut()}
@@ -40,6 +44,7 @@ export default function Header({ getData }) {
           getData={getData}
         />
       )}
+      <PlayerTeamModal />
     </div>
   );
 }

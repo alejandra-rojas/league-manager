@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 
-function Auth({ setShowLogin }) {
+function Auth() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const [isLogIn, setIsLogIn] = useState(true);
   const [email, setEmail] = useState(null);
@@ -47,14 +47,6 @@ function Auth({ setShowLogin }) {
         <form>
           <div className="flex justify-between">
             {isLogIn ? "Admin login" : "Admin sign up"}
-            <h3
-              className="border"
-              onClick={() => {
-                setShowLogin(false);
-              }}
-            >
-              x
-            </h3>
           </div>
           <input
             type="email"
