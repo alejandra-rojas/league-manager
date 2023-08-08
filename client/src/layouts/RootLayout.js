@@ -9,6 +9,7 @@ function RootLayout() {
         </h1>
         <nav className="flex gap-4">
           <NavLink to={"/"}>Home</NavLink>
+          <NavLink to={"about"}>About</NavLink>
           <NavLink to={"admin"}>Admin</NavLink>
         </nav>
       </header>
