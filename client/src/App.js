@@ -6,16 +6,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 //Pages
-import Admin from "./pages/admin/Leagues";
 import Home from "./pages/Home";
-
-//Layout
-import RootLayout from "./layouts/RootLayout";
 import About from "./pages/About";
-import AdminLayout from "./layouts/AdminLayout";
 import Players from "./pages/admin/Players";
 import Teams from "./pages/admin/Teams";
 import Leagues from "./pages/admin/Leagues";
+import NotFound from "./pages/NotFound";
+
+//Layout
+import RootLayout from "./layouts/RootLayout";
+import AdminLayout from "./layouts/AdminLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +27,7 @@ const router = createBrowserRouter(
         <Route path="players" element={<Players />} />
         <Route path="teams" element={<Teams />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
