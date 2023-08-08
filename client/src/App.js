@@ -23,7 +23,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="admin" element={<AdminLayout />}>
-        <Route path="leagues" element={<Leagues />} />
+        <Route index element={<Leagues />} />
         <Route path="players" element={<Players />} />
         <Route path="teams" element={<Teams />} />
       </Route>

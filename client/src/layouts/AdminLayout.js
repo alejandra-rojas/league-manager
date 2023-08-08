@@ -14,9 +14,9 @@ function AdminLayout() {
       {authToken && (
         <>
           <nav className="flex gap-6 justify-center bg-slate-500 py-5 my-5">
-            <NavLink to="leagues">Leagues</NavLink>
-            <NavLink to="players">Players</NavLink>
-            <NavLink to="teams">Teams</NavLink>
+            <NavLink to={"/admin"}>Leagues</NavLink>
+            <NavLink to={"players"}>Players</NavLink>
+            <NavLink to={"teams"}>Teams</NavLink>
           </nav>
 
           <Outlet />
