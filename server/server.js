@@ -202,7 +202,6 @@ app.delete("/events/:id", async (req, res) => {
 });
 
 //PLAYERS SEARCH
-
 // player_firstname player_lastname => %{}%
 // || is used in sql to concat
 // ILIKE case insensitive
@@ -253,6 +252,76 @@ app.get("/teams", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
+  }
+});
+
+// GET ALL TEAMS FOR ONE EVENT
+app.get("/events/:id/teams", async (req, res) => {
+  const eventId = req.params.id; // Extract the league ID from the request URL
+  try {
+    const query = `
+      SELECT
+          et.event_id,
+          et.team_id,
+          p1.player_firstname AS player1_firstname,
+          p1.player_lastname AS player1_lastname,
+          p2.player_firstname AS player2_firstname,
+          p2.player_lastname AS player2_lastname
+      FROM
+          event_teams et
+      JOIN
+          teams t ON et.team_id = t.team_id
+      JOIN
+          players p1 ON t.player1_id = p1.player_id
+      JOIN
+          players p2 ON t.player2_id = p2.player_id
+      WHERE
+          et.event_id = $1;
+    `;
+
+    const result = await pool.query(query, [eventId]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//ASSOCIATE TEAM TO EVENT
+app.post("/events/:id/teams", async (req, res) => {
+  const { team_id } = req.body;
+  const eventId = req.params.id;
+
+  console.log(eventId, team_id);
+  try {
+    const addingTeam = await pool.query(
+      "INSERT INTO event_teams(event_id, team_id) VALUES ($1, $2)",
+      [eventId, team_id]
+    );
+    res.json(addingTeam);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "An error occurred while adding the team to the event.",
+    });
+  }
+});
+
+//DELETE TEAM FROM EVENT
+app.delete("/events/:id/teams/:tid", async (req, res) => {
+  const { id, tid } = req.params;
+
+  try {
+    const deleteTeamFromEvent = await pool.query(
+      "DELETE FROM event_teams WHERE event_id = $1 AND team_id = $2",
+      [id, tid]
+    );
+
+    res.json(deleteTeamFromEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
