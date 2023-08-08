@@ -2,12 +2,27 @@ import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
 
 function EventEntry({ gevent, getEventsData }) {
+  const [eventTeams, setEventTeams] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
   const [name, setName] = useState("");
   const [searchString, setSearchString] = useState("");
   const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
+
+  const getEventTeamsData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}/teams`
+      );
+      const json = await response.json();
+      setEventTeams(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => getEventTeamsData, []);
+  console.log(eventTeams);
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -40,6 +55,44 @@ function EventEntry({ gevent, getEventsData }) {
     }
   };
 
+  const addTeam = async (team_id) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}/teams`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ team_id }),
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Team added to event!");
+        getEventTeamsData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeTeam = async (team_id) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}/teams/${team_id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("Team DELETED from event!");
+      getEventTeamsData();
+    }
+    try {
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   console.log(gevent);
   return (
     <>
@@ -58,13 +111,24 @@ function EventEntry({ gevent, getEventsData }) {
         </div>
         {showTeams && (
           <div className="eventteams">
-            <h3>Expanded event details</h3>
-            <h3>TEAM - RANKINGS</h3>
-
+            <h3>Teams & event standings</h3>
+            <ul>
+              {eventTeams.map((team) => (
+                <li key={team.team_id} className="flex gap-10 py-1">
+                  <p>
+                    {team.player1_firstname} {team.player1_lastname} &{" "}
+                    {team.player2_firstname} {team.player2_lastname}
+                  </p>
+                  <button onClick={() => removeTeam(team.team_id)}>
+                    Remove team from event
+                  </button>
+                </li>
+              ))}
+            </ul>
             <div className="bg-gray-200 my-5">
               <button className="my-3">Add player/team to event</button>
               <div>
-                <h1>Search for players</h1>
+                <h1>Search for existing players</h1>
                 <form onSubmit={onSubmitForm}>
                   <input
                     type="text"
@@ -100,7 +164,7 @@ function EventEntry({ gevent, getEventsData }) {
             <div className="bg-gray-200 my-5">
               <button className="my-3">Add team to event</button>
               <div>
-                <h1>Search for teams</h1>
+                <h1>Search for existing teams</h1>
                 <form onSubmit={onSubmitTeamsForm}>
                   <input
                     type="text"
@@ -130,7 +194,11 @@ function EventEntry({ gevent, getEventsData }) {
                         <td>
                           {team.player2_firstname} {team.player2_lastname}
                         </td>
-                        <td>Add team to event</td>
+                        <td>
+                          <button onClick={() => addTeam(team.team_id)}>
+                            Add team to event
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
