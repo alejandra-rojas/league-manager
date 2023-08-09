@@ -170,20 +170,6 @@ app.put("/events/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-
-  /*   const { id } = req.params;
-  const { league_name, starting_date, midway_point, end_date, isfinished } =
-    req.body;
-  try {
-    const editLeague = await pool.query(
-      "UPDATE leagues SET league_name = $1, starting_date = $2, midway_point = $3, end_date = $4, isfinished = $5 WHERE id = $6;",
-      [league_name, starting_date, midway_point, end_date, isfinished, id]
-    );
-    res.json(editLeague);
-  } catch (error) {
-    console.log("UPDATE ERROR");
-    console.error(error);
-  } */
 });
 
 //DELETE EVENT
@@ -365,6 +351,55 @@ app.delete("/events/:id/teams/:tid", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// GET ALL MATCHES
+app.get("/matches", async (req, res) => {
+  try {
+    const matches = await pool.query("SELECT * FROM matches");
+    res.json(matches.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// GET MATCHES FROM EVENT
+app.get("/events/:id/matches", async (req, res) => {
+  const event_id = req.params.id;
+  try {
+    const matches = await pool.query(
+      "SELECT * FROM matches WHERE event_id = $1",
+      [event_id]
+    );
+    res.json(matches.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// CREATE NEW MATCHES
+app.post("/matches", async (req, res) => {
+  const matchesData = req.body;
+
+  try {
+    const newMatches = await Promise.all(
+      matchesData.map(async (match) => {
+        const { event_id, team1_id, team2_id } = match;
+        const newMatch = await pool.query(
+          "INSERT INTO matches(event_id, team1_id, team2_id) VALUES ($1, $2, $3) RETURNING *",
+          [event_id, team1_id, team2_id]
+        );
+        return newMatch.rows[0];
+      })
+    );
+
+    res.status(201).json(newMatches);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while creating matches." });
   }
 });
 
