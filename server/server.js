@@ -22,7 +22,6 @@ app.get("/leagues", async (req, res) => {
 // CREATE NEW LEAGUE
 app.post("/leagues", async (req, res) => {
   const { league_name, starting_date, midway_point, end_date } = req.body;
-  console.log(league_name, starting_date, midway_point, end_date);
   try {
     const newLeague = await pool.query(
       "INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ($1, $2, $3, $4)",
@@ -208,6 +207,25 @@ app.get("/players", async (req, res) => {
     res.json(players.rows);
   } catch (error) {
     console.error(err.message);
+  }
+});
+
+// CREATE NEW PLAYER
+app.post("/players", async (req, res) => {
+  const {
+    player_firstname,
+    player_lastname,
+    player_phonenumber,
+    player_email,
+  } = req.body;
+  try {
+    const newPLayer = await pool.query(
+      "INSERT INTO players(player_firstname, player_lastname, player_phonenumber, player_email) VALUES ($1, $2, $3, $4)",
+      [player_firstname, player_lastname, player_phonenumber, player_email]
+    );
+    res.json(newPLayer);
+  } catch (error) {
+    console.error(error);
   }
 });
 
