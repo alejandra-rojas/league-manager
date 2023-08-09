@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   createBrowserRouter,
   Route,
@@ -8,9 +7,9 @@ import {
 //Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Players from "./pages/admin/Players";
+import Players, { playersData } from "./pages/admin/Players";
 import Teams from "./pages/admin/Teams";
-import Leagues from "./pages/admin/Leagues";
+import Leagues, { leaguesData } from "./pages/admin/Leagues";
 import NotFound from "./pages/NotFound";
 
 //Layout
@@ -23,8 +22,8 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="admin" element={<AdminLayout />}>
-        <Route index element={<Leagues />} />
-        <Route path="players" element={<Players />} />
+        <Route index element={<Leagues />} loader={leaguesData} />
+        <Route path="players" loader={playersData} element={<Players />} />
         <Route path="teams" element={<Teams />} />
       </Route>
       <Route path="*" element={<NotFound />} />
