@@ -57,6 +57,19 @@ CREATE TABLE event_teams (
 ); */
 
 
+CREATE TABLE matches (
+    event_id INTEGER REFERENCES events(event_id),
+    match_id SERIAL PRIMARY KEY,
+    team1_id INTEGER REFERENCES teams(team_id),
+    team2_id INTEGER REFERENCES teams(team_id),
+    isFinished BOOLEAN,
+    withdrawal BOOLEAN,
+    match_date DATE,
+    winner_id INTEGER REFERENCES teams(team_id),
+    winner_score VARCHAR(40),
+    points INTEGER);
+
+INSERT INTO matches (event_id, team1_id, team2_id) VALUES ($1, $2, $3)
 
 
 
