@@ -201,11 +201,21 @@ app.delete("/events/:id", async (req, res) => {
   }
 });
 
+//ALL PLAYERS
+app.get("/players", async (req, res) => {
+  try {
+    const players = await pool.query("SELECT * FROM players");
+    res.json(players.rows);
+  } catch (error) {
+    console.error(err.message);
+  }
+});
+
 //PLAYERS SEARCH
 // player_firstname player_lastname => %{}%
 // || is used in sql to concat
 // ILIKE case insensitive
-app.get("/players", async (req, res) => {
+app.get("/searchplayers", async (req, res) => {
   const { name } = req.query;
   try {
     const players = await pool.query(
