@@ -28,7 +28,7 @@ function EventEntry({ gevent, getEventsData }) {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVERURL}/players/?name=${name}`
+        `${process.env.REACT_APP_SERVERURL}/searchplayers/?name=${name}`
       );
 
       const parseResponse = await response.json();
