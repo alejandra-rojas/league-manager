@@ -7,7 +7,11 @@ function Players() {
   return (
     <div className="">
       {players.map((player) => (
-        <Link to={"/"} key={player.player_id} className="flex gap-9">
+        <Link
+          to={player.player_id.toString()}
+          key={player.player_id}
+          className="flex gap-9"
+        >
           {player.player_firstname} {player.player_lastname}
           <p>{player.player_phonenumber}</p>
           <p>{player.player_email}</p>

@@ -211,6 +211,21 @@ app.get("/players", async (req, res) => {
   }
 });
 
+//GET A SINGLE PLAYER
+app.get("/players/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const player = await pool.query(
+      "SELECT * FROM players WHERE player_id = $1",
+      [id]
+    );
+    res.json(player.rows);
+  } catch (error) {
+    console.log("UPDATE ERROR");
+    console.error(error);
+  }
+});
+
 //PLAYERS SEARCH
 // player_firstname player_lastname => %{}%
 // || is used in sql to concat
