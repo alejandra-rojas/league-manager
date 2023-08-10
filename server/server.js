@@ -298,10 +298,20 @@ app.get("/events/:id/teams", async (req, res) => {
       SELECT
           et.event_id,
           et.team_id,
+          et.team_points,
+          et.team_bonuspoints,
           p1.player_firstname AS player1_firstname,
           p1.player_lastname AS player1_lastname,
           p2.player_firstname AS player2_firstname,
-          p2.player_lastname AS player2_lastname
+          p2.player_lastname AS player2_lastname,
+          COUNT(DISTINCT m.match_id) AS total_matches,
+          COUNT(DISTINCT CASE WHEN m.isFinished THEN m.match_id END) AS played_matches,
+          COUNT(DISTINCT CASE WHEN m.winner_id = t.team_id THEN m.match_id END) AS team_wins,
+          SUM(CASE 
+            WHEN m.team1_id = t.team_id THEN m.team1_sets 
+            WHEN m.team2_id = t.team_id THEN m.team2_sets
+            ELSE 0
+          END) AS team_sets_won
       FROM
           event_teams et
       JOIN
@@ -310,11 +320,26 @@ app.get("/events/:id/teams", async (req, res) => {
           players p1 ON t.player1_id = p1.player_id
       JOIN
           players p2 ON t.player2_id = p2.player_id
+      LEFT JOIN
+          matches m ON (m.team1_id = t.team_id OR m.team2_id = t.team_id) AND m.event_id = et.event_id
       WHERE
-          et.event_id = $1;
+          et.event_id = $1
+      GROUP BY
+          et.event_id, et.team_id, p1.player_firstname, p1.player_lastname, p2.player_firstname, p2.player_lastname;
     `;
 
     const result = await pool.query(query, [eventId]);
+
+    /*     // Update team_bonusPoints for teams that have played all matches
+    const teamsToUpdate = result.rows.filter(
+      (team) => team.played_matches === team.total_matches
+    );
+    for (const team of teamsToUpdate) {
+      await pool.query(
+        "UPDATE event_teams SET team_bonusPoints = team_bonuspoints + 1 WHERE event_id = $1 AND team_id = $2",
+        [eventId, team.team_id]
+      );
+    } */
 
     res.json(result.rows);
   } catch (error) {
