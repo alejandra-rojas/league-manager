@@ -14,15 +14,14 @@ function EventModal({
   });
 
   const handleChange = (e) => {
-    console.log("changing", e);
+    //console.log("changing", e);
     const { name, value } = e.target;
 
     setData((data) => ({
       ...data,
       [name]: value,
     }));
-
-    console.log(data);
+    //console.log(data);
   };
 
   const postGroupData = async (e) => {
