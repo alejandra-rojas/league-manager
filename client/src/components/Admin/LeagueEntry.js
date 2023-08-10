@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
-import GroupEntry from "./EventEntry";
-import GroupModal from "./EventModal";
 import EventModal from "./EventModal";
 import EventEntry from "./EventEntry";
 
