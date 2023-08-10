@@ -29,7 +29,8 @@ app.post("/leagues", async (req, res) => {
     );
     res.json(newLeague);
   } catch (error) {
-    console.error(err);
+    console.log("CREATE NEW LEAGUE ERROR");
+    console.error(error);
   }
 });
 
@@ -59,7 +60,9 @@ app.delete("/leagues/:id", async (req, res) => {
       [id]
     );
     res.json(deleteLeague);
+    console.log(`league ${id} deleted`);
   } catch (error) {
+    console.log("DELETE ERROR");
     console.error(error);
   }
 });
@@ -142,6 +145,7 @@ app.post("/leagues/:id/events", async (req, res) => {
     );
     res.json(newEvent);
   } catch (error) {
+    console.log("NEW EVENT ERROR");
     console.error(error);
   }
 });
@@ -168,6 +172,7 @@ app.put("/events/:id", async (req, res) => {
     );
     res.json(editEvent);
   } catch (error) {
+    console.log("EDIT EVENT ERROR");
     console.error(error);
   }
 });
@@ -182,6 +187,7 @@ app.delete("/events/:id", async (req, res) => {
     );
     res.json(deleteEvent);
   } catch (error) {
+    console.log("DELETE EVENT ERROR");
     console.error(error);
   }
 });
@@ -367,18 +373,53 @@ app.get("/matches", async (req, res) => {
 // GET MATCHES FROM EVENT
 app.get("/events/:id/matches", async (req, res) => {
   const event_id = req.params.id;
+
   try {
-    const matches = await pool.query(
-      "SELECT * FROM matches WHERE event_id = $1",
-      [event_id]
-    );
+    const query = `
+      SELECT
+          m.*,
+          t1.player1_id AS team1_player1_id,
+          p1.player_firstname AS team1_player1_firstname,
+          p1.player_lastname AS team1_player1_lastname,
+          t1.player2_id AS team1_player2_id,
+          p2.player_firstname AS team1_player2_firstname,
+          p2.player_lastname AS team1_player2_lastname,
+          t2.player1_id AS team2_player1_id,
+          p3.player_firstname AS team2_player1_firstname,
+          p3.player_lastname AS team2_player1_lastname,
+          t2.player2_id AS team2_player2_id,
+          p4.player_firstname AS team2_player2_firstname,
+          p4.player_lastname AS team2_player2_lastname
+      FROM
+          matches m
+      JOIN
+          teams t1 ON m.team1_id = t1.team_id
+      JOIN
+          teams t2 ON m.team2_id = t2.team_id
+      JOIN
+          players p1 ON t1.player1_id = p1.player_id
+      JOIN
+          players p2 ON t1.player2_id = p2.player_id
+      JOIN
+          players p3 ON t2.player1_id = p3.player_id
+      JOIN
+          players p4 ON t2.player2_id = p4.player_id
+      WHERE
+          m.event_id = $1;
+    `;
+
+    const matches = await pool.query(query, [event_id]);
+
     res.json(matches.rows);
   } catch (error) {
     console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving matches." });
   }
 });
 
-// CREATE NEW MATCHES
+// CREATE NEW MATCHES BULK ACTION
 app.post("/matches", async (req, res) => {
   const matchesData = req.body;
 
@@ -386,6 +427,18 @@ app.post("/matches", async (req, res) => {
     const newMatches = await Promise.all(
       matchesData.map(async (match) => {
         const { event_id, team1_id, team2_id } = match;
+
+        // Check if a match with the same teams exists for the event
+        const existingMatch = await pool.query(
+          "SELECT * FROM matches WHERE event_id = $1 AND ((team1_id = $2 AND team2_id = $3) OR (team1_id = $3 AND team2_id = $2))",
+          [event_id, team1_id, team2_id]
+        );
+
+        if (existingMatch.rows.length > 0) {
+          console.log("Match already exists:", existingMatch.rows[0]);
+          return null; // Skip insertion for this match
+        }
+
         const newMatch = await pool.query(
           "INSERT INTO matches(event_id, team1_id, team2_id) VALUES ($1, $2, $3) RETURNING *",
           [event_id, team1_id, team2_id]
@@ -394,7 +447,10 @@ app.post("/matches", async (req, res) => {
       })
     );
 
-    res.status(201).json(newMatches);
+    // Remove null values from the array (matches that were skipped)
+    const filteredMatches = newMatches.filter((match) => match !== null);
+
+    res.status(201).json(filteredMatches);
   } catch (error) {
     console.error(error);
     res
