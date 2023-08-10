@@ -14,8 +14,8 @@ CREATE TABLE leagues (
     starting_date VARCHAR(10),
     midway_point VARCHAR(10),
     end_date VARCHAR(10),
-    isFinished BOOLEAN DEFAULT false
-);
+    isFinished BOOLEAN DEFAULT false);
+
 
 CREATE TABLE players (
     player_id SERIAL PRIMARY KEY,
@@ -28,34 +28,21 @@ CREATE TABLE teams (
     team_id SERIAL PRIMARY KEY,
     player1_id INTEGER REFERENCES players(player_id),
     player2_id INTEGER REFERENCES players(player_id), 
-    CHECK (player1_id <> player2_id)
-);
+    CHECK (player1_id <> player2_id));
 
 -- Create a functional index for the unique constraint
 -- Preventing duplicated teams in different order
 CREATE UNIQUE INDEX unique_player_order_idx ON teams (LEAST(player1_id, player2_id), GREATEST(player1_id, player2_id));
 
 CREATE TABLE events (
-    league_id INTEGER REFERENCES leagues(id),
+    league_id INTEGER REFERENCES leagues(id) ON DELETE CASCADE,
     event_id SERIAL PRIMARY KEY,
-    event_name VARCHAR(40),
-    -- participating_teams INTEGER[]
-    );
+    event_name VARCHAR(40));
 
 CREATE TABLE event_teams (
     event_id INTEGER REFERENCES events(event_id),
     team_id INTEGER REFERENCES teams(team_id),
     PRIMARY KEY (event_id, team_id));
-
-/* CREATE TABLE teams (
-    event_id INTEGER REFERENCES events(event_id)
-    team_id SERIAL PRIMARY KEY,
-    player1_fullname VARCHAR(40),
-    player2_fullname VARCHAR (40),
-    players_emails integer ARRAY[2],
-    players_phonenumbers integer ARRAY[2],
-); */
-
 
 CREATE TABLE matches (
     event_id INTEGER REFERENCES events(event_id),
@@ -67,7 +54,8 @@ CREATE TABLE matches (
     match_date DATE,
     winner_id INTEGER REFERENCES teams(team_id),
     winner_score VARCHAR(40),
-    points INTEGER);
+    team1_sets INTEGER,
+    team2_sets INTEGER);
 
 INSERT INTO matches (event_id, team1_id, team2_id) VALUES ($1, $2, $3)
 
