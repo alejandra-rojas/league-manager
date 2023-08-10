@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
-import { Link } from "react-router-dom";
+import MatchReportModal from "./MatchReportModal";
+import ReportModal from "./ReportModal";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
-  const [name, setName] = useState("");
   const [searchString, setSearchString] = useState("");
-  const [players, setPlayers] = useState([]);
+  // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
+  const [showMatchReportModal, setShowMatchReportModal] = useState(false);
 
   console.log(eventMatchesData);
 
@@ -26,9 +27,9 @@ function EventEntry({ gevent, getEventsData }) {
     }
   };
   useEffect(() => getEventTeamsData, []);
-  //console.log(eventTeams);
+  console.log(eventTeams);
 
-  const onSubmitForm = async (e) => {
+  /*   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(
@@ -41,7 +42,7 @@ function EventEntry({ gevent, getEventsData }) {
     } catch (err) {
       console.error(err.message);
     }
-  };
+  }; */
 
   const onSubmitTeamsForm = async (e) => {
     e.preventDefault();
@@ -250,7 +251,7 @@ function EventEntry({ gevent, getEventsData }) {
               <div>
                 <div className="my-5">
                   <h3>Participating teams</h3>
-                  <table class="table-auto border-collapse border">
+                  <table className="table-auto border-collapse border">
                     <thead>
                       <tr>
                         <th className="border-b border-solid  border-slate-600">
@@ -266,10 +267,10 @@ function EventEntry({ gevent, getEventsData }) {
                           Lost
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          Bonus
+                          Bonus points
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          Total
+                          Total points
                         </th>
                       </tr>
                     </thead>
@@ -283,11 +284,13 @@ function EventEntry({ gevent, getEventsData }) {
                             {team.player1_firstname} {team.player1_lastname} &{" "}
                             {team.player2_firstname} {team.player2_lastname}
                           </td>
-                          <td>2/5</td>
-                          <td>1</td>
-                          <td>1</td>
-                          <td>0</td>
-                          <td>2</td>
+                          <td>
+                            {team.played_matches}/{team.total_matches}
+                          </td>
+                          <td>{team.team_wins}</td>
+                          <td>{team.played_matches - team.team_wins}</td>
+                          <td>{team.team_bonuspoints}</td>
+                          <td>{team.team_sets_won * 2}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -300,34 +303,49 @@ function EventEntry({ gevent, getEventsData }) {
                 </p>
                 {/* {console.log(eventMatchesData)} */}
 
+                {showMatchReportModal && <ReportModal />}
                 <ul className="my-5">
-                  <h1>{gevent.event_name} matches</h1>
-                  {eventMatchesData.map((match) => (
-                    <li
-                      className="flex gap-10 py-1 border"
-                      key={match.match_id}
-                    >
-                      <div>
-                        <p>
-                          {match.team1_player1_firstname} &{" "}
-                          {match.team1_player2_firstname} VS{" "}
-                          {match.team2_player1_firstname} &{" "}
-                          {match.team2_player2_firstname}
-                        </p>
-                      </div>
-                      <div>Match Date {match.match_date}</div>
-                      <div>Is match finished {match.isFinished}</div>
-                      <div>Who won {match.winner_id}</div>
-                      <div>Number of sets team 1 won {match.team1_sets}</div>
-                      <div>Number of sets team 2 won {match.team2_sets}</div>
-                      <div>Winner Score {match.winner_score}</div>
-                      <div>Team withdrawal {match.withdrawal}</div>
-                      <button>Edit results</button>
-                    </li>
-                  ))}
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className="border-b border-solid  border-slate-600">
+                          Player
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Match Date
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Completed?
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Who won?
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Team1 sets
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Team2 sets
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          Winner Score
+                        </th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {eventMatchesData?.map((match) => (
+                        <MatchReportModal
+                          key={match.match_id}
+                          match={match}
+                          setShowMatchReportModal={setShowMatchReportModal}
+                          // getEventsData={getEventsData}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
                 </ul>
 
-                <p>If a team has withdrawn from this table.</p>
+                <p>If a team has withdrawn from this event click here.</p>
               </div>
             )}
           </div>
