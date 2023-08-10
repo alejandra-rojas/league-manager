@@ -7,7 +7,7 @@ import {
 //Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Leagues, { leaguesData } from "./pages/admin/Leagues";
+import Leagues from "./pages/admin/Leagues";
 import Players, { playersData } from "./pages/admin/Players";
 import PlayerDetails, {
   playerDetailsLoader,
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
 
       <Route path="admin" element={<AdminLayout />}>
-        <Route index element={<Leagues />} loader={leaguesData} />
+        <Route index element={<Leagues />} />
         <Route
           path="players"
           element={<PlayersLayout />}
