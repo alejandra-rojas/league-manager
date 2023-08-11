@@ -123,7 +123,7 @@ app.get("/leagues/:id/events", async (req, res) => {
   const leagueId = req.params.id; // Extract the league ID from the request URL
   try {
     const events = await pool.query(
-      "SELECT event_id, event_name, participating_teams FROM events WHERE league_id = $1",
+      "SELECT * FROM events WHERE league_id = $1",
       [leagueId]
     );
     res.json(events.rows);
@@ -135,13 +135,13 @@ app.get("/leagues/:id/events", async (req, res) => {
 
 // CREATE NEW EVENT
 app.post("/leagues/:id/events", async (req, res) => {
-  const { event_name } = req.body;
+  const { event_name, midway_matches } = req.body;
   const leagueId = req.params.id; // Extract the league ID from the request URL
   console.log(event_name);
   try {
     const newEvent = await pool.query(
-      "INSERT INTO events(league_id, event_name) VALUES ($1, $2)",
-      [leagueId, event_name]
+      "INSERT INTO events(league_id, event_name, midway_matches) VALUES ($1, $2, $3)",
+      [leagueId, event_name, midway_matches]
     );
     res.json(newEvent);
   } catch (error) {
@@ -164,11 +164,11 @@ app.get("/events", async (req, res) => {
 //EDIT EVENT
 app.put("/events/:id", async (req, res) => {
   const { id } = req.params;
-  const { event_name } = req.body;
+  const { event_name, midway_matches } = req.body;
   try {
     const editEvent = await pool.query(
-      "UPDATE events SET event_name = $1 WHERE event_id = $2;",
-      [event_name, id]
+      "UPDATE events SET event_name = $1, midway_matches = $2 WHERE event_id = $3;",
+      [event_name, midway_matches, id]
     );
     res.json(editEvent);
   } catch (error) {
@@ -292,14 +292,16 @@ app.get("/teams", async (req, res) => {
 
 // GET ALL TEAMS FOR ONE EVENT
 app.get("/events/:id/teams", async (req, res) => {
-  const eventId = req.params.id; // Extract the league ID from the request URL
+  const eventId = req.params.id;
+
   try {
     const query = `
       SELECT
           et.event_id,
           et.team_id,
-          et.team_points,
-          et.team_bonuspoints,
+          et.all_bonus,
+          et.mid_bonus,
+          et.challenger_bonus,
           et.team_withdrawn,
           p1.player_firstname AS player1_firstname,
           p1.player_lastname AS player1_lastname,
@@ -307,6 +309,7 @@ app.get("/events/:id/teams", async (req, res) => {
           p2.player_lastname AS player2_lastname,
           COUNT(DISTINCT m.match_id) AS total_matches,
           COUNT(DISTINCT CASE WHEN m.isFinished THEN m.match_id END) AS played_matches,
+          COUNT(DISTINCT CASE WHEN m.isFinished AND m.match_date <= l.midway_point THEN m.match_id END) AS matchesbefore_midway,
           COUNT(DISTINCT CASE WHEN m.winner_id = t.team_id THEN m.match_id END) AS team_wins,
           SUM(CASE 
             WHEN m.team1_id = t.team_id THEN m.team1_sets 
@@ -323,6 +326,10 @@ app.get("/events/:id/teams", async (req, res) => {
           players p2 ON t.player2_id = p2.player_id
       LEFT JOIN
           matches m ON (m.team1_id = t.team_id OR m.team2_id = t.team_id) AND m.event_id = et.event_id
+      JOIN
+          events e ON et.event_id = e.event_id
+      JOIN
+          leagues l ON e.league_id = l.id
       WHERE
           et.event_id = $1
       GROUP BY
@@ -527,9 +534,10 @@ app.put("/matches/:id", async (req, res) => {
     team2_sets,
     winner_score,
   } = req.body;
+
   try {
-    const editMatch = await pool.query(
-      "UPDATE matches SET match_date = $1, isfinished = $2, winner_id = $3, team1_sets = $4, team2_sets = $5, winner_score = $6 WHERE match_id = $7;",
+    const matchUpdate = await pool.query(
+      "UPDATE matches SET match_date = $1, isfinished = $2, winner_id = $3, team1_sets = $4, team2_sets = $5, winner_score = $6 WHERE match_id = $7 RETURNING event_id, team1_id, team2_id;",
       [
         match_date,
         isfinished,
@@ -540,10 +548,62 @@ app.put("/matches/:id", async (req, res) => {
         id,
       ]
     );
-    res.json(editMatch);
+
+    // Check if all matches of team1 are finished
+    const event_id = matchUpdate.rows[0].event_id;
+    const team1_id = matchUpdate.rows[0].team1_id;
+
+    const allMatchesFinishedTeam1Query = `
+      SELECT 
+        COUNT(*) = COUNT(CASE WHEN isfinished THEN 1 END) AS all_matches_finished_team1
+      FROM matches
+      WHERE 
+        event_id = $1 AND (team1_id = $2 OR team2_id = $2);
+    `;
+
+    const allMatchesFinishedTeam1Result = await pool.query(
+      allMatchesFinishedTeam1Query,
+      [event_id, team1_id]
+    );
+
+    if (allMatchesFinishedTeam1Result.rows[0].all_matches_finished_team1) {
+      // Update all_bonus to 1 for team1 in event_teams
+      await pool.query(
+        "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2;",
+        [event_id, team1_id]
+      );
+    }
+
+    // Check if all matches of team2 are finished
+    const team2_id = matchUpdate.rows[0].team2_id;
+
+    const allMatchesFinishedTeam2Query = `
+      SELECT 
+        COUNT(*) = COUNT(CASE WHEN isfinished THEN 1 END) AS all_matches_finished_team2
+      FROM matches
+      WHERE 
+        event_id = $1 AND (team1_id = $2 OR team2_id = $2);
+    `;
+
+    const allMatchesFinishedTeam2Result = await pool.query(
+      allMatchesFinishedTeam2Query,
+      [event_id, team2_id]
+    );
+
+    if (allMatchesFinishedTeam2Result.rows[0].all_matches_finished_team2) {
+      // Update all_bonus to 1 for team2 in event_teams
+      await pool.query(
+        "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2;",
+        [event_id, team2_id]
+      );
+    }
+
+    res.json(matchUpdate.rows);
   } catch (error) {
-    console.log("EDIT MATCH ERROR");
-    console.error(error);
+    console.error("EDIT MATCH ERROR:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while updating the match." });
   }
 });
 
