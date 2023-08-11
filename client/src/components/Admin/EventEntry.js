@@ -14,6 +14,10 @@ function EventEntry({ gevent, getEventsData }) {
 
   //console.log(gevent);
 
+  function calculateCombinations(n) {
+    return n - 1;
+  }
+
   const getEventTeamsData = async () => {
     try {
       const response = await fetch(
@@ -179,6 +183,10 @@ function EventEntry({ gevent, getEventsData }) {
         <div className="flex justify-between">
           <div className="flex gap-7 items-center">
             <h3>{gevent.event_name}</h3>
+            <h2>
+              Complete matches {gevent.midway_matches} before the midpoint to
+              get 2 bonus points.{" "}
+            </h2>
             <button
               onClick={() => setShowEventModal(true)}
               className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
@@ -288,7 +296,13 @@ function EventEntry({ gevent, getEventsData }) {
                           Lost
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          Bonus points
+                          M BP
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          E BP
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          C BP
                         </th>
                         <th className="border-b border-solid  border-slate-600">
                           Total points
@@ -296,24 +310,44 @@ function EventEntry({ gevent, getEventsData }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {eventTeams.map((team) => (
-                        <tr
-                          key={team.team_id}
-                          className={team.team_withdrawn ? "bg-slate-600" : ""}
-                        >
-                          <td>
-                            {team.player1_firstname} {team.player1_lastname} &{" "}
-                            {team.player2_firstname} {team.player2_lastname}
-                          </td>
-                          <td>
-                            {team.played_matches}/{team.total_matches}
-                          </td>
-                          <td>{team.team_wins}</td>
-                          <td>{team.played_matches - team.team_wins}</td>
-                          <td>{team.team_bonuspoints}</td>
-                          <td>{team.team_sets_won * 2}</td>
-                        </tr>
-                      ))}
+                      {eventTeams.map((team) => {
+                        const activeTeamsCount = eventTeams.filter(
+                          (t) => !t.team_withdrawn
+                        ).length;
+                        console.log(activeTeamsCount);
+                        const totalMatches =
+                          calculateCombinations(activeTeamsCount);
+
+                        return (
+                          <tr
+                            key={team.team_id}
+                            className={
+                              team.team_withdrawn ? "bg-slate-600" : ""
+                            }
+                          >
+                            <td>
+                              {team.player1_firstname} {team.player1_lastname} &{" "}
+                              {team.player2_firstname} {team.player2_lastname}
+                            </td>
+                            <td>
+                              {team.played_matches}/{totalMatches}
+                            </td>
+                            <td>{team.team_wins}</td>
+                            <td>{team.played_matches - team.team_wins}</td>
+                            <td>mid bonus</td>
+                            <td>all bonus</td>
+                            <td>Challenger bonus</td>
+                            <td>
+                              Total points{" "}
+                              {team.team_sets_won * 2 +
+                                (team.played_matches >= totalMatches &&
+                                !team.team_withdrawn
+                                  ? 1
+                                  : "")}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
