@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
-import MatchReportModal from "./MatchReportModal";
-import ReportModal from "./ReportModal";
+import StandingsReport from "./StandingsReport";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
@@ -11,9 +10,9 @@ function EventEntry({ gevent, getEventsData }) {
   // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
-  const [showMatchReportModal, setShowMatchReportModal] = useState(false);
+  const [selectedTeamWId, setSelectedTeamWId] = useState("");
 
-  console.log(eventMatchesData);
+  //console.log(gevent);
 
   const getEventTeamsData = async () => {
     try {
@@ -150,7 +149,29 @@ function EventEntry({ gevent, getEventsData }) {
     }
   };
   useEffect(() => getEventMatchesData, []);
-  //console.log(gevent);
+  console.log(eventMatchesData);
+
+  const withdrawTeam = async (e, team_id) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/events/${gevent.event_id}/teams/${team_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ team_id }),
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Team added to event!");
+        getEventTeamsData();
+        getEventMatchesData();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -278,7 +299,7 @@ function EventEntry({ gevent, getEventsData }) {
                       {eventTeams.map((team) => (
                         <tr
                           key={team.team_id}
-                          className=" border-b-orange-500 border-solid"
+                          className={team.team_withdrawn ? "bg-slate-600" : ""}
                         >
                           <td>
                             {team.player1_firstname} {team.player1_lastname} &{" "}
@@ -303,49 +324,47 @@ function EventEntry({ gevent, getEventsData }) {
                 </p>
                 {/* {console.log(eventMatchesData)} */}
 
-                {showMatchReportModal && <ReportModal />}
-                <ul className="my-5">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th className="border-b border-solid  border-slate-600">
-                          Player
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Match Date
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Completed?
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Who won?
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Team1 sets
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Team2 sets
-                        </th>
-                        <th className="border-b border-solid  border-slate-600">
-                          Winner Score
-                        </th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {eventMatchesData?.map((match) => (
-                        <MatchReportModal
-                          key={match.match_id}
-                          match={match}
-                          setShowMatchReportModal={setShowMatchReportModal}
-                          // getEventsData={getEventsData}
-                        />
-                      ))}
-                    </tbody>
-                  </table>
-                </ul>
+                <StandingsReport
+                  eventMatchesData={eventMatchesData}
+                  getEventMatchesData={getEventMatchesData}
+                  getEventTeamsData={getEventTeamsData}
+                />
 
-                <p>If a team has withdrawn from this event click here.</p>
+                <div className="mt-5">
+                  If a player has withdrawn from this event report it here.
+                </div>
+
+                <form>
+                  <label htmlFor="withdrawal">Which player withdrawn:</label>
+                  <select
+                    id="withdrawal"
+                    name="winner_id"
+                    value={selectedTeamWId}
+                    onChange={(e) => setSelectedTeamWId(e.target.value)}
+                    className="my-3 mx-0 py-2 px-3 rounded-xl border border-gray-200"
+                  >
+                    <option value="">select</option>
+                    {eventTeams
+                      .filter((team) => !team.team_withdrawn) // Filter out teams with team_withdrawal true
+                      .map((team) => (
+                        <option
+                          key={team.team_id}
+                          value={team.team_id}
+                          className="flex gap-10 py-1"
+                        >
+                          {team.player1_firstname} {team.player1_lastname} &{" "}
+                          {team.player2_firstname} {team.player2_lastname}
+                        </option>
+                      ))}
+                  </select>
+                  <input
+                    className={
+                      "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+                    }
+                    type="submit"
+                    onClick={(e) => withdrawTeam(e, selectedTeamWId)}
+                  />
+                </form>
               </div>
             )}
           </div>
