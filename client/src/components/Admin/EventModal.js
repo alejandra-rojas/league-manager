@@ -11,6 +11,7 @@ function EventModal({
 
   const [data, setData] = useState({
     event_name: editGroupMode ? gevent.event_name : "",
+    midway_matches: editGroupMode ? gevent.midway_matches : "",
   });
 
   const handleChange = (e) => {
@@ -105,6 +106,20 @@ function EventModal({
             placeholder="ex: 'Division A"
             name="event_name"
             value={data.event_name}
+            onChange={handleChange}
+            className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
+          />
+          <br />
+          <label htmlFor="bonusMatches">
+            Matches to play to midpoint bonus points:
+          </label>
+          <input
+            id="bonusMatches"
+            required
+            maxLength={1}
+            placeholder="ex: '3'"
+            name="midway_matches"
+            value={data.midway_matches}
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
