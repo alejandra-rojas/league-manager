@@ -40,9 +40,12 @@ CREATE TABLE events (
     event_name VARCHAR(40));
 
 CREATE TABLE event_teams (
-    event_id INTEGER REFERENCES events(event_id),
-    team_id INTEGER REFERENCES teams(team_id),
-    PRIMARY KEY (event_id, team_id));
+    event_id integer REFERENCES events(event_id) ON DELETE CASCADE,
+    team_id integer REFERENCES teams(team_id),
+    team_points integer,
+    team_bonuspoints integer,
+    team_withdrawn boolean DEFAULT false,
+    CONSTRAINT event_teams_pkey PRIMARY KEY (event_id, team_id));
 
 CREATE TABLE matches (
     event_id INTEGER REFERENCES events(event_id),
