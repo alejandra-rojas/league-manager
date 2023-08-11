@@ -5,6 +5,7 @@ function EventModal({
   setShowEventModal,
   league,
   getEventsData,
+  getEventTeamsData,
   gevent,
 }) {
   const editGroupMode = mode === "edit" ? true : false;
@@ -61,6 +62,7 @@ function EventModal({
         console.log("Event was edited!");
         setShowEventModal(false);
         getEventsData();
+        getEventTeamsData();
       }
     } catch (error) {
       console.error(error);
