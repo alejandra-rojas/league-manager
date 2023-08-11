@@ -32,25 +32,6 @@ function MatchReportEntry({ match, getEventMatchesData, getEventTeamsData }) {
         </button>
       </div>
 
-      {/* <tr key={match.match_id} className=" border-b-orange-500 border-solid">
-        <td>
-          {match.team1_player1_firstname} {match.team1_player2_firstname} VS{" "}
-          {match.team2_player1_firstname} {match.team2_player2_firstname}
-        </td>
-        <td>{match.match_date}</td>
-        <td>{match.isfinished ? "☑️" : ""}</td>
-        <td>{match.winner_id}</td>
-        <td>{match.team1_sets}</td>
-        <td>{match.team2_sets}</td>
-        <td>{match.winner_score}</td>
-        <td
-          onClick={() => setShowMatchReportModal(true)}
-          className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-500 hover:border-transparent rounded"
-        >
-          Edit
-        </td>
-      </tr> */}
-
       {showMatchReportModal && (
         <MatchReportModal
           match={match}

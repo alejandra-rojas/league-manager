@@ -32,48 +32,6 @@ function StandingsReport({
           getEventTeamsData={getEventTeamsData}
         />
       ))}
-
-      {/*       <ul className="my-5">
-        <table>
-          <thead>
-            <tr>
-              <th className="border-b border-solid  border-slate-600">
-                Player
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Match Date
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Completed?
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Who won?
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Team1 sets
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Team2 sets
-              </th>
-              <th className="border-b border-solid  border-slate-600">
-                Winner Score
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {eventMatchesData?.map((match) => (
-              <MatchReportEntry
-                key={match.match_id}
-                match={match}
-                setShowMatchReportModal={setShowMatchReportModal}
-                // getEventsData={getEventsData}
-              />
-            ))}
-          </tbody>
-        </table>
-      </ul>
- */}
     </div>
   );
 }
