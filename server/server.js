@@ -536,6 +536,12 @@ app.put("/matches/:id", async (req, res) => {
   } = req.body;
 
   try {
+    // Fetch the midway_point from the leagues table
+    const leaguesQuery =
+      "SELECT midway_point FROM leagues WHERE id = (SELECT league_id FROM events WHERE event_id = (SELECT event_id FROM matches WHERE match_id = $1))";
+    const leaguesResult = await pool.query(leaguesQuery, [id]);
+    const midwayPoint = new Date(leaguesResult.rows[0].midway_point);
+
     const matchUpdate = await pool.query(
       "UPDATE matches SET match_date = $1, isfinished = $2, winner_id = $3, team1_sets = $4, team2_sets = $5, winner_score = $6 WHERE match_id = $7 RETURNING event_id, team1_id, team2_id;",
       [
@@ -595,6 +601,31 @@ app.put("/matches/:id", async (req, res) => {
       await pool.query(
         "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2;",
         [event_id, team2_id]
+      );
+    }
+
+    // Convert the match_date to a Date object
+    const matchDate = new Date(match_date);
+
+    // Check if the match_date is before or equal to the midway_point
+    const midwayPointCheckQuery = `
+      SELECT 
+        CASE WHEN $1 <= $2 THEN true ELSE false END AS before_midway
+      FROM matches m
+      WHERE m.match_id = $3;
+    `;
+
+    const midwayPointCheckResult = await pool.query(midwayPointCheckQuery, [
+      matchDate,
+      midwayPoint,
+      id,
+    ]);
+
+    if (midwayPointCheckResult.rows[0].before_midway) {
+      // Update byMidpoint to true for the match
+      await pool.query(
+        "UPDATE matches SET bymidpoint = true WHERE match_id = $1;",
+        [id]
       );
     }
 
