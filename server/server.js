@@ -300,6 +300,7 @@ app.get("/events/:id/teams", async (req, res) => {
           et.team_id,
           et.team_points,
           et.team_bonuspoints,
+          et.team_withdrawn,
           p1.player_firstname AS player1_firstname,
           p1.player_lastname AS player1_lastname,
           p2.player_firstname AS player2_firstname,
@@ -379,6 +380,37 @@ app.delete("/events/:id/teams/:tid", async (req, res) => {
     );
 
     res.json(deleteTeamFromEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//WITHDRAW TEAM FROM EVENT - RESET TEAM SETS
+app.put("/events/:id/teams/:tid", async (req, res) => {
+  const { id, tid } = req.params;
+
+  try {
+    // Update matches for withdrawn team
+    await pool.query(
+      "UPDATE matches m " +
+        "SET team1_sets = 0, team2_sets = 0, withdrawal = true " +
+        "FROM event_teams et " +
+        "WHERE m.event_id = et.event_id " +
+        "AND (m.team1_id = et.team_id OR m.team2_id = et.team_id) " +
+        "AND et.team_id = $1",
+      [tid]
+    );
+
+    // Update event_teams table to mark team as withdrawn
+    await pool.query(
+      "UPDATE event_teams " +
+        "SET team_withdrawn = true " +
+        "WHERE event_id = $1 AND team_id = $2",
+      [id, tid]
+    );
+
+    res.json({ message: "Team withdrawn from event" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -481,6 +513,37 @@ app.post("/matches", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while creating matches." });
+  }
+});
+
+//EDIT MATCH SCORES
+app.put("/matches/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    match_date,
+    isfinished,
+    winner_id,
+    team1_sets,
+    team2_sets,
+    winner_score,
+  } = req.body;
+  try {
+    const editMatch = await pool.query(
+      "UPDATE matches SET match_date = $1, isfinished = $2, winner_id = $3, team1_sets = $4, team2_sets = $5, winner_score = $6 WHERE match_id = $7;",
+      [
+        match_date,
+        isfinished,
+        winner_id,
+        team1_sets,
+        team2_sets,
+        winner_score,
+        id,
+      ]
+    );
+    res.json(editMatch);
+  } catch (error) {
+    console.log("EDIT MATCH ERROR");
+    console.error(error);
   }
 });
 
