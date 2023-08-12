@@ -303,14 +303,17 @@ app.get("/events/:id/teams", async (req, res) => {
           et.mid_bonus,
           et.challenger_bonus,
           et.team_withdrawn,
+          (SELECT e.midway_matches FROM events e WHERE e.event_id = et.event_id) AS midway_matches,
           p1.player_firstname AS player1_firstname,
           p1.player_lastname AS player1_lastname,
           p2.player_firstname AS player2_firstname,
           p2.player_lastname AS player2_lastname,
           COUNT(DISTINCT m.match_id) AS total_matches,
           COUNT(DISTINCT CASE WHEN m.isFinished THEN m.match_id END) AS played_matches,
-          COUNT(DISTINCT CASE WHEN m.isFinished AND m.match_date <= l.midway_point THEN m.match_id END) AS matchesbefore_midway,
+          COUNT(DISTINCT CASE WHEN NOT withdrawal THEN m.match_id END) AS notwithdrawn_totalmatches,
+          COUNT(DISTINCT CASE WHEN NOT withdrawal AND m.isFinished THEN m.match_id END) AS completed_notwithdrawnmatches,
           COUNT(DISTINCT CASE WHEN m.winner_id = t.team_id THEN m.match_id END) AS team_wins,
+          SUM(CASE WHEN m.bymidpoint AND (m.team1_id = t.team_id OR m.team2_id = t.team_id) THEN 1 ELSE 0 END) AS matches_before_midpoint,
           SUM(CASE 
             WHEN m.team1_id = t.team_id THEN m.team1_sets 
             WHEN m.team2_id = t.team_id THEN m.team2_sets
@@ -338,17 +341,34 @@ app.get("/events/:id/teams", async (req, res) => {
 
     const result = await pool.query(query, [eventId]);
 
-    /*     // Update team_bonusPoints for teams that have played all matches
+    // mid_bonus logic
+    for (const row of result.rows) {
+      const midwayMatches = parseInt(row.midway_matches);
+      const matchesBeforeMidpoint = parseInt(row.matches_before_midpoint);
+
+      if (matchesBeforeMidpoint >= midwayMatches) {
+        // Update mid_bonus to 2 in the event_teams table
+        await pool.query(
+          "UPDATE event_teams SET mid_bonus = 2 WHERE event_id = $1 AND team_id = $2",
+          [row.event_id, row.team_id]
+        );
+        row.mid_bonus = 2; // Update the value in the result object
+      }
+    }
+
+    // all_bonus logic
     const teamsToUpdate = result.rows.filter(
-      (team) => team.played_matches === team.total_matches
+      (team) =>
+        team.total_matches > 0 &&
+        team.completed_notwithdrawnmatches >= team.notwithdrawn_totalmatches
     );
     for (const team of teamsToUpdate) {
       await pool.query(
-        "UPDATE event_teams SET team_bonusPoints = team_bonuspoints + 1 WHERE event_id = $1 AND team_id = $2",
+        "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2",
         [eventId, team.team_id]
       );
-    } */
-
+      team.all_bonus = 1;
+    }
     res.json(result.rows);
   } catch (error) {
     console.error(error);
@@ -555,55 +575,7 @@ app.put("/matches/:id", async (req, res) => {
       ]
     );
 
-    // Check if all matches of team1 are finished
-    const event_id = matchUpdate.rows[0].event_id;
-    const team1_id = matchUpdate.rows[0].team1_id;
-
-    const allMatchesFinishedTeam1Query = `
-      SELECT 
-        COUNT(*) = COUNT(CASE WHEN isfinished THEN 1 END) AS all_matches_finished_team1
-      FROM matches
-      WHERE 
-        event_id = $1 AND (team1_id = $2 OR team2_id = $2);
-    `;
-
-    const allMatchesFinishedTeam1Result = await pool.query(
-      allMatchesFinishedTeam1Query,
-      [event_id, team1_id]
-    );
-
-    if (allMatchesFinishedTeam1Result.rows[0].all_matches_finished_team1) {
-      // Update all_bonus to 1 for team1 in event_teams
-      await pool.query(
-        "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2;",
-        [event_id, team1_id]
-      );
-    }
-
-    // Check if all matches of team2 are finished
-    const team2_id = matchUpdate.rows[0].team2_id;
-
-    const allMatchesFinishedTeam2Query = `
-      SELECT 
-        COUNT(*) = COUNT(CASE WHEN isfinished THEN 1 END) AS all_matches_finished_team2
-      FROM matches
-      WHERE 
-        event_id = $1 AND (team1_id = $2 OR team2_id = $2);
-    `;
-
-    const allMatchesFinishedTeam2Result = await pool.query(
-      allMatchesFinishedTeam2Query,
-      [event_id, team2_id]
-    );
-
-    if (allMatchesFinishedTeam2Result.rows[0].all_matches_finished_team2) {
-      // Update all_bonus to 1 for team2 in event_teams
-      await pool.query(
-        "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2;",
-        [event_id, team2_id]
-      );
-    }
-
+    // SETTING byMidpoint in event_matches TO TRUE IF MATCH FINISHED BEFORE MIDPOINT
     // Convert the match_date to a Date object
     const matchDate = new Date(match_date);
 
