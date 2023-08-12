@@ -296,13 +296,16 @@ function EventEntry({ gevent, getEventsData }) {
                           Lost
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          Mid Bonus
+                          SetsWon
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          All bonus
+                          MidBon
                         </th>
                         <th className="border-b border-solid  border-slate-600">
-                          Challenger bonus
+                          AllBon
+                        </th>
+                        <th className="border-b border-solid  border-slate-600">
+                          ChallBon
                         </th>
                         <th className="border-b border-solid  border-slate-600">
                           Total points
@@ -334,16 +337,14 @@ function EventEntry({ gevent, getEventsData }) {
                             </td>
                             <td>{team.team_wins}</td>
                             <td>{team.played_matches - team.team_wins}</td>
+                            <td>{team.team_sets_won}</td>
                             <td>{team.mid_bonus}</td>
                             <td>{team.all_bonus}</td>
                             <td>{team.challenger_bonus}</td>
                             <td>
                               Total points{" "}
                               {team.team_sets_won * 2 +
-                                (team.played_matches >= totalMatches &&
-                                !team.team_withdrawn
-                                  ? 1
-                                  : "")}
+                                (team.mid_bonus + team.all_bonus)}
                             </td>
                           </tr>
                         );
