@@ -341,6 +341,41 @@ app.get("/events/:id/teams", async (req, res) => {
 
     const result = await pool.query(query, [eventId]);
 
+    // Calculate set_points based on team_sets_won * 2
+    for (const row of result.rows) {
+      const teamSetsWon = parseInt(row.team_sets_won);
+      const setPoints = teamSetsWon * 2;
+
+      // Update set_points in the event_teams table
+      await pool.query(
+        "UPDATE event_teams SET set_points = $1 WHERE event_id = $2 AND team_id = $3",
+        [setPoints, row.event_id, row.team_id]
+      );
+
+      // Update the value in the result object
+      row.set_points = setPoints;
+    }
+
+    // Calculate total_points based on team_sets_won * 2 + mid_bonus + all_bonus + challenger_bonus
+    for (const row of result.rows) {
+      // Calculate team_sets_won, mid_bonus, and all_bonus
+      const teamSetsWon = parseInt(row.team_sets_won);
+      const midBonus = parseInt(row.mid_bonus);
+      const allBonus = parseInt(row.all_bonus);
+
+      // Calculate total_points based on the formula: team_sets_won * 2 + mid_bonus + all_bonus
+      const totalPoints = teamSetsWon * 2 + midBonus + allBonus;
+
+      // Update total_points in the event_teams table
+      await pool.query(
+        "UPDATE event_teams SET total_points = $1 WHERE event_id = $2 AND team_id = $3",
+        [totalPoints, row.event_id, row.team_id]
+      );
+
+      // Update the total_points value in the result object
+      row.total_points = totalPoints;
+    }
+
     // mid_bonus logic
     for (const row of result.rows) {
       const midwayMatches = parseInt(row.midway_matches);
