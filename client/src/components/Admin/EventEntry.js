@@ -66,6 +66,12 @@ function EventEntry({ gevent, getEventsData }) {
     }
   };
 
+  const clearSearchResults = () => {
+    setSearchPerformed(false);
+    setTeams([]);
+    setSearchString("");
+  };
+
   const addTeam = async (team_id) => {
     try {
       const response = await fetch(
@@ -254,6 +260,9 @@ function EventEntry({ gevent, getEventsData }) {
                     </table>
                     {searchPerformed && teams.length === 0 && (
                       <p>No teams found</p>
+                    )}
+                    {searchPerformed && teams.length >= 1 && (
+                      <button onClick={clearSearchResults}>Clear search</button>
                     )}
                   </div>
                 </div>
