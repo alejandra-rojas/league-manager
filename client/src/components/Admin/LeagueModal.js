@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 function LeagueModal({ mode, setShowModal, getData, league }) {
   const editMode = mode === "edit" ? true : false;
+  const [midpointError, setMidpointError] = useState("");
+  const [endDateError, setEndDateError] = useState("");
 
   const [data, setData] = useState({
     league_name: editMode ? league.league_name : "",
@@ -27,6 +30,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
         console.log("Created new league succesfully!");
         setShowModal(false);
         getData();
+        toast.success(`${data.league_name} league created `);
       }
     } catch (error) {
       console.error(error);
@@ -49,6 +53,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
         console.log("edited");
         setShowModal(false);
         getData();
+        toast.success(`${data.league_name} has been modified succesfully`);
       }
     } catch (error) {
       console.error(error);
@@ -66,6 +71,21 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
     }));
 
     console.log(data);
+
+    if (
+      name === "midway_point" &&
+      new Date(value) < new Date(data.starting_date)
+    ) {
+      setMidpointError("Midpoint date must be after the start date.");
+    } else {
+      setMidpointError("");
+    }
+
+    if (name === "end_date" && new Date(value) < new Date(data.midway_point)) {
+      setEndDateError("Midpoint date must be after the start date.");
+    } else {
+      setEndDateError("");
+    }
   };
 
   const deleteLeague = async () => {
@@ -77,6 +97,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
         }
       );
       if (response.status === 200) {
+        toast.success(`League has been deleted`);
         getData();
       }
     } catch (error) {
@@ -104,7 +125,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             id="leagueName"
             required
             maxLength={30}
-            placeholder="ex: 'Women Doubles"
+            placeholder="Women Doubles"
             name="league_name"
             value={data.league_name}
             onChange={handleChange}
@@ -132,6 +153,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
+          {midpointError && <p className="text-red-500">{midpointError}</p>}
           <br />
           <label htmlFor="endDate">End date:</label>
           <input
@@ -143,6 +165,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
+          {endDateError && <p className="text-red-500">{endDateError}</p>}
           <br />
           {mode === "edit" && (
             <>

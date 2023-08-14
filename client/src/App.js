@@ -22,6 +22,10 @@ import RootLayout from "./layouts/RootLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import PlayersLayout from "./layouts/PlayersLayout";
 
+// Library
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
@@ -51,7 +55,12 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />;
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;

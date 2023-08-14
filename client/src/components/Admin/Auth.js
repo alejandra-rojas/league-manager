@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 function Auth() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
@@ -37,6 +38,7 @@ function Auth() {
     } else {
       setCookie("Email", data.email);
       setCookie("AuthToken", data.token);
+      toast.success(`Succes`);
       window.location.reload();
     }
   };
