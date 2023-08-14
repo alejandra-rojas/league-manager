@@ -16,7 +16,7 @@ function MatchReportEntry({ match, getEventMatchesData, getEventTeamsData }) {
           {match.team2_player1_firstname} & {match.team2_player2_firstname}
         </div>
 
-        <div>{match.match_date.trim() === '""' ? "" : match.match_date}</div>
+        <div>{match.match_date === null ? "" : match.match_date}</div>
         <div>{match.isfinished ? "☑️" : "-"}</div>
 
         {/* <div>{match.team1_sets === 0 ? "-" : match.team1_sets}</div>
