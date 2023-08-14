@@ -76,9 +76,7 @@ function MatchReportModal({
           required
           type="date"
           name="match_date"
-          value={
-            data.match_date.trim() === "0" ? "yyyy-MM-dd" : data.match_date
-          }
+          value={data.match_date === null ? "" : data.match_date}
           onChange={handleChange}
           className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
         />
@@ -99,7 +97,7 @@ function MatchReportModal({
             <select
               id="winner"
               name="winner_id"
-              value={data.winner_id}
+              value={data.winner_id !== null ? data.winner_id : ""}
               onChange={handleChange}
               className="my-3 mx-0 py-2 px-3 rounded-xl border border-gray-200"
             >
