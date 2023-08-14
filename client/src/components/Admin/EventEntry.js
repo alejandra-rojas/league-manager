@@ -313,42 +313,41 @@ function EventEntry({ gevent, getEventsData }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {eventTeams.map((team) => {
-                        const activeTeamsCount = eventTeams.filter(
-                          (t) => !t.team_withdrawn
-                        ).length;
-                        console.log(activeTeamsCount);
-                        const totalMatches =
-                          calculateCombinations(activeTeamsCount);
+                      {eventTeams
+                        .sort((a, b) => b.total_points - a.total_points)
+                        .map((team) => {
+                          const activeTeamsCount = eventTeams.filter(
+                            (t) => !t.team_withdrawn
+                          ).length;
+                          console.log(activeTeamsCount);
+                          const totalMatches =
+                            calculateCombinations(activeTeamsCount);
 
-                        return (
-                          <tr
-                            key={team.team_id}
-                            className={
-                              team.team_withdrawn ? "bg-slate-600" : ""
-                            }
-                          >
-                            <td>
-                              {team.player1_firstname} {team.player1_lastname} &{" "}
-                              {team.player2_firstname} {team.player2_lastname}
-                            </td>
-                            <td>
-                              {team.played_matches}/{totalMatches}
-                            </td>
-                            <td>{team.team_wins}</td>
-                            <td>{team.played_matches - team.team_wins}</td>
-                            <td>{team.team_sets_won}</td>
-                            <td>{team.mid_bonus}</td>
-                            <td>{team.all_bonus}</td>
-                            <td>{team.challenger_bonus}</td>
-                            <td>
-                              Total points{" "}
-                              {team.team_sets_won * 2 +
-                                (team.mid_bonus + team.all_bonus)}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                          return (
+                            <tr
+                              key={team.team_id}
+                              className={
+                                team.team_withdrawn ? "bg-slate-600" : ""
+                              }
+                            >
+                              <td>
+                                {team.player1_firstname} {team.player1_lastname}{" "}
+                                & {team.player2_firstname}{" "}
+                                {team.player2_lastname}
+                              </td>
+                              <td>
+                                {team.played_matches}/{totalMatches}
+                              </td>
+                              <td>{team.team_wins}</td>
+                              <td>{team.played_matches - team.team_wins}</td>
+                              <td>{team.team_sets_won}</td>
+                              <td>{team.mid_bonus}</td>
+                              <td>{team.all_bonus}</td>
+                              <td>{team.challenger_bonus}</td>
+                              <td>{team.total_points}</td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>
@@ -400,6 +399,8 @@ function EventEntry({ gevent, getEventsData }) {
                     onClick={(e) => withdrawTeam(e, selectedTeamWId)}
                   />
                 </form>
+
+                <div className="mt-5">Add a challenger match</div>
               </div>
             )}
           </div>
