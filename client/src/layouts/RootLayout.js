@@ -9,9 +9,15 @@ function RootLayout() {
           Highbury and Islington Leagues
         </h1>
         <nav className="flex gap-4">
-          <NavLink to={"/"}>Home</NavLink>
-          <NavLink to={"about"}>About</NavLink>
-          <NavLink to={"admin"}>Admin</NavLink>
+          <NavLink to={"/"} aria-label="Go to home">
+            Home
+          </NavLink>
+          <NavLink to={"about"} aria-label="Go to About page">
+            About
+          </NavLink>
+          <NavLink to={"admin"} aria-label="Go to Admin section">
+            Admin
+          </NavLink>
         </nav>
       </header>
       <main className="max-w-7xl my-4 mx-auto ">

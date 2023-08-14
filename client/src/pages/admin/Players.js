@@ -99,6 +99,7 @@ function Players() {
             to={player.player_id.toString()}
             key={player.player_id}
             className="flex gap-9"
+            aria-label={`Go to  ${player.player_firstname} ${player.player_lastname} players page`}
           >
             {player.player_firstname} {player.player_lastname}
             <p>{player.player_phonenumber}</p>
