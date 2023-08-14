@@ -7,6 +7,8 @@ function EventEntry({ gevent, getEventsData }) {
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
   const [searchString, setSearchString] = useState("");
+  const [searchPerformed, setSearchPerformed] = useState(false); // New state
+
   // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
@@ -58,6 +60,7 @@ function EventEntry({ gevent, getEventsData }) {
 
       console.log(parseResponse);
       setTeams(parseResponse);
+      setSearchPerformed(true);
     } catch (err) {
       console.error(err.message);
     }
@@ -129,7 +132,7 @@ function EventEntry({ gevent, getEventsData }) {
       if (response.status === 201) {
         const newMatches = await response.json();
         console.log("New matches created:", newMatches);
-        // You can update the UI or provide feedback to the user here
+        // provide feedback to the user
         getEventMatchesData();
       } else {
         console.log("Error generating matches:", response.statusText);
@@ -249,7 +252,9 @@ function EventEntry({ gevent, getEventsData }) {
                         ))}
                       </tbody>
                     </table>
-                    {/* {teams.length === 0 && <p>No teams found</p>} */}
+                    {searchPerformed && teams.length === 0 && (
+                      <p>No teams found</p>
+                    )}
                   </div>
                 </div>
 
