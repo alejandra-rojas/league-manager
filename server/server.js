@@ -210,13 +210,36 @@ app.post("/players", async (req, res) => {
     player_phonenumber,
     player_email,
   } = req.body;
+
   try {
-    const newPLayer = await pool.query(
+    const newPlayer = await pool.query(
       "INSERT INTO players(player_firstname, player_lastname, player_phonenumber, player_email) VALUES ($1, $2, $3, $4)",
       [player_firstname, player_lastname, player_phonenumber, player_email]
     );
-    res.json(newPLayer);
+    res.json(newPlayer);
   } catch (error) {
+    console.log("ERROR WHILE CREATING PLAYER");
+    console.error(error);
+  }
+});
+
+//EDIT A PLAYER
+app.put("/players/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    player_firstname,
+    player_lastname,
+    player_phonenumber,
+    player_email,
+  } = req.body;
+  try {
+    const editPlayer = await pool.query(
+      "UPDATE players SET player_firstname = $1, player_lastname = $2, player_phonenumber = $3, player_email = $4 WHERE id = $5;",
+      [player_firstname, player_lastname, player_phonenumber, player_email, id]
+    );
+    res.json(editPlayer);
+  } catch (error) {
+    console.log("UPDATE PLAYER ERROR");
     console.error(error);
   }
 });
@@ -232,6 +255,21 @@ app.get("/players/:id", async (req, res) => {
     res.json(player.rows);
   } catch (error) {
     console.log("UPDATE ERROR");
+    console.error(error);
+  }
+});
+
+//DELETE PLAYER
+app.delete("/players/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletePlayer = await pool.query(
+      "DELETE FROM players WHERE player_id = $1;",
+      [id]
+    );
+    res.json(deleteEvent);
+  } catch (error) {
+    console.log("DELETE PLAYER ERROR");
     console.error(error);
   }
 });
