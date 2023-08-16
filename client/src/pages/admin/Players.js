@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import {
-  useLoaderData,
-  Link,
-  Form,
-  useActionData,
-  redirect,
-} from "react-router-dom";
+import { toast } from "react-toastify";
+import { useLoaderData, Link } from "react-router-dom";
+
+import { TrashIcon } from "@heroicons/react/24/solid";
+import { UserPlusIcon } from "@heroicons/react/24/solid";
 
 function Players() {
   const players = useLoaderData();
   const [showAddPlayer, setShowAddPlayer] = useState(false);
-  const data = useActionData();
 
   return (
     <>
@@ -27,6 +24,7 @@ function Players() {
         <div>
           <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
             <div className="flex justify-between pb-3">
+              <TrashIcon width={20} />
               <h3 className="text-xl font-bold">
                 Add a new player to the database
               </h3>
@@ -39,7 +37,7 @@ function Players() {
                 X
               </button>
             </div>
-            <Form className="flex-col" method="post" action="/players">
+            <Form className="flex-col" method="post" action="/newPlayer">
               <label htmlFor="firstName">First name:</label>
               <input
                 id="firstName"
@@ -47,6 +45,7 @@ function Players() {
                 maxLength={30}
                 placeholder="John"
                 name="player_firstname"
+                aria-labelledby="firstName"
                 className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
               />
               <br />
@@ -79,15 +78,19 @@ function Players() {
                 name="player_email"
                 className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
               />
+              <br />
+              <br />
 
-              <input
+              <button
                 className={
-                  "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+                  "flex items-center gap-1 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
                 }
                 type="submit"
-              />
+              >
+                <span>Register player</span>
 
-              {data && data.error && <p>{data.error}</p>}
+                <UserPlusIcon width={20} />
+              </button>
             </Form>
           </div>
         </div>
@@ -114,13 +117,13 @@ function Players() {
 export default Players;
 
 // loader function
-export const playersData = async () => {
+/* export const playersData = async () => {
   try {
     const response = await fetch(`${process.env.REACT_APP_SERVERURL}/players`);
     return response.json();
   } catch (error) {
     console.error(error);
   }
-};
+}; */
 
-// action function
+// Have decided to continue using fetch for the API point, will explore react router loaders and actions again in the future

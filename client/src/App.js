@@ -9,9 +9,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Leagues from "./pages/admin/Leagues";
 import Players, { playersData } from "./pages/admin/Players";
-import PlayerDetails, {
-  playerDetailsLoader,
-} from "./pages/admin/PlayerDetails";
+import PlayerDetails from "./pages/admin/PlayerDetails";
 import PlayerError from "./pages/admin/PlayerError";
 import Teams from "./pages/admin/Teams";
 
@@ -39,12 +37,12 @@ const router = createBrowserRouter(
           element={<PlayersLayout />}
           errorElement={<PlayerError />}
         >
-          <Route index loader={playersData} element={<Players />} />
           <Route
-            path=":id"
-            loader={playerDetailsLoader}
-            element={<PlayerDetails />}
+            index
+            //loader={playersData}
+            element={<Players />}
           />
+          <Route path=":id" element={<PlayerDetails />} />
         </Route>
         <Route path="teams" element={<Teams />} />
       </Route>
