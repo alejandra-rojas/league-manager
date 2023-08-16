@@ -1,3 +1,5 @@
+// Need to refactor this page as no longer using react-router-dom useLoaderData & useParams
+
 import { useLoaderData, useParams } from "react-router-dom";
 
 function PlayerDetails() {
@@ -27,7 +29,6 @@ function PlayerDetails() {
 export default PlayerDetails;
 
 //Loader function
-
 export const playerDetailsLoader = async ({ params }) => {
   const { id } = params;
   try {
