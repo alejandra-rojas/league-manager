@@ -234,7 +234,7 @@ app.put("/players/:id", async (req, res) => {
   } = req.body;
   try {
     const editPlayer = await pool.query(
-      "UPDATE players SET player_firstname = $1, player_lastname = $2, player_phonenumber = $3, player_email = $4 WHERE id = $5;",
+      "UPDATE players SET player_firstname = $1, player_lastname = $2, player_phonenumber = $3, player_email = $4 WHERE player_id = $5;",
       [player_firstname, player_lastname, player_phonenumber, player_email, id]
     );
     res.json(editPlayer);
@@ -267,7 +267,7 @@ app.delete("/players/:id", async (req, res) => {
       "DELETE FROM players WHERE player_id = $1;",
       [id]
     );
-    res.json(deleteEvent);
+    res.json(deletePlayer);
   } catch (error) {
     console.log("DELETE PLAYER ERROR");
     console.error(error);
