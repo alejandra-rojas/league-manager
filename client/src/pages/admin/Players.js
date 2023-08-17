@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 import PlayerModal from "../../components/Admin/PlayerModal";
 import PlayerEntry from "../../components/Admin/PlayerEntry";
+import PlayerSearchBar from "../../components/Admin/PlayerSearchBar";
 
 function Players() {
   const [players, setPlayers] = useState(null);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
+  const [searchState, setSearchState] = useState("");
 
   //Getting players data
   const getPlayersData = async () => {
@@ -30,10 +32,25 @@ function Players() {
           onClick={() => setShowPlayerModal(true)}
           className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
         >
+          <UserPlusIcon width={20} />
           Add Player
         </button>
       </div>
-      <div className="">
+      <div>
+        <div className="text-container">
+          <label htmlFor="location">Player seach box</label>
+          <input
+            onChange={(e) => setSearchState(e.target.value)}
+            className="input-text"
+            type="text"
+            name="player"
+            value={searchState}
+            placeholder="Search player by name"
+          />
+        </div>
+      </div>
+
+      <div>
         {players?.map((player) => (
           <PlayerEntry
             key={player.player_id}
@@ -49,6 +66,14 @@ function Players() {
           mode={"create"}
           getPlayersData={getPlayersData}
           setShowPlayerModal={setShowPlayerModal}
+        />
+      )}
+
+      {searchState.length > 0 && (
+        <PlayerSearchBar
+          players={players}
+          searchState={searchState}
+          setSearchState={setSearchState}
         />
       )}
     </>
