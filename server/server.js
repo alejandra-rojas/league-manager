@@ -291,8 +291,48 @@ app.get("/searchplayers", async (req, res) => {
   }
 });
 
-//TEAMS SEARCH
+//ALL TEAMS
 app.get("/teams", async (req, res) => {
+  try {
+    const query = `
+      SELECT
+        t.team_id,
+        t.player1_id,
+        t.player2_id,
+        p1.player_firstname AS player1_firstname,
+        p1.player_lastname AS player1_lastname,
+        p2.player_firstname AS player2_firstname,
+        p2.player_lastname AS player2_lastname
+      FROM teams t
+      JOIN players p1 ON t.player1_id = p1.player_id
+      JOIN players p2 ON t.player2_id = p2.player_id
+    `;
+
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching teams:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//DELETE TEAM
+app.delete("/teams/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleteTeam = await pool.query(
+      "DELETE FROM teams WHERE team_id = $1;",
+      [id]
+    );
+    res.json(deleteTeam);
+  } catch (error) {
+    console.log("DELETE TEAM ERROR");
+    console.error(error);
+  }
+});
+
+//TEAMS SEARCH
+app.get("/teams/search", async (req, res) => {
   const { name } = req.query;
 
   try {
