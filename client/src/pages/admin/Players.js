@@ -36,29 +36,17 @@ function Players() {
           Add Player
         </button>
       </div>
-      <div>
-        <div className="text-container">
-          <label htmlFor="location">Player seach box</label>
-          <input
-            onChange={(e) => setSearchState(e.target.value)}
-            className="input-text"
-            type="text"
-            name="player"
-            value={searchState}
-            placeholder="Search player by name"
-          />
-        </div>
-      </div>
 
-      <div>
-        {players?.map((player) => (
-          <PlayerEntry
-            key={player.player_id}
-            player={player}
-            getPlayersData={getPlayersData}
-            setShowPlayerModal={setShowPlayerModal}
-          />
-        ))}
+      <div className="my-5">
+        <label htmlFor="location">Player seach box</label>
+        <input
+          onChange={(e) => setSearchState(e.target.value)}
+          className="input-text"
+          type="text"
+          name="player"
+          value={searchState}
+          placeholder="Search player by name"
+        />
       </div>
 
       {showPlayerModal && (
@@ -69,11 +57,25 @@ function Players() {
         />
       )}
 
+      {!searchState && (
+        <div>
+          {players?.map((player) => (
+            <PlayerEntry
+              key={player.player_id}
+              player={player}
+              getPlayersData={getPlayersData}
+              setShowPlayerModal={setShowPlayerModal}
+            />
+          ))}
+        </div>
+      )}
+
       {searchState.length > 0 && (
         <PlayerSearchBar
           players={players}
           searchState={searchState}
           setSearchState={setSearchState}
+          getPlayersData={getPlayersData}
         />
       )}
     </>

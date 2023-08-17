@@ -1,11 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import PlayerEntry from "./PlayerEntry";
 
 function PlayerSearchBar({
   searchState,
-  setSearchState,
   players,
-  maxSuggestions = 10,
+  getPlayersData,
+  setShowPlayerModal,
+
+  maxSuggestions = 20,
 }) {
   const regex = new RegExp(searchState, "i");
 
@@ -17,26 +18,20 @@ function PlayerSearchBar({
   });
 
   return (
-    <div className="suggestion-wrapper">
+    <div className="searchresults-wrapper">
       {resultArray.length === 0 ? (
-        <div className="suggestion no-match">
-          <span className="suggestion-text">
-            No match for that players name
-          </span>
+        <div className="searchresults no-match">
+          <span className="searchresults-text">No match for that name</span>
         </div>
       ) : (
         <>
-          {resultArray.slice(0, maxSuggestions).map((value) => (
-            <Link key={value.player_id} className="link" to={value.path}>
-              <div
-                className="suggestion"
-                onClick={() => setSearchState(value.name)}
-              >
-                <span className="suggestion-text">
-                  {value.player_firstname} {value.player_lastname}
-                </span>
-              </div>
-            </Link>
+          {resultArray.slice(0, maxSuggestions).map((player) => (
+            <PlayerEntry
+              key={player.player_id}
+              player={player}
+              getPlayersData={getPlayersData}
+              setShowPlayerModal={setShowPlayerModal}
+            />
           ))}
         </>
       )}
