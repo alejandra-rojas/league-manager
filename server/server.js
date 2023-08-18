@@ -316,6 +316,24 @@ app.get("/teams", async (req, res) => {
   }
 });
 
+//CREATE TEAM
+app.post("/teams", async (req, res) => {
+  const { player1_id, player2_id } = req.body;
+
+  try {
+    const creatingTeam = await pool.query(
+      "INSERT INTO teams(player1_id, player2_id) VALUES ($1, $2)",
+      [player1_id, player2_id]
+    );
+    res.json(creatingTeam);
+  } catch (err) {
+    console.error(err);
+    if (err) {
+      res.json({ detail: err.detail });
+    }
+  }
+});
+
 //DELETE TEAM
 app.delete("/teams/:id", async (req, res) => {
   const { id } = req.params;
