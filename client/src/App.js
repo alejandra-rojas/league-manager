@@ -7,7 +7,11 @@ import {
 //Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
+
+//Leagues Pages
 import Leagues from "./pages/admin/Leagues";
+import LeaguesUpcoming from "./pages/admin/LeaguesUpcoming";
+import LeaguesFinished from "./pages/admin/LeaguesFinished";
 import Players from "./pages/admin/Players";
 import PlayerDetails from "./pages/admin/PlayerDetails";
 import PlayerError from "./pages/admin/PlayerError";
@@ -18,6 +22,7 @@ import NotFound from "./pages/NotFound";
 //Layout
 import RootLayout from "./layouts/RootLayout";
 import AdminLayout from "./layouts/AdminLayout";
+import LeaguesLayout from "./layouts/LeaguesLayout";
 import PlayersLayout from "./layouts/PlayersLayout";
 
 // Library
@@ -31,17 +36,17 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
 
       <Route path="admin" element={<AdminLayout />}>
-        <Route index element={<Leagues />} />
+        <Route path="leagues" element={<LeaguesLayout />}>
+          <Route index element={<Leagues />} />
+          <Route path="upcoming" element={<LeaguesUpcoming />} />
+          <Route path="finished" element={<LeaguesFinished />} />
+        </Route>
         <Route
           path="players"
           element={<PlayersLayout />}
           errorElement={<PlayerError />}
         >
-          <Route
-            index
-            //loader={playersData}
-            element={<Players />}
-          />
+          <Route index element={<Players />} />
           <Route path=":id" element={<PlayerDetails />} />
         </Route>
         <Route path="teams" element={<Teams />} />

@@ -15,7 +15,7 @@ function RootLayout() {
           <NavLink to={"about"} aria-label="Go to About page">
             About
           </NavLink>
-          <NavLink to={"admin"} aria-label="Go to Admin section">
+          <NavLink to={"admin/leagues"} aria-label="Go to Admin section">
             Admin
           </NavLink>
         </nav>
