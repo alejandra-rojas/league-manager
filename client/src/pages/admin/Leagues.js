@@ -6,13 +6,6 @@ function Leagues() {
   const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
 
-  // Getting data only if we are logged in
-  /*   useEffect(()=>{
-      if(authToken){
-        getData()
-      }
-    }, []) */
-
   //Getting leagues data
   const getData = async () => {
     try {
@@ -28,29 +21,18 @@ function Leagues() {
 
   useEffect(() => getData, []);
 
-  //Getting events data
-
-  //Getting players/teams data
-
-  //Upcoming leagues
   const today = new Date();
-  const upcomingLeagues = leagues
-    ?.filter((league) => !league.isfinished)
-    .filter((league) => {
-      const leagueStartDate = new Date(league.starting_date);
-      return leagueStartDate >= today;
-    });
+
+  //Not finished leagues
+  const unfinishedLeagues = leagues?.filter((league) => !league.isfinished);
 
   //Ongoing leagues sorted by  starting date
-  const sortedLeagues = leagues
+  const sortedLeagues = unfinishedLeagues
     ?.filter((league) => {
       const leagueStartDate = new Date(league.starting_date);
       return leagueStartDate <= today;
     })
     .sort((a, b) => new Date(a.starting_date) - new Date(b.starting_date));
-
-  //Finished leagues
-  const finishedLeagues = leagues?.filter((league) => league.isfinished);
 
   return (
     <>
@@ -70,28 +52,6 @@ function Leagues() {
             of start/end date
           </h2>
           {sortedLeagues?.map((league) => (
-            <LeagueEntry
-              key={league.id}
-              league={league}
-              getData={getData}
-              message={"days left of play"}
-            />
-          ))}
-        </div>
-        <div>
-          <h2>Upcoming Leagues - Todays date has not reached the start date</h2>
-          {upcomingLeagues?.map((league) => (
-            <LeagueEntry
-              key={league.id}
-              league={league}
-              getData={getData}
-              message={"days left to join"}
-            />
-          ))}
-        </div>
-        <div>
-          <h2>Finished leagues // isfinished attribute = true</h2>
-          {finishedLeagues?.map((league) => (
             <LeagueEntry key={league.id} league={league} getData={getData} />
           ))}
         </div>
