@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-function LeagueModal({ mode, setShowModal, getData, league }) {
+function LeagueModal({ mode, setShowModal, getData, league, today }) {
   const editMode = mode === "edit" ? true : false;
   const [error, setError] = useState(null);
 
@@ -26,7 +26,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
       );
 
       if (response.status === 200) {
-        console.log("Created new league succesfully!");
+        //console.log("Created new league succesfully!");
         setShowModal(false);
         getData();
         toast.success(`${data.league_name} league created `);
@@ -49,7 +49,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
       );
 
       if (response.status === 200) {
-        console.log("edited");
+        //console.log("edited");
         setShowModal(false);
         getData();
         toast.success(`${data.league_name} has been modified succesfully`);
@@ -69,7 +69,6 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
       ...data,
       [name]: newValue,
     }));
-
     //console.log(data);
 
     if (
@@ -167,9 +166,9 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
-
           <br />
-          {mode === "edit" && (
+          <br />
+          {mode === "edit" && today >= new Date(league.end_date) && (
             <>
               <div>
                 <input
@@ -183,17 +182,10 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
                   The league is finished and all the results are entered
                 </label>
               </div>
-              <div>
-                <button
-                  onClick={() => deleteLeague()}
-                  className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-                >
-                  Delete
-                </button>
-              </div>
             </>
           )}
-
+          <br />
+          <br />
           {!error && (
             <input
               className={
@@ -205,6 +197,14 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
           )}
         </form>
         {error && <p className="text-red-500">{error}</p>}
+        <div>
+          <button
+            onClick={() => deleteLeague()}
+            className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );
