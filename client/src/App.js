@@ -8,7 +8,7 @@ import {
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Leagues from "./pages/admin/Leagues";
-import Players, { playersData } from "./pages/admin/Players";
+import Players from "./pages/admin/Players";
 import PlayerDetails from "./pages/admin/PlayerDetails";
 import PlayerError from "./pages/admin/PlayerError";
 import Teams from "./pages/admin/Teams";
@@ -56,7 +56,18 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
   );
 }
