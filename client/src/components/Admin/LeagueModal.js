@@ -3,8 +3,7 @@ import { toast } from "react-toastify";
 
 function LeagueModal({ mode, setShowModal, getData, league }) {
   const editMode = mode === "edit" ? true : false;
-  const [midpointError, setMidpointError] = useState("");
-  const [endDateError, setEndDateError] = useState("");
+  const [error, setError] = useState(null);
 
   const [data, setData] = useState({
     league_name: editMode ? league.league_name : "",
@@ -59,8 +58,9 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
       console.error(error);
     }
   };
+
   const handleChange = (e) => {
-    console.log("changing", e);
+    //console.log("changing", e);
     const { name, value, type, checked } = e.target;
 
     const newValue = type === "checkbox" ? checked : value;
@@ -70,21 +70,23 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
       [name]: newValue,
     }));
 
-    console.log(data);
+    //console.log(data);
 
     if (
       name === "midway_point" &&
-      new Date(value) < new Date(data.starting_date)
+      (new Date(value) <= new Date(data.starting_date) ||
+        new Date(value) >= new Date(data.end_date))
     ) {
-      setMidpointError("Midpoint date must be after the start date.");
+      setError(
+        "Midpoint date must be after the start date and before the end date."
+      );
+    } else if (
+      name === "end_date" &&
+      new Date(value) <= new Date(data.midway_point)
+    ) {
+      setError("End date must be after the mid date.");
     } else {
-      setMidpointError("");
-    }
-
-    if (name === "end_date" && new Date(value) < new Date(data.midway_point)) {
-      setEndDateError("Midpoint date must be after the start date.");
-    } else {
-      setEndDateError("");
+      setError("");
     }
   };
 
@@ -153,7 +155,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
-          {midpointError && <p className="text-red-500">{midpointError}</p>}
+
           <br />
           <label htmlFor="endDate">End date:</label>
           <input
@@ -165,7 +167,7 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             onChange={handleChange}
             className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
           />
-          {endDateError && <p className="text-red-500">{endDateError}</p>}
+
           <br />
           {mode === "edit" && (
             <>
@@ -192,14 +194,17 @@ function LeagueModal({ mode, setShowModal, getData, league }) {
             </>
           )}
 
-          <input
-            className={
-              "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-            }
-            type="submit"
-            onClick={editMode ? editData : postData}
-          />
+          {!error && (
+            <input
+              className={
+                "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+              }
+              type="submit"
+              onClick={editMode ? editData : postData}
+            />
+          )}
         </form>
+        {error && <p className="text-red-500">{error}</p>}
       </div>
     </div>
   );
