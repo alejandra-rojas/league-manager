@@ -35,6 +35,14 @@ function Teams() {
         </button>
       </div>
 
+      {showTeamsModal && (
+        <TeamModal
+          mode={"create"}
+          getTeamsData={getTeamsData}
+          setShowTeamsModal={setShowTeamsModal}
+        />
+      )}
+
       <div className="my-5">
         <label htmlFor="location">Search for a team</label>
         <input
@@ -46,14 +54,6 @@ function Teams() {
           placeholder="search by player name"
         />
       </div>
-
-      {showTeamsModal && (
-        <TeamModal
-          mode={"create"}
-          getTeamsData={getTeamsData}
-          setShowTeamsModal={setShowTeamsModal}
-        />
-      )}
 
       {!searchState && (
         <div>
@@ -74,6 +74,7 @@ function Teams() {
           searchState={searchState}
           setSearchState={setSearchState}
           getTeamsData={getTeamsData}
+          showTeamsModal={showTeamsModal}
         />
       )}
     </>
