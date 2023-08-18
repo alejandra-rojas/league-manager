@@ -3,22 +3,53 @@ import LeagueModal from "./LeagueModal";
 import EventModal from "./EventModal";
 import EventEntry from "./EventEntry";
 
-export default function LeagueEntry({ league, getData, message }) {
+export default function LeagueEntry({ league, getData }) {
   const [showModal, setShowModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
   const lowercaseTitle = league.league_name.toLowerCase();
   const [leagueEvents, setLeagueEvents] = useState(null);
+  //console.log(league);
 
   const isFinished = league.isfinished;
+  const startDate = new Date(league.starting_date);
+  const endDate = new Date(league.end_date);
+  const today = new Date();
+  const registrationCutoff = new Date(startDate);
+  registrationCutoff.setDate(startDate.getDate() - 2); // Two days before the start
+  let daysLeft;
+  let message;
 
-  const differenceInTime =
-    new Date(league.end_date) - new Date(league.starting_date);
+  function formatDateToYYYYMMDD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because months are zero-based
+    const day = String(date.getDate()).padStart(2, "0");
 
-  let remainingDays;
-  if (differenceInTime >= 0) {
-    remainingDays = differenceInTime / (1000 * 3600 * 24);
-  } else if (differenceInTime < 0) {
-    remainingDays = 0;
+    return `${year}-${month}-${day}`;
+  }
+  const formattedTodaysDate = formatDateToYYYYMMDD(today);
+
+  if (today < registrationCutoff) {
+    // Calculate days left to join
+    const daysToJoin = Math.ceil(
+      (registrationCutoff - today) / (1000 * 3600 * 24)
+    );
+    daysLeft = daysToJoin;
+    message =
+      daysLeft === 1
+        ? "day left to join the league"
+        : "days left to join the league";
+  } else if (today >= startDate && today < endDate) {
+    // Calculate days left of play
+    const daysOfPlay = Math.ceil((endDate - today) / (1000 * 3600 * 24));
+    daysLeft = daysOfPlay;
+    message = daysLeft === 1 ? "day left of play" : "days left of play";
+  } else if (league.end_date === formattedTodaysDate) {
+    // Last day to play
+    message = "Today is the last day to complete a match";
+  } else {
+    // No days left, either league hasn't started or has already ended
+    message =
+      "League has finished. Once all the results are entered, set the league to finished via the edit modal";
   }
 
   const getEventsData = async () => {
@@ -49,13 +80,11 @@ export default function LeagueEntry({ league, getData, message }) {
         <p>
           Start date: {league.starting_date} | End date: {league.end_date}
         </p>
-
         <p>Midway point: {league.midway_point}</p>
-        <p>Number of groups in league: {league.league_events}</p>
 
         {!isFinished && (
           <h3>
-            {remainingDays} {message}
+            {daysLeft} {message}
           </h3>
         )}
       </div>
@@ -87,6 +116,7 @@ export default function LeagueEntry({ league, getData, message }) {
           setShowModal={setShowModal}
           getData={getData}
           league={league}
+          today={today}
         />
       )}
 
