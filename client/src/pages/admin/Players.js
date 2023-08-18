@@ -76,6 +76,7 @@ function Players() {
           searchState={searchState}
           setSearchState={setSearchState}
           getPlayersData={getPlayersData}
+          setShowPlayerModal={setShowPlayerModal}
         />
       )}
     </>
