@@ -316,6 +316,39 @@ app.get("/teams", async (req, res) => {
   }
 });
 
+//ALL A SINGLE TEAM
+app.get("/teams/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const query = `
+      SELECT
+        t.team_id,
+        t.player1_id,
+        t.player2_id,
+        p1.player_firstname AS player1_firstname,
+        p1.player_lastname AS player1_lastname,
+        p2.player_firstname AS player2_firstname,
+        p2.player_lastname AS player2_lastname
+      FROM teams t
+      JOIN players p1 ON t.player1_id = p1.player_id
+      JOIN players p2 ON t.player2_id = p2.player_id
+      WHERE t.team_id = $1
+    `;
+
+    const { rows } = await pool.query(query, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Team not found" });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error("Error fetching team:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //CREATE TEAM
 app.post("/teams", async (req, res) => {
   const { player1_id, player2_id } = req.body;

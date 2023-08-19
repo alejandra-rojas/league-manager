@@ -31,7 +31,7 @@ import TeamsLayout from "./layouts/TeamsLayout";
 // Library
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TeamDetails from "./pages/admin/TeamDetails";
+import TeamDetails, { teamDetailsLoader } from "./pages/admin/TeamDetails";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -59,7 +59,11 @@ const router = createBrowserRouter(
         </Route>
         <Route path="teams" element={<TeamsLayout />}>
           <Route index element={<Teams />} />
-          <Route path=":id" element={<TeamDetails />} />
+          <Route
+            path=":id"
+            element={<TeamDetails />}
+            loader={teamDetailsLoader}
+          />
         </Route>
       </Route>
 
