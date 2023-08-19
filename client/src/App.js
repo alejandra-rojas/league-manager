@@ -13,7 +13,9 @@ import Leagues from "./pages/admin/Leagues";
 import LeaguesUpcoming from "./pages/admin/LeaguesUpcoming";
 import LeaguesFinished from "./pages/admin/LeaguesFinished";
 import Players from "./pages/admin/Players";
-import PlayerDetails from "./pages/admin/PlayerDetails";
+import PlayerDetails, {
+  playerDetailsLoader,
+} from "./pages/admin/PlayerDetails";
 import PlayerError from "./pages/admin/PlayerError";
 import Teams from "./pages/admin/Teams";
 
@@ -24,10 +26,12 @@ import RootLayout from "./layouts/RootLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import LeaguesLayout from "./layouts/LeaguesLayout";
 import PlayersLayout from "./layouts/PlayersLayout";
+import TeamsLayout from "./layouts/TeamsLayout";
 
 // Library
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TeamDetails from "./pages/admin/TeamDetails";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,9 +51,16 @@ const router = createBrowserRouter(
           errorElement={<PlayerError />}
         >
           <Route index element={<Players />} />
-          <Route path=":id" element={<PlayerDetails />} />
+          <Route
+            path=":id"
+            element={<PlayerDetails />}
+            loader={playerDetailsLoader}
+          />
         </Route>
-        <Route path="teams" element={<Teams />} />
+        <Route path="teams" element={<TeamsLayout />}>
+          <Route index element={<Teams />} />
+          <Route path=":id" element={<TeamDetails />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />

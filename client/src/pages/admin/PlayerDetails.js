@@ -1,12 +1,9 @@
-// Need to refactor this page as no longer using react-router-dom useLoaderData & useParams
-
 import { useLoaderData, useParams } from "react-router-dom";
 
 function PlayerDetails() {
   const { id } = useParams();
   const player = useLoaderData();
-
-  console.log(player);
+  //console.log(player);
 
   return (
     <div>
