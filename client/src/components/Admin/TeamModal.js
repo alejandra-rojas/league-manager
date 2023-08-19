@@ -63,13 +63,13 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
       setError("A team can only have two players");
       setTimeout(() => {
         setError("");
-      }, 9000); // 5 seconds timeout
+      }, 9000);
       console.log("You can't add more than two players.");
     } else if (playerExists) {
       setError("This player is already selected");
       setTimeout(() => {
         setError("");
-      }, 9000); // 5 seconds timeout
+      }, 9000);
       console.log("This player is already selected.");
     }
   };

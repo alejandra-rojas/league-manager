@@ -105,7 +105,7 @@ function EventModal({
             id="eventName"
             required
             maxLength={30}
-            placeholder="ex: 'Division A"
+            placeholder="Division A"
             name="event_name"
             value={data.event_name}
             onChange={handleChange}
@@ -119,7 +119,7 @@ function EventModal({
             id="bonusMatches"
             required
             maxLength={1}
-            placeholder="ex: '3'"
+            placeholder="3"
             name="midway_matches"
             value={data.midway_matches}
             onChange={handleChange}

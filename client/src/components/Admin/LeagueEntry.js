@@ -49,7 +49,7 @@ export default function LeagueEntry({ league, getData }) {
   } else {
     // No days left, either league hasn't started or has already ended
     message =
-      "League has finished. Once all the results are entered, set the league to finished via the edit modal";
+      "The end date for the league has passed. Once all the results are entered, set the league to finished via the edit modal";
   }
 
   const getEventsData = async () => {
