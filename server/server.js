@@ -521,6 +521,9 @@ app.post("/events/:id/teams", async (req, res) => {
     res.json(addingTeam);
   } catch (err) {
     console.error(err);
+    /*     if (err) {
+        res.json({ detail: err.detail });
+      } */
     res.status(500).json({
       message: "An error occurred while adding the team to the event.",
     });

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
 import StandingsReport from "./StandingsReport";
+import { toast } from "react-toastify";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
   const [searchString, setSearchString] = useState("");
-  const [searchPerformed, setSearchPerformed] = useState(false); // New state
-
+  const [searchPerformed, setSearchPerformed] = useState(false);
   // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
   const [selectedTeamWId, setSelectedTeamWId] = useState("");
+  const [error, setError] = useState(null);
 
   //console.log(gevent);
 
@@ -32,7 +33,7 @@ function EventEntry({ gevent, getEventsData }) {
     }
   };
   useEffect(() => getEventTeamsData, []);
-  console.log(eventTeams);
+  //console.log(eventTeams);
 
   /*   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -83,12 +84,23 @@ function EventEntry({ gevent, getEventsData }) {
         }
       );
 
+      const data = await response.json();
+      //console.log(data);
       if (response.status === 200) {
         console.log("Team added to event!");
+        setError(null);
         getEventTeamsData();
       }
+      if (data.message) {
+        setError(data.message);
+        setTimeout(() => {
+          setError("");
+        }, 5000);
+      }
+      //console.log(error);
     } catch (error) {
       console.error(error);
+      setError(error);
     }
   };
 
@@ -138,15 +150,15 @@ function EventEntry({ gevent, getEventsData }) {
       if (response.status === 201) {
         const newMatches = await response.json();
         console.log("New matches created:", newMatches);
-        // provide feedback to the user
+        toast.success(
+          `${gevent.event_name} standings table has been generated succesfully`
+        );
         getEventMatchesData();
       } else {
         console.log("Error generating matches:", response.statusText);
-        // Handle the error and provide feedback to the user
       }
     } catch (error) {
       console.error("Error generating matches:", error);
-      // Handle the error and provide feedback to the user
     }
   };
 
@@ -192,10 +204,7 @@ function EventEntry({ gevent, getEventsData }) {
         <div className="flex justify-between">
           <div className="flex gap-7 items-center">
             <h3>{gevent.event_name}</h3>
-            <h2>
-              Complete matches {gevent.midway_matches} before the midpoint to
-              get 2 bonus points.{" "}
-            </h2>
+
             <button
               onClick={() => setShowEventModal(true)}
               className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
@@ -281,6 +290,7 @@ function EventEntry({ gevent, getEventsData }) {
                     </li>
                   ))}
                 </ul>
+                {error && <p>{error}</p>}
 
                 <button
                   onClick={handleGenerateMatches}
@@ -293,6 +303,10 @@ function EventEntry({ gevent, getEventsData }) {
             {eventMatchesData.length !== 0 && (
               <div>
                 <div className="my-5">
+                  <h2>
+                    Complete matches {gevent.midway_matches} before the midpoint
+                    to get bonus points.
+                  </h2>
                   <h3>Participating teams</h3>
                   <table className="table-auto border-collapse border">
                     <thead>
@@ -367,8 +381,7 @@ function EventEntry({ gevent, getEventsData }) {
                 </div>
                 <p>
                   The standings table for this event has been published and the
-                  participating teams cannot be altered anymore. If a team has
-                  withdrawn update every match accordingly.
+                  participating teams cannot be altered anymore.
                 </p>
                 {/* {console.log(eventMatchesData)} */}
 
