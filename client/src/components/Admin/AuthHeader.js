@@ -12,14 +12,15 @@ export default function AuthHeader() {
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center my-5">
-      <p>Welcome back {adminEmail}</p>
+    <>
+      <span>Hello {adminEmail}</span>
       <button
-        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded"
+        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
         onClick={() => signOut()}
+        aria-label="Sign Out from Admin page"
       >
         Sign Out
       </button>
-    </div>
+    </>
   );
 }
