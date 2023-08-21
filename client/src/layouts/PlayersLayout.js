@@ -2,9 +2,15 @@ import { NavLink, Outlet } from "react-router-dom";
 
 export default function PlayersLayout() {
   return (
-    <div>
-      <h2>Player Details Page</h2>
-      <Outlet />
-    </div>
+    <>
+      <section>
+        <hgroup>
+          <h2>Players Page</h2>
+          <p>Manage your players database and access individual player pages</p>
+        </hgroup>
+
+        <Outlet />
+      </section>
+    </>
   );
 }

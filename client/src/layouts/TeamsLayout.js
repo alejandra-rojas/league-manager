@@ -3,10 +3,15 @@ import { Outlet } from "react-router-dom";
 
 function TeamsLayout() {
   return (
-    <div>
-      <h2>Teams Layout</h2>
-      <Outlet />
-    </div>
+    <>
+      <section>
+        <hgroup>
+          <h2>Teams Page</h2>
+          <p>Manage your teams and access individual team pages</p>
+        </hgroup>
+        <Outlet />
+      </section>
+    </>
   );
 }
 

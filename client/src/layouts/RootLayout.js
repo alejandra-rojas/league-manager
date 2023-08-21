@@ -6,13 +6,17 @@ function RootLayout() {
   return (
     <>
       <AccessibleNavigationAnnouncer />
-      <header className="flex justify-between">
+      <header id="primary-navigation" className="flex justify-between">
         <a href="/" aria-label="Go to the Home page">
           <h1 className="text-3xl font-bold underline">
             Highbury and Islington Leagues
           </h1>
         </a>
-        <nav role="navigation" className="flex gap-4">
+        <nav
+          role="navigation"
+          aria-labelledby="primary-navigation"
+          className="flex gap-4"
+        >
           <NavLink to={"/"} aria-label="Go to the Home page">
             Home
           </NavLink>
