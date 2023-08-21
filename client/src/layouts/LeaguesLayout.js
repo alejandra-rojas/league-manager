@@ -45,29 +45,43 @@ function LeaguesLayout() {
             >
               Navigation for Leagues Section
             </h2>
-            <NavLink
-              to={"/admin/leagues"}
-              aria-label="Go to ongoing leagues page"
-            >
-              Ongoing
-            </NavLink>
-            <NavLink to={"upcoming"} aria-label="Go to upcoming leagues page">
-              Upcoming
-            </NavLink>
-            <NavLink to={"finished"} aria-label="Go to finished leagues page">
-              Finished
-            </NavLink>
+            <ul className="flex gap-4">
+              <NavLink
+                to={"/admin/leagues"}
+                aria-label="Go to ongoing leagues page"
+                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+              >
+                Ongoing
+              </NavLink>
+              <NavLink
+                to={"upcoming"}
+                aria-label="Go to upcoming leagues page"
+                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+              >
+                Upcoming
+              </NavLink>
+              <NavLink
+                to={"finished"}
+                aria-label="Go to finished leagues page"
+                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+              >
+                Finished
+              </NavLink>
+            </ul>
           </nav>
         </section>
       </div>
+
       {showModal && (
-        <LeagueModal
-          mode={"create"}
-          setShowModal={setShowModal}
-          getData={getData}
-        />
+        <section id="createleague">
+          <LeagueModal
+            mode={"create"}
+            setShowModal={setShowModal}
+            getData={getData}
+          />
+        </section>
       )}
-      <section id="leaguescontent">
+      <section id="leagues-content">
         <Outlet />
       </section>
     </>

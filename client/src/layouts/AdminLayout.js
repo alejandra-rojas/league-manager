@@ -24,20 +24,37 @@ function AdminLayout() {
                 className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
               >
                 <h2 id="admin-primary-navigation-label" className="sr-only">
-                  Primary Navigation for Admin
+                  Primary Admin Navigation
                 </h2>
-                <NavLink
-                  to={"/admin/leagues"}
-                  aria-label="Go to leagues section"
-                >
-                  Leagues
-                </NavLink>
-                <NavLink to={"players"} aria-label="Go to players section">
-                  Players
-                </NavLink>
-                <NavLink to={"teams"} aria-label="Go to teams section">
-                  Teams
-                </NavLink>
+                <ul className="flex gap-4">
+                  <NavLink
+                    to={"/admin/leagues"}
+                    aria-label="Go to leagues section"
+                    className={({ isActive }) =>
+                      isActive ? "bg-green-600" : ""
+                    }
+                  >
+                    Leagues
+                  </NavLink>
+                  <NavLink
+                    to={"players"}
+                    aria-label="Go to players section"
+                    className={({ isActive }) =>
+                      isActive ? "bg-green-600" : ""
+                    }
+                  >
+                    Players
+                  </NavLink>
+                  <NavLink
+                    to={"teams"}
+                    aria-label="Go to teams section"
+                    className={({ isActive }) =>
+                      isActive ? "bg-green-600" : ""
+                    }
+                  >
+                    Teams
+                  </NavLink>
+                </ul>
               </nav>
             </header>
           </section>
