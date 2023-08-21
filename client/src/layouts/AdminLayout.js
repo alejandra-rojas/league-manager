@@ -27,33 +27,39 @@ function AdminLayout() {
                   Primary Admin Navigation
                 </h2>
                 <ul className="flex gap-4">
-                  <NavLink
-                    to={"leagues"}
-                    aria-label="Go to leagues section"
-                    className={({ isActive }) =>
-                      isActive ? "bg-green-600" : ""
-                    }
-                  >
-                    Leagues
-                  </NavLink>
-                  <NavLink
-                    to={"players"}
-                    aria-label="Go to players section"
-                    className={({ isActive }) =>
-                      isActive ? "bg-green-600" : ""
-                    }
-                  >
-                    Players
-                  </NavLink>
-                  <NavLink
-                    to={"teams"}
-                    aria-label="Go to teams section"
-                    className={({ isActive }) =>
-                      isActive ? "bg-green-600" : ""
-                    }
-                  >
-                    Teams
-                  </NavLink>
+                  <li>
+                    <NavLink
+                      to={"leagues"}
+                      aria-label="Go to leagues section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Leagues
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"players"}
+                      aria-label="Go to players section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Players
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"teams"}
+                      aria-label="Go to teams section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Teams
+                    </NavLink>
+                  </li>
                 </ul>
               </nav>
             </header>

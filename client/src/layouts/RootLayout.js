@@ -28,27 +28,33 @@ function RootLayout() {
               Home Site Navigation
             </h2>
             <ul className="flex gap-4">
-              <NavLink
-                to={"/"}
-                aria-label="Go to the Home page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                Home
-              </NavLink>
-              <NavLink
-                to={"about"}
-                aria-label="Go to About page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                About
-              </NavLink>
-              <NavLink
-                to={"admin"}
-                aria-label="Go to Admin page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                Admin
-              </NavLink>
+              <li>
+                <NavLink
+                  to={"/"}
+                  aria-label="Go to the Home page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"about"}
+                  aria-label="Go to About page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  About
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"admin"}
+                  aria-label="Go to Admin page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  Admin
+                </NavLink>
+              </li>
             </ul>
           </nav>
           <Breadcrumbs />

@@ -46,27 +46,33 @@ function LeaguesLayout() {
               Navigation for Leagues Section
             </h2>
             <ul className="flex gap-4">
-              <NavLink
-                to={"ongoing"}
-                aria-label="Go to ongoing leagues page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                Ongoing
-              </NavLink>
-              <NavLink
-                to={"upcoming"}
-                aria-label="Go to upcoming leagues page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                Upcoming
-              </NavLink>
-              <NavLink
-                to={"finished"}
-                aria-label="Go to finished leagues page"
-                className={({ isActive }) => (isActive ? "bg-green-600" : "")}
-              >
-                Finished
-              </NavLink>
+              <li>
+                <NavLink
+                  to={"ongoing"}
+                  aria-label="Go to ongoing leagues page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  Ongoing
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"upcoming"}
+                  aria-label="Go to upcoming leagues page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  Upcoming
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to={"finished"}
+                  aria-label="Go to finished leagues page"
+                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                >
+                  Finished
+                </NavLink>
+              </li>
             </ul>
           </nav>
         </section>
