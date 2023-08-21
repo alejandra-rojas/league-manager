@@ -36,33 +36,21 @@ function Leagues() {
 
   return (
     <>
-      <div className="flex justify-end">
-        <button
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-          onClick={() => setShowModal(true)}
-        >
-          Create League
-        </button>
-      </div>
+      <hgroup>
+        <h3>Current Leagues</h3>
+        <p>
+          Not finished and todays date is within the range of start/end date
+        </p>
+      </hgroup>
 
       <div className="flex flex-col gap-20">
         <div className="flex flex-col gap-5">
-          <h2>
-            Current Leagues - Not finished and todays date is within the range
-            of start/end date
-          </h2>
+          <h2>-</h2>
           {sortedLeagues?.map((league) => (
             <LeagueEntry key={league.id} league={league} getData={getData} />
           ))}
         </div>
       </div>
-      {showModal && (
-        <LeagueModal
-          mode={"create"}
-          setShowModal={setShowModal}
-          getData={getData}
-        />
-      )}
     </>
   );
 }
