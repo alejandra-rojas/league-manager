@@ -3,6 +3,7 @@ import {
   Route,
   createRoutesFromElements,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 //Pages
 import Home from "./pages/Home";
@@ -40,8 +41,9 @@ const router = createBrowserRouter(
       <Route path="about" element={<About />} />
 
       <Route path="admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<Navigate to="leagues/ongoing" />} />
         <Route path="leagues" element={<LeaguesLayout />}>
-          <Route index element={<Leagues />} />
+          <Route path="ongoing" element={<Leagues />} />
           <Route path="upcoming" element={<LeaguesUpcoming />} />
           <Route path="finished" element={<LeaguesFinished />} />
         </Route>

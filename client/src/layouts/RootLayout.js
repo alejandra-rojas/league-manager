@@ -43,7 +43,7 @@ function RootLayout() {
                 About
               </NavLink>
               <NavLink
-                to={"admin/leagues"}
+                to={"admin"}
                 aria-label="Go to Admin page"
                 className={({ isActive }) => (isActive ? "bg-green-600" : "")}
               >

@@ -28,7 +28,7 @@ function AdminLayout() {
                 </h2>
                 <ul className="flex gap-4">
                   <NavLink
-                    to={"/admin/leagues"}
+                    to={"leagues"}
                     aria-label="Go to leagues section"
                     className={({ isActive }) =>
                       isActive ? "bg-green-600" : ""

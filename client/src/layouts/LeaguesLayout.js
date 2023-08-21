@@ -47,7 +47,7 @@ function LeaguesLayout() {
             </h2>
             <ul className="flex gap-4">
               <NavLink
-                to={"/admin/leagues"}
+                to={"ongoing"}
                 aria-label="Go to ongoing leagues page"
                 className={({ isActive }) => (isActive ? "bg-green-600" : "")}
               >
