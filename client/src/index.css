@@ -15,3 +15,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+a:focus {
+  outline: auto 5px Highlight; /* for non-webkit browsers */
+  outline: auto 5px -webkit-focus-ring-color; /* for webkit browsers */
+}

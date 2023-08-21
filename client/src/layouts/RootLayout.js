@@ -1,21 +1,25 @@
 import { NavLink, Outlet } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
+import AccessibleNavigationAnnouncer from "../components/AccessibleNavigationAnnouncer";
 
 function RootLayout() {
   return (
-    <div>
+    <>
+      <AccessibleNavigationAnnouncer />
       <header className="flex justify-between">
-        <h1 className="text-3xl font-bold underline">
-          Highbury and Islington Leagues
-        </h1>
-        <nav className="flex gap-4">
-          <NavLink to={"/"} aria-label="Go to home">
+        <a href="/" aria-label="Go to the Home page">
+          <h1 className="text-3xl font-bold underline">
+            Highbury and Islington Leagues
+          </h1>
+        </a>
+        <nav role="navigation" className="flex gap-4">
+          <NavLink to={"/"} aria-label="Go to the Home page">
             Home
           </NavLink>
           <NavLink to={"about"} aria-label="Go to About page">
             About
           </NavLink>
-          <NavLink to={"admin/leagues"} aria-label="Go to Admin section">
+          <NavLink to={"admin/leagues"} aria-label="Go to Admin page">
             Admin
           </NavLink>
         </nav>
@@ -24,7 +28,7 @@ function RootLayout() {
         <Breadcrumbs />
         <Outlet />
       </main>
-    </div>
+    </>
   );
 }
 
