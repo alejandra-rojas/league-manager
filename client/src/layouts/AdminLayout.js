@@ -8,12 +8,15 @@ function AdminLayout() {
   const authToken = cookies.AuthToken;
 
   return (
-    <section>
-      <div className="flex justify-between">{!authToken && <Auth />}</div>
+    <section id="admin-primary-navigation">
+      {!authToken && <Auth />}
       {authToken && <AuthHeader />}
       {authToken && (
         <>
-          <nav className="flex gap-6 justify-center bg-slate-500 py-5 my-5">
+          <nav
+            aria-labelledby="admin-primary-navigation"
+            className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
+          >
             <NavLink to={"/admin/leagues"} aria-label="Go to leagues section">
               Leagues
             </NavLink>
