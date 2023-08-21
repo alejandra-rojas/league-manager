@@ -15,12 +15,17 @@ function AdminLayout() {
         <>
           <section id="admin-primary-navigation">
             <header>
-              <a href="#admincontent">Skip to admin content</a>
+              <a href="#leaguessection" className="sr-only">
+                Skip to leagues section navigation
+              </a>
               <AuthHeader />
               <nav
-                aria-labelledby="admin-primary-navigation"
+                aria-labelledby="admin-primary-navigation-label"
                 className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
               >
+                <h2 id="admin-primary-navigation-label" className="sr-only">
+                  Primary Navigation for Admin
+                </h2>
                 <NavLink
                   to={"/admin/leagues"}
                   aria-label="Go to leagues section"
@@ -36,7 +41,7 @@ function AdminLayout() {
               </nav>
             </header>
           </section>
-          <section id="admincontent">
+          <section id="leaguessection">
             <Outlet />
           </section>
         </>
