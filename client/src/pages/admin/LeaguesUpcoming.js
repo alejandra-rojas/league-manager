@@ -29,14 +29,20 @@ function LeaguesUpcoming() {
     });
 
   return (
-    <div>
+    <>
       <div>
-        <h2>Upcoming Leagues - Todays date has not reached the start date</h2>
-        {upcomingLeagues?.map((league) => (
-          <LeagueEntry key={league.id} league={league} getData={getData} />
-        ))}
+        <h3>Upcoming Leagues</h3>
+        <p>Leagues that have not started yet</p>
       </div>
-    </div>
+
+      <section id="current-leagues" className="flex flex-col gap-20">
+        <ul className="flex flex-col gap-5">
+          {upcomingLeagues?.map((league) => (
+            <LeagueEntry key={league.id} league={league} getData={getData} />
+          ))}
+        </ul>
+      </section>
+    </>
   );
 }
 

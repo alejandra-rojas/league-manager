@@ -6,7 +6,7 @@ function MatchReportEntry({ match, getEventMatchesData, getEventTeamsData }) {
 
   return (
     <>
-      <div
+      <li
         className={`grid grid-cols-6 ${match.withdrawal ? "bg-slate-600" : ""}`}
       >
         <div className={match.winner_id === match.team1_id ? "font-bold" : ""}>
@@ -26,11 +26,12 @@ function MatchReportEntry({ match, getEventMatchesData, getEventTeamsData }) {
         </div>
         <button
           onClick={() => setShowMatchReportModal(true)}
+          aria-label="Edit Match Details"
           className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-500 hover:border-transparent rounded"
         >
           Edit
         </button>
-      </div>
+      </li>
 
       {showMatchReportModal && (
         <MatchReportModal

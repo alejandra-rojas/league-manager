@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import LeagueEntry from "../../components/Admin/LeagueEntry";
-import LeagueModal from "../../components/Admin/LeagueModal";
+//import LeagueModal from "../../components/Admin/LeagueModal";
 
 function Leagues() {
-  const [showModal, setShowModal] = useState(false);
+  //const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
+  const today = new Date();
 
   //Getting leagues data
   const getData = async () => {
@@ -21,8 +22,6 @@ function Leagues() {
 
   useEffect(() => getData, []);
 
-  const today = new Date();
-
   //Not finished leagues
   const unfinishedLeagues = leagues?.filter((league) => !league.isfinished);
 
@@ -36,21 +35,21 @@ function Leagues() {
 
   return (
     <>
-      <hgroup>
+      <div>
         <h3>Current Leagues</h3>
         <p>
-          Not finished and todays date is within the range of start/end date
+          Leagues that are not finished and todays date is within the range of
+          start/end date
         </p>
-      </hgroup>
+      </div>
 
-      <div className="flex flex-col gap-20">
-        <div className="flex flex-col gap-5">
-          <h2>-</h2>
+      <section id="current-leagues" className="flex flex-col gap-20">
+        <ul className="flex flex-col gap-5">
           {sortedLeagues?.map((league) => (
             <LeagueEntry key={league.id} league={league} getData={getData} />
           ))}
-        </div>
-      </div>
+        </ul>
+      </section>
     </>
   );
 }

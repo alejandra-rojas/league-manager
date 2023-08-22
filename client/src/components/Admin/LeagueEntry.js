@@ -66,50 +66,33 @@ export default function LeagueEntry({ league, getData }) {
   useEffect(() => getEventsData, []);
 
   return (
-    <div className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
-      <div className="flex gap-7 items-center">
-        <h2>{league.league_name}</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-        >
-          Edit
-        </button>
-      </div>
-      <div className="pt-4 pb-6 border-solid border-black-20 border-b-2 mb-6">
-        <p>
-          Start date: {league.starting_date} | End date: {league.end_date}
-        </p>
-        <p>Midway point: {league.midway_point}</p>
-
-        {!isFinished && (
-          <h3>
-            {daysLeft} {message}
-          </h3>
-        )}
-      </div>
-      {!isFinished && (
-        <>
-          {leagueEvents && (
-            <>
-              <p>There are {leagueEvents.length} events in this league </p>
-              {leagueEvents?.map((gevent) => (
-                <EventEntry
-                  key={gevent.event_id}
-                  gevent={gevent}
-                  getEventsData={getEventsData}
-                />
-              ))}
-            </>
-          )}
+    <li className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
+      <header className="pt-4 pb-6 border-solid border-black-20 border-b-2 mb-6">
+        <div className="flex gap-7 items-center">
+          <div>
+            <h4>{league.league_name}</h4>
+            <p>
+              Start date: {league.starting_date} | End date: {league.end_date}
+            </p>
+            <p>Midway point: {league.midway_point}</p>
+          </div>
           <button
-            onClick={() => setShowEventModal(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
+            onClick={() => setShowModal(true)}
+            aria-label="Show 'Edit League' Modal"
+            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
           >
-            Add event or group to {lowercaseTitle}
+            Edit
           </button>
-        </>
-      )}
+        </div>
+        <p>
+          {!isFinished && (
+            <span>
+              {daysLeft} {message}
+            </span>
+          )}
+        </p>
+      </header>
+
       {showModal && (
         <LeagueModal
           mode={"edit"}
@@ -120,6 +103,33 @@ export default function LeagueEntry({ league, getData }) {
         />
       )}
 
+      <section>
+        {leagueEvents && (
+          <div className="pt-4 pb-10 border-solid border-black-20 border-b-2 mb-4">
+            <p>
+              {isFinished ? " " : "There are "} {leagueEvents.length} events on
+              this league
+            </p>
+            <ul>
+              {leagueEvents.map((gevent) => (
+                <li key={gevent.event_id}>
+                  <EventEntry gevent={gevent} getEventsData={getEventsData} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {!isFinished && (
+          <button
+            onClick={() => setShowEventModal(true)}
+            aria-label="Opel Modal to add an event to this league"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
+          >
+            Add event or group to {lowercaseTitle}
+          </button>
+        )}
+      </section>
+
       {showEventModal && (
         <EventModal
           mode={"new"}
@@ -129,6 +139,6 @@ export default function LeagueEntry({ league, getData }) {
           leagueEvents={leagueEvents}
         />
       )}
-    </div>
+    </li>
   );
 }

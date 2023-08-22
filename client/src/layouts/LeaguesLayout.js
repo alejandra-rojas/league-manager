@@ -79,13 +79,11 @@ function LeaguesLayout() {
       </div>
 
       {showModal && (
-        <section id="createleague">
-          <LeagueModal
-            mode={"create"}
-            setShowModal={setShowModal}
-            getData={getData}
-          />
-        </section>
+        <LeagueModal
+          mode={"create"}
+          setShowModal={setShowModal}
+          getData={getData}
+        />
       )}
       <section id="leagues-content">
         <Outlet />

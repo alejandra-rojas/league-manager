@@ -27,7 +27,7 @@ function Breadcrumbs() {
     });
 
   return (
-    <nav aria-label="Breadcrumb" className="breadcrumbs">
+    <nav aria-label="breadcrumb">
       <ol className="flex gap-1 list-none p-0">
         {crumbs.map((crumb, index) => (
           <Fragment key={index}>

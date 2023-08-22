@@ -49,26 +49,30 @@ function MatchReportModal({
   };
 
   return (
-    <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
-      <div className="flex justify-between pb-3">
-        <h2>Scores card</h2>
-
+    <section className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
+      <header className="flex justify-between pb-3">
+        <div>
+          <h2>Match report</h2>
+          <h2>
+            Player 1: {match.team1_player1_firstname}{" "}
+            {match.team1_player1_lastname} & {match.team1_player2_firstname}{" "}
+            {match.team1_player2_lastname}
+          </h2>
+          <h2>
+            Player 2: {match.team2_player1_firstname}{" "}
+            {match.team2_player1_lastname} & {match.team2_player2_firstname}{" "}
+            {match.team2_player2_lastname}
+          </h2>
+        </div>
         <button
           onClick={() => {
             setShowMatchReportModal(false);
           }}
         >
-          X
+          Close
         </button>
-      </div>
-      <h2>
-        Team 1: {match.team1_player1_firstname} {match.team1_player1_lastname} &{" "}
-        {match.team1_player2_firstname} {match.team1_player2_lastname}
-      </h2>
-      <h2>
-        Team 2: {match.team2_player1_firstname} {match.team2_player1_lastname} &{" "}
-        {match.team2_player2_firstname} {match.team2_player2_lastname}
-      </h2>
+      </header>
+
       <form className="flex-col">
         <label htmlFor="matchDate">Date of the match:</label>
         <input
@@ -147,15 +151,18 @@ function MatchReportModal({
           className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
         />
         <br />
-        <input
+        <button
           className={
             "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
           }
           type="submit"
           onClick={updateMatchData}
-        />
+          aria-label="Update Match data"
+        >
+          Update match data
+        </button>
       </form>
-    </div>
+    </section>
   );
 }
 
