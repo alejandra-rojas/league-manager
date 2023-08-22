@@ -383,7 +383,7 @@ app.delete("/teams/:id", async (req, res) => {
 });
 
 //TEAMS SEARCH
-app.get("/teams/search", async (req, res) => {
+app.get("/searchteams/", async (req, res) => {
   const { name } = req.query;
 
   try {
@@ -409,7 +409,7 @@ app.get("/teams/search", async (req, res) => {
     `;
 
     const values = [`%${name}%`];
-
+    console.log(values);
     const teamsResult = await pool.query(query, values);
 
     res.json(teamsResult.rows);
