@@ -45,9 +45,9 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
   };
 
   const clearSearchResults = () => {
-    setSearchPerformed(false);
     setTeams([]);
     setSearchString("");
+    setSearchPerformed(false);
   };
 
   // Add player to team
@@ -140,64 +140,82 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
       {!editMode && (
         <div>
           <div className="bg-gray-200 p-3 my-3 border rounded-md">
-            <div className="flex">
-              <button className="my-3">Add team to event</button>
+            <div className="flex justify-between items-center mb-3">
               <button
-                className="border"
-                onClick={() => {
-                  setShowTeamsModal(false);
-                }}
+                className="border bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                onClick={() => setShowTeamsModal(false)}
+                aria-label="Close the create team modal"
               >
-                X
+                Close
               </button>
             </div>
 
             <div>
-              <h1>Search for existing players</h1>
-              <form onSubmit={onSubmitForm}>
+              <h1>Search for an existing players</h1>
+              <form onSubmit={onSubmitForm} className="flex">
                 <input
                   type="text"
                   name="name"
                   placeholder="Enter players name"
                   value={searchString}
                   onChange={(e) => setSearchString(e.target.value)}
-                ></input>
+                  className="my-3 mr-2 px-3 py-2 rounded-md border border-gray-300"
+                  aria-label="Search for players by name"
+                />
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  type="submit"
+                  aria-label="Submit the player search"
+                >
+                  Submit
+                </button>
                 {searchPerformed && players.length >= 1 && (
-                  <button onClick={clearSearchResults}>Clear search</button>
+                  <button
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded ml-2"
+                    onClick={clearSearchResults}
+                    aria-label="Clear the player search results"
+                  >
+                    Clear search
+                  </button>
                 )}
-                <button>Submit</button>
               </form>
               {searchPerformed && players.length === 0 && (
                 <p>No player found</p>
               )}
 
-              <table>
-                <thead className="hidden">
-                  <tr>
-                    <th>Team ID</th>
-                    <th>Players name</th>
-                    <th>action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {players.map((player) => (
-                    <tr key={player.player_id} className="flex g-5">
-                      <td>{player.player_id}</td>
-                      <td>
-                        {player.player_firstname} {player.player_lastname}
-                      </td>
-
-                      <td>
-                        <button onClick={() => addPlayer(player)}>
-                          Add player to team
-                        </button>
-                      </td>
+              {searchPerformed && players.length > 0 && (
+                <table className="w-full">
+                  <thead className="hidden">
+                    <tr>
+                      <th>Team ID</th>
+                      <th>Players name</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {players.map((player) => (
+                      <tr key={player.player_id} className="flex g-5">
+                        <td>{player.player_id}</td>
+                        <td>
+                          {player.player_firstname} {player.player_lastname}
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => addPlayer(player)}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                            aria-label={`Add ${player.player_firstname} ${player.player_lastname} to team`}
+                          >
+                            Add player to team
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
+
           {selectedPlayers.length !== 0 && (
             <>
               <div>You are creating a team with players:</div>
@@ -207,15 +225,28 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
                     <p>
                       {player.player_firstname} {player.player_lastname}
                     </p>
-                    <button onClick={() => removePlayer(player)}>
+                    <button
+                      onClick={() => removePlayer(player)}
+                      aria-label={`Remove ${player.player_firstname} ${player.player_lastname} from team`}
+                    >
                       Remove player
                     </button>
                   </li>
                 ))}
               </ul>
-              {error && <p>{error}</p>}
+              {error && (
+                <p className="text-red-500" aria-live="assertive">
+                  {error}
+                </p>
+              )}
               {selectedPlayers.length === 2 && (
-                <button onClick={createTeam}>Create team</button>
+                <button
+                  onClick={createTeam}
+                  aria-label="Create team"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
+                >
+                  Create team
+                </button>
               )}
             </>
           )}
@@ -229,12 +260,17 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
             onClick={() => {
               setShowTeamsModal(false);
             }}
+            aria-label="Close team modal"
           >
-            X
+            Close
           </button>
-          <button onClick={deleteTeam}>
+          <button
+            onClick={deleteTeam}
+            className="flex"
+            aria-label={`Delete ${team.player1_firstname} and ${team.player2_firstname}'s team`}
+          >
             <TrashIcon width={20} />
-            <span>delete team</span>
+            <span>Delete team</span>
           </button>
         </div>
       )}

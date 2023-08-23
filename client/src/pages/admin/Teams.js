@@ -27,38 +27,39 @@ function Teams() {
 
   return (
     <>
-      <div className="flex justify-end">
-        <button
-          onClick={() => setShowTeamsModal(true)}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-        >
-          <UserPlusIcon width={20} />
-          Create team
-        </button>
-      </div>
+      <button
+        onClick={() => setShowTeamsModal(true)}
+        className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+        aria-label="Create a new team"
+      >
+        <UserPlusIcon width={20} />
+        Create Team
+      </button>
 
       {showTeamsModal && (
         <TeamModal
-          mode={"create"}
+          mode="create"
           getTeamsData={getTeamsData}
           setShowTeamsModal={setShowTeamsModal}
         />
       )}
 
-      <div className="my-5">
-        <label htmlFor="location">Search for a team</label>
+      <div id="Teams-Filter-Form">
+        <label htmlFor="searchInput">Filter teams by player name</label>
         <input
+          id="searchInput"
           onChange={(e) => setSearchState(e.target.value)}
           className="input-text"
           type="text"
           name="player"
           value={searchState}
-          placeholder="search by player name"
+          placeholder="Enter player name"
+          aria-label="Filter teams by player name"
         />
       </div>
 
-      {!searchState && (
-        <div>
+      {!searchState ? (
+        <div id="All-Teams">
           {teams?.map((team) => (
             <TeamEntry
               key={team.team_id}
@@ -68,16 +69,16 @@ function Teams() {
             />
           ))}
         </div>
-      )}
-
-      {searchState.length > 0 && (
-        <TeamSearchBar
-          teams={teams}
-          searchState={searchState}
-          setSearchState={setSearchState}
-          getTeamsData={getTeamsData}
-          showTeamsModal={showTeamsModal}
-        />
+      ) : (
+        <div id="Filtered-Teams">
+          <TeamSearchBar
+            teams={teams}
+            searchState={searchState}
+            setSearchState={setSearchState}
+            getTeamsData={getTeamsData}
+            showTeamsModal={showTeamsModal}
+          />
+        </div>
       )}
     </>
   );

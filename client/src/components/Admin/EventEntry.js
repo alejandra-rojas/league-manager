@@ -204,20 +204,20 @@ function EventEntry({ gevent, getEventsData }) {
           <div className="flex gap-7 items-center">
             <h3>{gevent.event_name}</h3>
             <button
-              onClick={() => setShowTeams((prevState) => !prevState)}
-              aria-expanded={showTeams}
-              aria-controls="eventDetailsSection"
-              className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-500 hover:border-transparent rounded"
+              onClick={() => setShowEventModal(true)}
+              aria-label="Opel modal to edit this event"
+              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
             >
-              {showTeams ? "Close event details " : "Expand event details"}
+              Edit
             </button>
           </div>
           <button
-            onClick={() => setShowEventModal(true)}
-            aria-label="Opel modal to edit this event"
-            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+            onClick={() => setShowTeams((prevState) => !prevState)}
+            aria-expanded={showTeams}
+            aria-controls="eventDetailsSection"
+            className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-1 px-3 border border-gray-500 hover:border-transparent rounded"
           >
-            Edit
+            {showTeams ? "Close event details " : "Expand event details"}
           </button>
         </header>
 

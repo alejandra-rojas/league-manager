@@ -21,22 +21,21 @@ function TeamSearchBar({
   });
 
   return (
-    <div className="searchresults-wrapper">
+    <div id="Filtered-Teams-Results">
       {resultArray.length === 0 ? (
-        <div className="searchresults no-match">
-          <span className="searchresults-text">No match for that name</span>
-        </div>
+        <p role="alert">No match for that name</p>
       ) : (
-        <>
+        <ul>
           {resultArray.slice(0, maxSuggestions).map((team) => (
-            <TeamEntry
-              key={team.team_id}
-              team={team}
-              getTeamsData={getTeamsData}
-              showTeamsModal={showTeamsModal}
-            />
+            <li key={team.team_id}>
+              <TeamEntry
+                team={team}
+                getTeamsData={getTeamsData}
+                showTeamsModal={showTeamsModal}
+              />
+            </li>
           ))}
-        </>
+        </ul>
       )}
     </div>
   );
