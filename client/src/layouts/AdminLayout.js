@@ -2,8 +2,11 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Auth from "../components/Admin/Auth";
 import AuthHeader from "../components/Admin/AuthHeader";
+import { useTitle } from "../App";
 
 function AdminLayout() {
+  useTitle("Admin Section");
+
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const authToken = cookies.AuthToken;
 

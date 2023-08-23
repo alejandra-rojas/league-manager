@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import LeagueEntry from "../../components/Admin/LeagueEntry";
+import { useTitle } from "../../App";
 //import LeagueModal from "../../components/Admin/LeagueModal";
 
 function Leagues() {
+  useTitle("Current Leagues");
   //const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
   const today = new Date();

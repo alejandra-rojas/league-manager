@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { useTitle } from "../App";
 
 function Home() {
+  useTitle("H&I Tennis Leagues");
   const [leagues, setLeagues] = useState(null);
 
   //Getting leagues data

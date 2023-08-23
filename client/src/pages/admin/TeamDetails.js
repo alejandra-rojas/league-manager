@@ -1,8 +1,10 @@
 import { useLoaderData, useParams } from "react-router-dom";
+import { useTitle } from "../../App";
 
 function TeamDetails() {
   const { id } = useParams();
   const team = useLoaderData();
+  useTitle(`Team Page - ${team.player1_lastname} & ${team.player2_lastname}`);
   //console.log(team);
 
   return (

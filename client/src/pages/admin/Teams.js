@@ -3,8 +3,10 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 import TeamModal from "../../components/Admin/TeamModal";
 import TeamEntry from "../../components/Admin/TeamEntry";
 import TeamSearchBar from "../../components/Admin/TeamSearchBar";
+import { useTitle } from "../../App";
 
 function Teams() {
+  useTitle("Teams Admin");
   const [teams, setTeams] = useState(null);
   const [showTeamsModal, setShowTeamsModal] = useState(false);
   const [searchState, setSearchState] = useState("");

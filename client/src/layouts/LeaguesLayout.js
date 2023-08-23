@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import LeagueModal from "../components/Admin/LeagueModal";
+import { useTitle } from "../App";
 
 function LeaguesLayout() {
+  useTitle("Leagues Admin");
   const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
 

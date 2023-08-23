@@ -3,8 +3,10 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 import PlayerModal from "../../components/Admin/PlayerModal";
 import PlayerEntry from "../../components/Admin/PlayerEntry";
 import PlayerSearchBar from "../../components/Admin/PlayerSearchBar";
+import { useTitle } from "../../App";
 
 function Players() {
+  useTitle("Players Admin");
   const [players, setPlayers] = useState(null);
   const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [searchState, setSearchState] = useState("");

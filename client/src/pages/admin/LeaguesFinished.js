@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LeagueEntry from "../../components/Admin/LeagueEntry";
+import { useTitle } from "../../App";
 
 function LeaguesFinished() {
+  useTitle("Finished Leagues");
   const [leagues, setLeagues] = useState(null);
 
   //Getting leagues data

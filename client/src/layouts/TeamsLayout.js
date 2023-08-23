@@ -1,14 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { useTitle } from "../App";
 
 function TeamsLayout() {
+  useTitle("Teams Admin");
   return (
     <>
       <section>
-        <hgroup>
+        <header>
           <h2>Teams Page</h2>
           <p>Manage your teams and access individual team pages</p>
-        </hgroup>
+        </header>
         <Outlet />
       </section>
     </>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   createBrowserRouter,
   Route,
@@ -95,3 +96,13 @@ function App() {
 }
 
 export default App;
+
+export function useTitle(title) {
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = title;
+    return () => {
+      document.title = prevTitle;
+    };
+  });
+}

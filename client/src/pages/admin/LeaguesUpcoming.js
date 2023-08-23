@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import LeagueEntry from "../../components/Admin/LeagueEntry";
+import { useTitle } from "../../App";
 
 function LeaguesUpcoming() {
+  useTitle("Upcoming Leagues");
   const [leagues, setLeagues] = useState(null);
   const today = new Date();
 

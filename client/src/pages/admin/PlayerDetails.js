@@ -1,8 +1,12 @@
 import { useLoaderData, useParams } from "react-router-dom";
+import { useTitle } from "../../App";
 
 function PlayerDetails() {
   const { id } = useParams();
   const player = useLoaderData();
+  useTitle(
+    `Player Page - ${player[0].player_firstname} ${player[0].player_lastname}`
+  );
   //console.log(player);
 
   return (
