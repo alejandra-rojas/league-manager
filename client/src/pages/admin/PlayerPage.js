@@ -1,7 +1,7 @@
 import { useLoaderData, useParams } from "react-router-dom";
 import { useTitle } from "../../App";
 
-function PlayerDetails() {
+function PlayerPage() {
   const { id } = useParams();
   const player = useLoaderData();
   useTitle(
@@ -10,24 +10,26 @@ function PlayerDetails() {
   //console.log(player);
 
   return (
-    <div>
-      <h2>Player {id} Details</h2>
-
-      <h3>Name</h3>
-      <p>
-        {player[0].player_firstname} {player[0].player_lastname}
-      </p>
+    <section>
+      <header>
+        <h3>
+          Player page: {player[0].player_firstname} {player[0].player_lastname}
+        </h3>
+      </header>
 
       <div>
-        Contact details:
-        <p>{player[0].player_phonenumber}</p>
-        <p>{player[0].player_email}</p>
+        <h3>Contact details</h3>
+        <p>Phone: {player[0].player_phonenumber}</p>
+        <p>Email: {player[0].player_email}</p>
+        <p>Player id: {id}</p>
       </div>
-    </div>
+
+      <div>Stadistics showing up here soon.</div>
+    </section>
   );
 }
 
-export default PlayerDetails;
+export default PlayerPage;
 
 //Loader function
 export const playerDetailsLoader = async ({ params }) => {

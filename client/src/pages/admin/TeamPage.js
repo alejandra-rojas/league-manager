@@ -1,7 +1,7 @@
 import { useLoaderData, useParams } from "react-router-dom";
 import { useTitle } from "../../App";
 
-function TeamDetails() {
+function TeamPage() {
   const { id } = useParams();
   const team = useLoaderData();
   useTitle(`Team Page - ${team.player1_lastname} & ${team.player2_lastname}`);
@@ -26,7 +26,7 @@ function TeamDetails() {
   );
 }
 
-export default TeamDetails;
+export default TeamPage;
 
 //Loader function
 export const teamDetailsLoader = async ({ params }) => {
