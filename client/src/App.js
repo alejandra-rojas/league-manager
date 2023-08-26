@@ -15,9 +15,7 @@ import Leagues from "./pages/admin/Leagues";
 import LeaguesUpcoming from "./pages/admin/LeaguesUpcoming";
 import LeaguesFinished from "./pages/admin/LeaguesFinished";
 import Players from "./pages/admin/Players";
-import PlayerDetails, {
-  playerDetailsLoader,
-} from "./pages/admin/PlayerDetails";
+import PlayerDetails, { playerDetailsLoader } from "./pages/admin/PlayerPage";
 import PlayerError from "./pages/admin/PlayerError";
 import Teams from "./pages/admin/Teams";
 
@@ -33,7 +31,7 @@ import TeamsLayout from "./layouts/TeamsLayout";
 // Library
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TeamDetails, { teamDetailsLoader } from "./pages/admin/TeamDetails";
+import TeamDetails, { teamDetailsLoader } from "./pages/admin/TeamPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
