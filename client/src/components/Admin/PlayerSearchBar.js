@@ -18,11 +18,9 @@ function PlayerSearchBar({
   });
 
   return (
-    <div className="searchresults-wrapper">
+    <div id="search-results-player">
       {resultArray.length === 0 ? (
-        <div className="searchresults no-match">
-          <span className="searchresults-text">No match for that name</span>
-        </div>
+        <span className="searchresults-text">No match for that name</span>
       ) : (
         <>
           {resultArray.slice(0, maxSuggestions).map((player) => (

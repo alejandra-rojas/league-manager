@@ -32,28 +32,31 @@ function Players() {
       <div className="flex justify-end">
         <button
           onClick={() => setShowPlayerModal(true)}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+          className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+          aria-label="Add Player"
         >
           <UserPlusIcon width={20} />
-          Add Player
+          Create Player
         </button>
       </div>
 
       <div className="my-5">
-        <label htmlFor="location">Player seach box</label>
+        <label htmlFor="searchPlayer">Filter players by name</label>
         <input
+          id="searchPlayer"
           onChange={(e) => setSearchState(e.target.value)}
           className="input-text"
           type="text"
           name="player"
           value={searchState}
-          placeholder="Search player by name"
+          placeholder="Enter player's name"
+          aria-label="Filter players by name"
         />
       </div>
 
       {showPlayerModal && (
         <PlayerModal
-          mode={"create"}
+          mode="create"
           getPlayersData={getPlayersData}
           setShowPlayerModal={setShowPlayerModal}
         />
