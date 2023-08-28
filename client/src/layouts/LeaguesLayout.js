@@ -1,3 +1,6 @@
+import "../styles/Admin/LeaguesLayout.scss";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
+
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import LeagueModal from "../components/Admin/LeagueModal";
@@ -7,6 +10,9 @@ function LeaguesLayout() {
   useTitle("Leagues Admin");
   const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
+  const [isActiveOngoing, setIsActiveOngoing] = useState(false);
+  const [isActiveUpcoming, setIsActiveUpcoming] = useState(false);
+  const [isActiveFinished, setIsActiveFinished] = useState(false);
 
   //Getting leagues data
   const getData = async () => {
@@ -25,13 +31,15 @@ function LeaguesLayout() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <button
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-          onClick={() => setShowModal(true)}
-        >
-          Create League
-        </button>
+      <section id="leagues-layout-header">
+        {/* <h2>Leagues admin page</h2> */}
+
+        {/* <button onClick={() => setShowModal(true)}>
+          <PlusCircleIcon width={35} />
+          <span>
+            New <span className="">league</span>
+          </span>
+        </button> */}
 
         <a href="#leaguescontent" className="sr-only">
           Skip to leagues section content
@@ -39,46 +47,71 @@ function LeaguesLayout() {
         <section id="admin-secondary-navigation-leagues">
           <nav
             aria-labelledby="admin-secondary-navigation-leagues-label"
-            className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
+            className=""
           >
-            <h2
+            <div
               id="admin-secondary-navigation-leagues-label"
               className="sr-only"
             >
               Navigation for Leagues Section
-            </h2>
+            </div>
             <ul className="flex gap-4">
               <li>
                 <NavLink
                   to={"ongoing"}
                   aria-label="Go to ongoing leagues page"
-                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  activeClassName="active"
+                  onClick={() => {
+                    setIsActiveOngoing(true);
+                    setIsActiveUpcoming(false);
+                    setIsActiveFinished(false);
+                  }}
                 >
-                  Ongoing
+                  Current{" "}
+                  <span className="md-only">
+                    {isActiveOngoing ? "leagues" : ""}
+                  </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to={"upcoming"}
                   aria-label="Go to upcoming leagues page"
-                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  onClick={() => {
+                    setIsActiveOngoing(false);
+                    setIsActiveUpcoming(true);
+                    setIsActiveFinished(false);
+                  }}
                 >
-                  Upcoming
+                  Upcoming{" "}
+                  <span className="md-only">
+                    {isActiveUpcoming ? "leagues" : ""}
+                  </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to={"finished"}
                   aria-label="Go to finished leagues page"
-                  className={({ isActive }) => (isActive ? "bg-green-600" : "")}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  onClick={() => {
+                    setIsActiveOngoing(false);
+                    setIsActiveUpcoming(false);
+                    setIsActiveFinished(true);
+                  }}
                 >
-                  Finished
+                  Finished{" "}
+                  <span className="md-only">
+                    {isActiveFinished ? "leagues" : ""}
+                  </span>
                 </NavLink>
               </li>
             </ul>
           </nav>
         </section>
-      </div>
+      </section>
 
       {showModal && (
         <LeagueModal
@@ -87,7 +120,7 @@ function LeaguesLayout() {
           getData={getData}
         />
       )}
-      <section id="leagues-content">
+      <section id="leagues-layout-content">
         <Outlet />
       </section>
     </>
