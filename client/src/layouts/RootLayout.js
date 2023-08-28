@@ -75,6 +75,56 @@ function RootLayout() {
             </nav>
           </div>
         </div>
+        {authToken && (
+          <section id="admin-primary-navigation">
+            <header>
+              <a href="#leaguessection" className="sr-only">
+                Skip to leagues section navigation
+              </a>
+              <nav aria-labelledby="admin-primary-navigation-label">
+                <h2 id="admin-primary-navigation-label" className="sr-only">
+                  Primary Admin Navigation
+                </h2>
+
+                <ul className="flex gap-4">
+                  <li>
+                    <NavLink
+                      to={"admin/leagues"}
+                      aria-label="Go to leagues section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Leagues
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"admin/players"}
+                      aria-label="Go to players section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Players
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={"admin/teams"}
+                      aria-label="Go to teams section"
+                      className={({ isActive }) =>
+                        isActive ? "bg-green-600" : ""
+                      }
+                    >
+                      Teams
+                    </NavLink>
+                  </li>
+                </ul>
+              </nav>
+            </header>
+          </section>
+        )}
       </header>
       {/* <Breadcrumbs /> */}
       <main id="content">
