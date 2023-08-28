@@ -21,7 +21,7 @@ function AdminLayout() {
               <a href="#leaguessection" className="sr-only">
                 Skip to leagues section navigation
               </a>
-              <AuthHeader />
+              {/* <AuthHeader /> */}
               <nav
                 aria-labelledby="admin-primary-navigation-label"
                 className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
