@@ -1,5 +1,5 @@
 import { useCookies } from "react-cookie";
-import "../../styles/Admin/Auth.scss";
+import "../../styles/Admin/AdminLayout.scss";
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
 
 export default function AuthHeader() {

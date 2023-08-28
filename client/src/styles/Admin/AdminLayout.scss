@@ -57,28 +57,3 @@
     max-width: 10rem;
   }
 }
-
-//AUTH HEADER JS
-#logout-banner {
-  @include flex-col($base-padding);
-  align-items: center;
-  justify-content: flex-end;
-  padding: $base-padding 0;
-
-  span {
-    font-size: $font-size-sm;
-    font-weight: 400;
-  }
-
-  button {
-    @include pillStyle($font-size-sm, white);
-    @include flex-row(0.5rem);
-    padding: 0 $base-padding;
-  }
-
-  @include breakpoint-md {
-    @include flex-row;
-    justify-content: flex-end;
-    background-color: transparent;
-  }
-}

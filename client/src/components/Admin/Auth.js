@@ -1,4 +1,4 @@
-import "../../styles/Admin/Auth.scss";
+import "../../styles/Admin/AdminLayout.scss";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 

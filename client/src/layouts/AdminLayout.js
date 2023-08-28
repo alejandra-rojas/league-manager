@@ -1,3 +1,4 @@
+import "../styles/Admin/AdminLayout.scss";
 import { NavLink, Outlet } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Auth from "../components/Admin/Auth";
@@ -13,19 +14,14 @@ function AdminLayout() {
   return (
     <>
       {!authToken && <Auth />}
-
       {authToken && (
         <>
-          <section id="admin-primary-navigation">
+          {/* <section id="admin-primary-navigation">
             <header>
               <a href="#leaguessection" className="sr-only">
                 Skip to leagues section navigation
               </a>
-              {/* <AuthHeader /> */}
-              <nav
-                aria-labelledby="admin-primary-navigation-label"
-                className="flex gap-6 justify-center bg-slate-500 py-5 my-5"
-              >
+              <nav aria-labelledby="admin-primary-navigation-label">
                 <h2 id="admin-primary-navigation-label" className="sr-only">
                   Primary Admin Navigation
                 </h2>
@@ -66,10 +62,9 @@ function AdminLayout() {
                 </ul>
               </nav>
             </header>
-          </section>
-          <section id="leaguessection">
-            <Outlet />
-          </section>
+          </section> */}
+
+          <Outlet />
         </>
       )}
     </>
