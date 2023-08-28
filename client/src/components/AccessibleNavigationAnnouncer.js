@@ -24,9 +24,8 @@ function AccessibleNavigationAnnouncer() {
   }, [location]);
 
   return (
-    // .sr-only comes from Tailwind CSS and makes sure it will only be visible for SRs
     <span
-      //className="sr-only"
+      className="sr-only"
       role="status"
       aria-live="polite"
       aria-atomic="true"

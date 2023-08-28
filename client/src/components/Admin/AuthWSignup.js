@@ -18,7 +18,9 @@ function Auth() {
   const handleSubmit = async (e, endpoint) => {
     e.preventDefault();
     if (!isLogIn && password !== confirmPassword) {
-      setError("Make sure passwords match!");
+      setError(
+        "Make sure passwords match!. If you continue to have problems contact the system administrator."
+      );
       return;
     }
 

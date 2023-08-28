@@ -1,0 +1,68 @@
+@import "./Variables/Variables.scss";
+
+#header-primary {
+  display: flex;
+  flex-direction: column-reverse;
+
+  @include breakpoint-md {
+    flex-direction: column;
+  }
+
+  .top-banner-admin {
+    font-size: $font-size-sm;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    display: flex;
+
+    padding: 0 1rem;
+    background-color: $color-olive;
+
+    @include breakpoint-md {
+      font-size: $font-size-sm;
+      justify-content: end;
+    }
+  }
+
+  #primary-navigation {
+    display: flex;
+    justify-content: space-between;
+    height: 7rem;
+  }
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 80rem; /* 1280px */
+  margin: 0 auto;
+}
+
+h2 {
+  @include h2;
+}
+
+.error {
+  color: $color-error;
+  font-size: $base-font-size;
+  margin: 0 auto;
+}
+
+//A11Y
+.md-only {
+  display: none;
+}
+
+//A11Y
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

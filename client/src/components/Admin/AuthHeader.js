@@ -1,4 +1,6 @@
 import { useCookies } from "react-cookie";
+import "../../styles/Admin/Auth.scss";
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
 
 export default function AuthHeader() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
@@ -12,15 +14,12 @@ export default function AuthHeader() {
   };
 
   return (
-    <>
-      <span>Hello {adminEmail}</span>
-      <button
-        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
-        onClick={() => signOut()}
-        aria-label="Sign Out from Admin page"
-      >
-        Sign Out
+    <section id="logout-banner">
+      <span className="md-only">Welcome back: {adminEmail}</span>
+      <button onClick={() => signOut()} aria-label="Sign Out from Admin page">
+        LOGOUT
+        {/* <ArrowLeftOnRectangleIcon width={22} /> */}
       </button>
-    </>
+    </section>
   );
 }

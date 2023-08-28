@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import "../../styles/Admin/Auth.scss";
+import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { toast } from "react-toastify";
 
 function Auth() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
@@ -19,12 +19,14 @@ function Auth() {
   const handleSubmit = async (e, endpoint) => {
     e.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Please enter a valid email address.");
+      setError("Please enter a valid email address");
       return;
     }
 
     if (!isLogIn && password !== confirmPassword) {
-      setError("Make sure passwords match!");
+      setError(
+        "Make sure passwords match!. If you continue to have problems contact the system administrator"
+      );
       return;
     }
 
@@ -44,46 +46,43 @@ function Auth() {
     } else {
       setCookie("Email", data.email);
       setCookie("AuthToken", data.token);
-      toast.success(`Succes`);
       window.location.reload();
     }
   };
 
   return (
-    <section className="my-5 mx-5 py-5 px-5 rounded-2xl border border-gray-200">
-      <hgroup>
-        <h2>{isLogIn ? "Admin login" : "Admin sign up"}</h2>
-        <span>
-          {isLogIn
-            ? "Use your email & password. If you have problems contact the system administrator"
-            : "Create an admin account"}
-        </span>
-      </hgroup>
-      <form id="admin-login-form">
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          required
-          placeholder="email"
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setIsFormComplete(e.target.value && password);
-          }}
-          autoComplete="email"
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          placeholder="password"
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setIsFormComplete(email && e.target.value);
-          }}
-          autoComplete="password"
-        />
-        {!isLogIn && (
+    <section id="auth">
+      <div className="login-form">
+        <div className="title-container">
+          <h2 className="">{isLogIn ? "Admin login" : "Admin sign up"}</h2>
+        </div>
+        <form id="admin-login-form">
+          <div className="form-input">
+            <label htmlFor="email">Email address</label>
+            <input
+              type="email"
+              required
+              placeholder="Type your email address"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setIsFormComplete(e.target.value && password);
+              }}
+              autoComplete="email"
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              placeholder="Type your password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setIsFormComplete(email && e.target.value);
+              }}
+              autoComplete="password"
+            />
+          </div>
+          {/* {!isLogIn && (
           <>
             <label htmlFor="confirm-password">Confirm Password:</label>
             <input
@@ -93,20 +92,20 @@ function Auth() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </>
-        )}
-        <input
-          type="submit"
-          disabled={!isFormComplete}
-          className={
-            "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-          }
-          onClick={(e) => {
-            handleSubmit(e, isLogIn ? "login" : "signup");
-          }}
-        />
-        {error && <p className="text-red-500">{error}</p>}
-      </form>
-      <div className="flex justify-end">
+        )} */}
+          {error && <p className="error">{error}</p>}
+          <button
+            type="submit"
+            disabled={!isFormComplete}
+            onClick={(e) => {
+              handleSubmit(e, isLogIn ? "login" : "signup");
+            }}
+          >
+            {isLogIn ? "LOGIN" : "Sign up"}
+          </button>
+        </form>
+
+        {/*       <div className="flex justify-end">
         {isLogIn && (
           <button
             className={` hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-l `}
@@ -127,6 +126,7 @@ function Auth() {
             Admin Login
           </button>
         )}
+      </div> */}
       </div>
     </section>
   );
