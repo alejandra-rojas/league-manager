@@ -1,0 +1,55 @@
+@import "../Variables/Variables.scss";
+
+// NEW LEAGUE BTN
+.create-league {
+  position: fixed;
+  bottom: 3vh;
+  right: 5vw;
+  @include flex-row(0.5rem);
+  @include pillStyleSolid($font-size-sm);
+  padding-right: $base-padding;
+  padding-left: $base-padding;
+  box-shadow: $base-box-shadow;
+}
+
+@include breakpoint-md {
+  .create-league {
+    position: relative;
+    bottom: 2.5rem;
+    right: 0;
+    @include flex-row(0.5rem);
+    @include pillStyleSolid;
+    padding-right: $base-padding;
+    padding-left: $base-padding;
+  }
+}
+
+#current-leagues {
+  @include flex-col($base-margin);
+
+  @include breakpoint-md {
+    @include flex-col(2rem);
+  }
+
+  #league-section-header {
+    margin: 0 auto;
+    padding: $base-padding 0;
+    p {
+      text-align: center;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    @include breakpoint-md {
+      p {
+        font-size: $base-font-size;
+      }
+    }
+  }
+
+  #current-leagues-data {
+    ul {
+      @include flex-col(3rem);
+    }
+  }
+}
