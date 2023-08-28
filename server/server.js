@@ -78,7 +78,7 @@ app.post("/login", async (req, res) => {
 
     console.log(users);
     if (!users.rows.length)
-      return res.json({ detail: "Admin user does not exist." });
+      return res.json({ detail: "Admin user does not exist" });
 
     const success = await bcrypt.compare(
       password,
