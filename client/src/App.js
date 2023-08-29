@@ -42,6 +42,7 @@ const router = createBrowserRouter(
       <Route path="admin" element={<AdminLayout />}>
         <Route path="/admin" element={<Navigate to="leagues/ongoing" />} />
         <Route path="leagues" element={<LeaguesLayout />}>
+          <Route index element={<Navigate to="ongoing" />} />
           <Route path="ongoing" element={<Leagues />} />
           <Route path="upcoming" element={<LeaguesUpcoming />} />
           <Route path="finished" element={<LeaguesFinished />} />
