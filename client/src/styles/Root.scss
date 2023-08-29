@@ -1,9 +1,12 @@
 @import "./Variables/Variables.scss";
 
+#main-header {
+  background-color: $color-green;
+}
+
 #header-primary {
   display: flex;
   flex-direction: column;
-  //flex-direction: column-reverse;
 
   @include breakpoint-md {
     flex-direction: column;
@@ -29,7 +32,13 @@
     color: white;
     justify-content: space-between;
     height: 7rem;
-    padding: 2rem 1rem 1rem;
+    padding: 2rem 0 1rem;
+
+    @include breakpoint-xl {
+      justify-content: space-between;
+      width: 80rem; /* 1280px */
+      margin: 0 auto;
+    }
   }
 }
 
@@ -73,10 +82,16 @@
         background-color: $color-green;
         display: flex;
         gap: 1rem;
-        padding: 0 1rem $base-padding;
+        padding: 0 0 $base-padding;
         justify-content: flex-end;
       }
     }
+  }
+
+  @include breakpoint-xl {
+    justify-content: space-between;
+    width: 80rem; /* 1280px */
+    margin: 0 auto;
   }
 }
 
