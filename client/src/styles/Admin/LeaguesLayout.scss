@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    padding: $base-padding 0;
+    padding: $base-padding2X 0 0;
     //border-bottom: 0.1rem solid black;
   }
 
@@ -24,30 +24,19 @@
     font-size: $font-size-sm;
     ul {
       li {
-        padding-right: $base-font-size;
+        @include pillStyle($base-font-size, $color-green);
 
         .active {
           font-weight: 600;
           padding: $base-padding;
-          border-bottom: 1px solid black;
+          color: $color-olive;
         }
-      }
-      li:not(:last-of-type) {
-        border-right: 1px solid black;
       }
     }
 
     @include breakpoint-md {
       @include flex-row($base-font-size);
       font-size: 1.5rem;
-      ul {
-        li {
-          padding-right: $base-font-size;
-        }
-        li:not(:last-of-type) {
-          border-right: 1px solid black;
-        }
-      }
     }
   }
 }

@@ -51,7 +51,7 @@ function Leagues() {
           <h2 className="sr-only">Current Leagues</h2>
           <p>
             Leagues that are not finished and todays date is within the range of
-            start/end date
+            the start and end date
           </p>
         </header>
 

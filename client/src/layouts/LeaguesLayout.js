@@ -10,9 +10,6 @@ function LeaguesLayout() {
   useTitle("Leagues Admin");
   const [showModal, setShowModal] = useState(false);
   const [leagues, setLeagues] = useState(null);
-  const [isActiveOngoing, setIsActiveOngoing] = useState(false);
-  const [isActiveUpcoming, setIsActiveUpcoming] = useState(false);
-  const [isActiveFinished, setIsActiveFinished] = useState(false);
 
   //Getting leagues data
   const getData = async () => {
@@ -61,17 +58,8 @@ function LeaguesLayout() {
                   to={"ongoing"}
                   aria-label="Go to ongoing leagues page"
                   className={({ isActive }) => (isActive ? "active" : "")}
-                  activeClassName="active"
-                  onClick={() => {
-                    setIsActiveOngoing(true);
-                    setIsActiveUpcoming(false);
-                    setIsActiveFinished(false);
-                  }}
                 >
-                  Current{" "}
-                  <span className="md-only">
-                    {isActiveOngoing ? "leagues" : ""}
-                  </span>
+                  Current
                 </NavLink>
               </li>
               <li>
@@ -79,16 +67,8 @@ function LeaguesLayout() {
                   to={"upcoming"}
                   aria-label="Go to upcoming leagues page"
                   className={({ isActive }) => (isActive ? "active" : "")}
-                  onClick={() => {
-                    setIsActiveOngoing(false);
-                    setIsActiveUpcoming(true);
-                    setIsActiveFinished(false);
-                  }}
                 >
-                  Upcoming{" "}
-                  <span className="md-only">
-                    {isActiveUpcoming ? "leagues" : ""}
-                  </span>
+                  Upcoming
                 </NavLink>
               </li>
               <li>
@@ -96,16 +76,8 @@ function LeaguesLayout() {
                   to={"finished"}
                   aria-label="Go to finished leagues page"
                   className={({ isActive }) => (isActive ? "active" : "")}
-                  onClick={() => {
-                    setIsActiveOngoing(false);
-                    setIsActiveUpcoming(false);
-                    setIsActiveFinished(true);
-                  }}
                 >
-                  Finished{" "}
-                  <span className="md-only">
-                    {isActiveFinished ? "leagues" : ""}
-                  </span>
+                  Finished
                 </NavLink>
               </li>
             </ul>

@@ -1,3 +1,6 @@
+import "../../styles/Admin/Leagues.scss";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
+
 import React, { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
 import EventModal from "./EventModal";
@@ -13,6 +16,7 @@ export default function LeagueEntry({ league, getData }) {
   const isFinished = league.isfinished;
   const startDate = new Date(league.starting_date);
   const endDate = new Date(league.end_date);
+  const midDate = new Date(league.midway_point);
   const today = new Date();
   const registrationCutoff = new Date(startDate);
   registrationCutoff.setDate(startDate.getDate() - 2); // Two days before the start
@@ -66,33 +70,46 @@ export default function LeagueEntry({ league, getData }) {
   useEffect(() => getEventsData, []);
 
   return (
-    <li className="bg-gray-100 px-6 pt-10 pb-8 shadow-s ring-1 ring-gray-900/5  sm:rounded-lg sm:px-10">
-      <header className="pt-4 pb-6 border-solid border-black-20 border-b-2 mb-6">
-        <div className="flex gap-7 items-center">
-          <div>
-            <h4>{league.league_name}</h4>
-            <p>
-              Start date: {league.starting_date} | End date: {league.end_date}
-            </p>
-            <p>Midway point: {league.midway_point}</p>
-          </div>
+    <li className="league-single-entry">
+      <header className="league-info">
+        <div className="league-title">
+          <h3>{league.league_name}</h3>
           <button
             onClick={() => setShowModal(true)}
             aria-label="Show 'Edit League' Modal"
-            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
           >
-            Edit
+            Edit league
           </button>
         </div>
-        <p>
-          {!isFinished && (
-            <span>
-              {daysLeft} {message}
-            </span>
-          )}
-        </p>
-      </header>
+        <div className="league-dates">
+          <p>
+            {startDate.toDateString()} to {endDate.toDateString()}
+          </p>
+          <p>Midpoint: {midDate.toDateString()}</p>
+        </div>
 
+        <div className="league-stats">
+          {/*           <p>
+            {leagueEvents.length}{" "}
+            {leagueEvents.length === 1 ? "event" : "events"}
+          </p> */}
+
+          {!isFinished && (
+            <p
+              className={
+                message ===
+                "The end date for the league has passed. Once all the results are entered, set the league to finished via the edit modal"
+                  ? "text-highlight"
+                  : "days-left"
+              }
+            >
+              <span>
+                {daysLeft} {message}
+              </span>
+            </p>
+          )}
+        </div>
+      </header>
       {showModal && (
         <LeagueModal
           mode={"edit"}
@@ -102,14 +119,9 @@ export default function LeagueEntry({ league, getData }) {
           today={today}
         />
       )}
-
-      <section>
+      <section id="events-section">
         {leagueEvents && (
-          <div className="pt-4 pb-10 border-solid border-black-20 border-b-2 mb-4">
-            <p>
-              {isFinished ? " " : "There are "} {leagueEvents.length} events on
-              this league
-            </p>
+          <div>
             <ul>
               {leagueEvents.map((gevent) => (
                 <li key={gevent.event_id}>
@@ -123,13 +135,13 @@ export default function LeagueEntry({ league, getData }) {
           <button
             onClick={() => setShowEventModal(true)}
             aria-label="Opel Modal to add an event to this league"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
+            className="add-event"
           >
-            Add event or group to {lowercaseTitle}
+            <PlusCircleIcon width={30} />
+            Add event to {lowercaseTitle}
           </button>
         )}
       </section>
-
       {showEventModal && (
         <EventModal
           mode={"new"}

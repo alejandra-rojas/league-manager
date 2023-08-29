@@ -2,7 +2,6 @@
 
 #primary-navigation {
   background-color: $color-green;
-  padding: 2rem 1rem;
 
   h1 {
     font-size: $base-font-size;
@@ -29,9 +28,10 @@
       }
     }
   }
-}
 
-//ACTIVE MENU
-.active {
-  background-color: $color-grey;
+  //ACTIVE MENU
+  .active {
+    font-weight: 600;
+    text-decoration: underline;
+  }
 }

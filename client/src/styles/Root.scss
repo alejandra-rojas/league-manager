@@ -2,7 +2,8 @@
 
 #header-primary {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  //flex-direction: column-reverse;
 
   @include breakpoint-md {
     flex-direction: column;
@@ -14,7 +15,6 @@
     color: white;
     font-weight: bold;
     display: flex;
-
     padding: 0 1rem;
     background-color: $color-olive;
 
@@ -26,11 +26,61 @@
 
   #primary-navigation {
     display: flex;
+    color: white;
     justify-content: space-between;
     height: 7rem;
+    padding: 2rem 1rem 1rem;
   }
 }
 
+//AUTH HEADER JS
+#logout-banner {
+  @include flex-col($base-padding);
+  align-items: center;
+  justify-content: flex-end;
+  padding: $base-padding 0;
+
+  span {
+    font-size: $font-size-sm;
+    font-weight: 400;
+  }
+
+  button {
+    @include pillStyle($font-size-sm, white);
+    @include flex-row(0.5rem);
+    padding: 0 $base-padding;
+  }
+
+  @include breakpoint-md {
+    @include flex-row;
+    justify-content: flex-end;
+    background-color: transparent;
+  }
+}
+
+//ADMIN NAVIGATION
+#admin-primary-navigation {
+  header {
+    nav {
+      background-color: $color-green;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: $base-padding 1rem;
+
+      @include breakpoint-md {
+        font-size: $base-font-size;
+        background-color: $color-green;
+        display: flex;
+        gap: 1rem;
+        padding: 0 1rem $base-padding;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+//MAIN
 main {
   display: flex;
   flex-direction: column;
@@ -43,15 +93,23 @@ h2 {
   @include h2;
 }
 
+h3 {
+  @include h3;
+}
+
 .error {
   color: $color-error;
   font-size: $base-font-size;
   margin: 0 auto;
 }
 
-//A11Y
+//HIDDING ELEMENTS FROM MOBILE VIEW
 .md-only {
   display: none;
+
+  @include breakpoint-md {
+    display: inline;
+  }
 }
 
 //A11Y
