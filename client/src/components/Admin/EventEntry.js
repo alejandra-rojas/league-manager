@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import EventModal from "./EventModal";
 import StandingsReport from "./StandingsReport";
 import { toast } from "react-toastify";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
@@ -234,123 +237,163 @@ function EventEntry({ gevent, getEventsData }) {
         {showTeams && (
           <>
             <div className="mid-bonus-info">
-              <p>
-                Complete {gevent.midway_matches} matches before the midpoint to
-                get bonus points
-              </p>
+              {eventMatchesData.length !== 0 && (
+                <p>
+                  Complete {gevent.midway_matches} matches before the midpoint
+                  to get bonus points
+                </p>
+              )}
               <div className="line"></div>
             </div>
+
             <div id="event-details">
               {eventMatchesData.length === 0 && (
                 <section id="create-event-table">
-                  <h4>Participating teams</h4>
-                  {eventTeams.length === 0 ? (
-                    <p>
-                      There are no teams on this event yet. To add a team to an
-                      event, search for the team using the search field.
-                    </p>
-                  ) : (
-                    <ul>
-                      {eventTeams.map((team) => (
-                        <li key={team.team_id} className="flex gap-10 py-1">
-                          <p>
-                            Team: {team.player1_firstname}{" "}
-                            {team.player1_lastname} & {team.player2_firstname}{" "}
-                            {team.player2_lastname}
-                          </p>
-                          <button
-                            aria-label={`Remove team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} from event`}
-                            onClick={() => removeTeam(team.team_id)}
-                          >
-                            Remove team from event
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <div className="participants">
+                    <h5>Participants</h5>
+                    {eventTeams.length === 0 ? (
+                      <p className="text-highlight">
+                        There are no participants on this event yet. To add a
+                        participant to an event, search for them using the
+                        search field below.
+                      </p>
+                    ) : (
+                      <div className="list">
+                        <ul>
+                          {eventTeams.map((team, index) => (
+                            <li
+                              key={team.team_id}
+                              className={
+                                index % 2 === 0 ? "even-row" : "odd-row"
+                              }
+                            >
+                              <p>
+                                <span>
+                                  {team.player1_firstname}{" "}
+                                  {team.player1_lastname}
+                                </span>{" "}
+                                <span>
+                                  & {team.player2_firstname}{" "}
+                                  {team.player2_lastname}
+                                </span>
+                              </p>
+                              <button
+                                aria-label={`Remove team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} from event`}
+                                onClick={() => removeTeam(team.team_id)}
+                              >
+                                <span>Remove</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-                  <section
-                    id="player-search"
-                    className="bg-gray-200  my-3 border rounded-md"
-                  >
-                    <div className="py-3">
-                      <h3>Search the player database by player's name</h3>
+                    {eventTeams.length >= 4 && (
+                      <button
+                        onClick={handleGenerateMatches}
+                        aria-label={`Create matches table`}
+                        className="create-table"
+                      >
+                        <SparklesIcon width={20} />
+                        Create standings table
+                      </button>
+                    )}
+                  </div>
+
+                  <section id="player-search">
+                    <div className="search-input">
+                      {/* <h5>Search the database by participant's name</h5> */}
 
                       <form onSubmit={onSubmitTeamsForm}>
                         <input
                           type="text"
                           id="searchInput"
                           name="name"
-                          placeholder="Enter player's name:"
+                          placeholder="Search by participant's name:"
                           value={searchString}
                           onChange={(e) => setSearchString(e.target.value)}
                         ></input>
-                        <button type="submit" aria-label="Submit search">
-                          Submit
+                        <div className="clear-search">
+                          {searchPerformed && (
+                            <button
+                              onClick={clearSearchResults}
+                              aria-label="Clear search results"
+                            >
+                              <XMarkIcon width={20} />
+                            </button>
+                          )}
+                        </div>
+                        <button
+                          type="submit"
+                          aria-label="Submit search"
+                          disabled={!searchString}
+                        >
+                          <MagnifyingGlassIcon width={25} />
+                          <span>search</span>
                         </button>
                       </form>
                       {error && <p className="text-red-600">{error}</p>}
-                      {searchPerformed && teams.length >= 1 && (
-                        <button
-                          onClick={clearSearchResults}
-                          aria-label="Clear search results"
-                        >
-                          Clear search
-                        </button>
-                      )}
                     </div>
-
-                    <table>
-                      <thead className="hidden">
-                        <tr>
-                          <th scope="col">Team ID</th>
-                          <th scope="col">Players 1 Name</th>
-                          <th scope="col">Players 2 Name</th>
-                          <th scope="col">action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teams.map((team) => (
-                          <tr key={team.team_id} className="flex g-5">
-                            <td>{team.team_id}</td>
-                            <td>
-                              {team.player1_firstname} {team.player1_lastname}
-                            </td>
-                            <td>
-                              {team.player2_firstname} {team.player2_lastname}
-                            </td>
-                            <td>
-                              <button
-                                onClick={() => addTeam(team.team_id)}
-                                aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
+                    {searchPerformed && teams.length >= 1 && (
+                      <div className="search-results">
+                        <h5>Search results:</h5>
+                        <table>
+                          <thead className="sr-only">
+                            <tr>
+                              <th scope="col">Team ID</th>
+                              <th scope="col">Players 1 Name</th>
+                              <th scope="col">&</th>
+                              <th scope="col">Players 2 Name</th>
+                              <th scope="col">action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {teams.map((team, index) => (
+                              <tr
+                                key={team.team_id}
+                                className={
+                                  index % 2 === 0 ? "even-row" : "odd-row"
+                                }
                               >
-                                Add team to event
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                                <td>{team.team_id}</td>
+                                <td>
+                                  {team.player1_firstname}{" "}
+                                  {team.player1_lastname}
+                                </td>
+                                <td>&</td>
+                                <td>
+                                  {team.player2_firstname}{" "}
+                                  {team.player2_lastname}
+                                </td>
+                                <td>
+                                  <button
+                                    onClick={() => addTeam(team.team_id)}
+                                    aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
+                                  >
+                                    Add team to event
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                     {searchPerformed && teams.length === 0 && (
-                      <p>No teams found</p>
+                      <p className="error">
+                        No results! You can add a new participant to the
+                        database via the players page
+                      </p>
                     )}
                   </section>
-
-                  <button
-                    onClick={handleGenerateMatches}
-                    aria-label={`Create matches table`}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-full"
-                  >
-                    Create matches table
-                  </button>
                 </section>
               )}
               {eventMatchesData.length !== 0 && (
                 <section id="event-standings">
                   <div className="my-5">
-                    <h4>Participating teams</h4>
                     <table className="table-auto border-collapse border">
-                      <caption>Event Standings</caption>
+                      <h5 className="sr-only">Event Standings</h5>
                       <thead>
                         <tr>
                           <th className="border-b border-slate-600" scope="col">

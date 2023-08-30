@@ -115,7 +115,12 @@ h3 {
 .error {
   color: $color-error;
   font-size: $base-font-size;
-  margin: 0 auto;
+  text-align: center;
+}
+
+.text-highlight {
+  display: inline-block;
+  background-color: $color-highlight-yellow;
 }
 
 //HIDDING ELEMENTS FROM MOBILE VIEW

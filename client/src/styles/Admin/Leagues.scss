@@ -82,11 +82,6 @@
           .days-left {
             font-weight: bold;
           }
-
-          .text-highlight {
-            display: inline-block;
-            background-color: $color-highlight-yellow;
-          }
         }
 
         @include breakpoint-md {

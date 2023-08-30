@@ -63,6 +63,7 @@ $base-margin: 0.75rem;
 //BORDER
 $base-border-radius2D: 9px;
 $base-border-radius: 20px;
+$base-border-radius-md: 30px;
 $base-border-thickness: 1px;
 
 @mixin input {
@@ -72,7 +73,7 @@ $base-border-thickness: 1px;
 }
 
 //SHADOW
-$base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+$base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 
 //MIX INS
 @mixin h2 {
@@ -87,6 +88,11 @@ $base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
   @include breakpoint-md {
     font-size: $font-size-lg;
   }
+}
+
+@mixin h5 {
+  font-size: $base-font-size;
+  font-weight: 600;
 }
 
 @mixin flex-row($gapSize: 2rem) {
@@ -122,6 +128,12 @@ $base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     background-color: $monocrome;
     color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
   }
 }
 
@@ -163,18 +175,20 @@ $base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 0.75rem;
   align-self: center;
   transition: all 0.3s;
+  box-shadow: $base-box-shadow;
 
   &:hover {
     border: 1px solid $pillColor;
     cursor: pointer;
     color: $pillColor;
-    background-color: $color-lightgreen;
-    box-shadow: $base-box-shadow;
+    background-color: cyan;
+    box-shadow: none;
   }
 
   &:disabled {
     opacity: 0.25;
     cursor: default;
     pointer-events: none;
+    box-shadow: none;
   }
 }

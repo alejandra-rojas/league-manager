@@ -30,7 +30,7 @@
     }
 
     button {
-      @include editButton(#1d4ed8);
+      @include editButton($color-darkgreen);
     }
   }
 
@@ -47,5 +47,132 @@
 
   #event-details {
     margin: $base-padding 0.8rem;
+
+    #create-event-table {
+      padding-top: $base-padding;
+      h5 {
+        @include h5;
+      }
+
+      @include breakpoint-md {
+        p {
+          font-size: $base-font-size;
+        }
+      }
+    }
+
+    .participants {
+      @include flex-col(0.25rem);
+      align-items: flex-start;
+
+      .list {
+        ul {
+          display: flex;
+          gap: 0.25rem;
+          li {
+            display: flex;
+            gap: 2.5rem;
+
+            button {
+              color: #1d4ed8;
+              text-decoration: underline solid $base-border-thickness;
+            }
+          }
+        }
+        .even-row {
+          background-color: #f2f2f2;
+        }
+
+        .odd-row {
+          background-color: #ffffff;
+        }
+      }
+
+      button.create-table {
+        @include flex-row($base-border-radius2D);
+        @include pillStyleSolid(1.2rem, $color-olive);
+        align-self: flex-start;
+        margin-top: $base-padding;
+      }
+    }
+
+    #player-search {
+      margin-top: $base-padding2X;
+      background-color: #e1e1de;
+      padding: 1rem;
+      @include flex-col($base-padding);
+      justify-content: left;
+
+      .search-input {
+        h5 {
+          font-weight: 400;
+          font-size: $font-size-sm;
+        }
+
+        form {
+          @include flex-col(0.25rem);
+          align-items: center;
+
+          @include breakpoint-md {
+            @include flex-row(0.3rem);
+            justify-content: left;
+          }
+
+          input {
+            border-radius: $base-border-radius-md;
+            height: $font-size-xxl;
+
+            padding: 0 $base-padding2X;
+
+            @include breakpoint-md {
+              min-width: 400px;
+              font-size: $base-font-size;
+            }
+          }
+
+          .clear-search {
+            button {
+              margin-right: $base-padding;
+              border-radius: 50%;
+              padding: 0.3rem;
+              border-color: $color-darkgrey;
+              color: $color-darkgrey;
+            }
+          }
+
+          button {
+            @include editButton(#1d4ed8);
+            @include flex-row(0.25rem);
+            justify-content: left;
+            font-size: $base-font-size;
+          }
+        }
+      }
+
+      .search-results {
+        tbody {
+          font-size: $base-font-size;
+
+          .even-row {
+            background-color: #f2f2f2;
+            padding: $base-padding 0;
+          }
+
+          .odd-row {
+            background-color: #ffffff;
+          }
+        }
+
+        button {
+          margin-left: 1rem;
+          color: #1d4ed8;
+          text-decoration: underline solid $base-border-thickness;
+        }
+      }
+    }
+  }
+
+  .error {
+    text-align: left;
   }
 }
