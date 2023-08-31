@@ -93,7 +93,7 @@
             gap: 2.5rem;
 
             button {
-              color: #1d4ed8;
+              color: $color-lightblue;
               text-decoration: underline solid $base-border-thickness;
             }
           }
@@ -162,7 +162,7 @@
           }
 
           button {
-            @include editButton(#1d4ed8);
+            @include editButton($color-lightblue);
             @include flex-row(0.25rem);
             justify-content: left;
             font-size: $base-font-size;
@@ -186,7 +186,7 @@
 
         button {
           margin-left: 1rem;
-          color: #1d4ed8;
+          color: $color-lightblue;
           text-decoration: underline solid $base-border-thickness;
         }
       }
@@ -227,12 +227,62 @@
           .centered {
             text-align: center;
           }
+        }
+      }
+    }
 
-          .withdrawn {
-            opacity: 50%;
-            color: gray;
-            text-decoration: line-through;
+    #match-reports-table {
+      display: grid;
+      margin: $base-padding2X 0;
+
+      ul {
+        gap: 0;
+        li {
+          @include flex-col(0);
+          grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr;
+          column-gap: $base-padding;
+          align-items: flex-start;
+          flex-wrap: wrap;
+        }
+
+        @include breakpoint-md {
+          li {
+            display: grid;
+            grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr;
+            column-gap: $base-padding;
+            align-items: center;
           }
+        }
+
+        .md-header {
+          font-weight: 600;
+          display: none;
+        }
+
+        @include breakpoint-md {
+          .md-header {
+            display: grid;
+            grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr;
+            column-gap: $base-padding;
+            align-items: center;
+          }
+        }
+
+        li:hover {
+          background-color: $color-highlight-yellow;
+        }
+
+        .even-row {
+          background-color: #f2f2f2;
+        }
+
+        .odd-row {
+          background-color: #ffffff;
+        }
+
+        button {
+          margin: 0.25rem;
+          @include editButton($color-olive);
         }
       }
     }
@@ -253,15 +303,17 @@
       }
 
       form {
-        @include flex-row($base-padding);
+        @include flex-col($base-padding);
         justify-content: left;
 
-        //className="my-3 mx-0 py-2 px-3 rounded-xl border border-gray-200"
+        @include breakpoint-md {
+          @include flex-row($base-padding);
+          justify-content: left;
+        }
 
         select {
           color: $color-error;
           border-radius: $base-border-radius;
-
           padding: $base-padding;
         }
 
@@ -283,5 +335,11 @@
     text-decoration: underline;
     @include flex-row(0.25rem);
     color: $color-error;
+  }
+
+  .withdrawn {
+    opacity: 50%;
+    color: gray;
+    text-decoration: line-through;
   }
 }

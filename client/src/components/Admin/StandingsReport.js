@@ -10,22 +10,21 @@ function StandingsReport({
   const [showMatchReportModal, setShowMatchReportModal] = useState(false);
 
   return (
-    <section id="individual-match-reports" className="mt-5">
-      <header className="grid grid-cols-6">
-        <div>Player 1</div>
-        <div>Player 2</div>
-        <div>Match Date</div>
-        <div>Finished</div>
-
-        {/*         <div>P1 sets</div>
-        <div>P2 sets</div> */}
-        <div>Winner Score</div>
-        <div className="hidden">Action</div>
-      </header>
-
+    <section id="match-reports-table">
       <ul>
-        {eventMatchesData?.map((match) => (
+        <li className="md-header">
+          <span>Player 1</span>
+          <span>Player 2</span>
+          <p>Match Date</p>
+          <span>Finished</span>
+          {/*<div>P1 sets</div>
+        <div>P2 sets</div> */}
+          <span>Winner Score</span>
+          <span>Action</span>
+        </li>
+        {eventMatchesData?.map((match, index) => (
           <MatchReportEntry
+            index={index}
             key={match.match_id}
             match={match}
             setShowMatchReportModal={setShowMatchReportModal}
