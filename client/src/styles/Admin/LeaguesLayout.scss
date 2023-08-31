@@ -5,7 +5,7 @@
   flex-direction: column-reverse;
   gap: $base-padding;
   justify-content: space-between;
-  padding: $base-padding 0;
+  padding: $base-padding2X 0 $base-padding;
 
   @include breakpoint-md {
     display: flex;
@@ -23,14 +23,18 @@
     @include flex-row($base-font-size);
     font-size: $font-size-sm;
     ul {
+      @include flex-row($base-padding);
       li {
         @include pillStyle($base-font-size, $color-green);
 
-        .active {
-          font-weight: 600;
-          padding: $base-padding;
-          color: $color-olive;
+        @include breakpoint-md {
+          font-size: 1.5rem;
         }
+      }
+      /* Styles for the li when its child a NavLink has the "active" class */
+      li:has(a.active) {
+        background-color: $color-green;
+        color: white;
       }
     }
 
