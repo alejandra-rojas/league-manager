@@ -367,46 +367,32 @@ function EventEntry({ gevent, getEventsData }) {
                     {searchPerformed && teams.length >= 1 && (
                       <div className="search-results">
                         <h5>Search results:</h5>
-                        <table>
-                          <thead className="sr-only">
-                            <tr>
-                              <th scope="col">Team ID</th>
-                              <th scope="col">Players 1 Name</th>
-                              <th scope="col">&</th>
-                              <th scope="col">Players 2 Name</th>
-                              <th scope="col">action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {teams.map((team, index) => (
-                              <tr
-                                key={team.team_id}
-                                className={
-                                  index % 2 === 0 ? "even-row" : "odd-row"
-                                }
-                              >
-                                <td>{team.team_id}</td>
-                                <td>
-                                  {team.player1_firstname}{" "}
-                                  {team.player1_lastname}
-                                </td>
-                                <td>&</td>
-                                <td>
-                                  {team.player2_firstname}{" "}
-                                  {team.player2_lastname}
-                                </td>
-                                <td>
-                                  <button
-                                    onClick={() => addTeam(team.team_id)}
-                                    aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
-                                  >
-                                    Add team to event
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                        <ul>
+                          {teams.map((team, index) => (
+                            <li
+                              key={team.team_id}
+                              className={
+                                index % 2 === 0 ? "even-row" : "odd-row"
+                              }
+                            >
+                              <span>
+                                {team.player1_firstname} {team.player1_lastname}
+                              </span>
+                              <span>&</span>
+                              <span>
+                                {team.player2_firstname} {team.player2_lastname}
+                              </span>
+                              <span>
+                                <button
+                                  onClick={() => addTeam(team.team_id)}
+                                  aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
+                                >
+                                  Add team to event
+                                </button>
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
                     {searchPerformed && teams.length === 0 && (
