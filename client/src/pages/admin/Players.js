@@ -29,17 +29,6 @@ function Players() {
 
   return (
     <>
-      <div className="flex justify-end">
-        <button
-          onClick={() => setShowPlayerModal(true)}
-          className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-          aria-label="Add Player"
-        >
-          <UserPlusIcon width={20} />
-          Create Player
-        </button>
-      </div>
-
       <div className="my-5">
         <label htmlFor="searchPlayer">Filter players by name</label>
         <input
@@ -53,14 +42,6 @@ function Players() {
           aria-label="Filter players by name"
         />
       </div>
-
-      {showPlayerModal && (
-        <PlayerModal
-          mode="create"
-          getPlayersData={getPlayersData}
-          setShowPlayerModal={setShowPlayerModal}
-        />
-      )}
 
       {!searchState && (
         <div>
