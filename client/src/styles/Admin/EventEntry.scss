@@ -368,6 +368,18 @@
       }
     }
 
+    #challenger-matches {
+      button {
+        margin: 0 auto;
+        @include pillStyle(1rem, $color-olive);
+        @include flex-row(0.25rem);
+        opacity: 50%;
+      }
+
+      @include breakpoint-md {
+      }
+    }
+
     #team-withdrawal-form {
       margin-top: $base-padding;
       border-radius: 0.25rem;

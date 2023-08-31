@@ -8,6 +8,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
@@ -463,8 +464,11 @@ function EventEntry({ gevent, getEventsData }) {
                     getEventTeamsData={getEventTeamsData}
                   />
 
-                  <div id="challenger-match">
-                    <h4>Add a challenger match</h4>
+                  <div id="challenger-matches">
+                    <button>
+                      <PlusIcon width={25} />
+                      <h6>Add a challenger match</h6>
+                    </button>
                   </div>
 
                   <div id="team-withdrawal-form">
