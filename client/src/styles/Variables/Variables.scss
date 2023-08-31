@@ -140,6 +140,7 @@ $base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
 @mixin pillStyle($fontSize: 1.2rem, $pillColor: $color-blue) {
   font-size: $fontSize;
   color: $pillColor;
+  background-color: transparent;
   font-weight: 600;
   border-radius: 25px;
   border: 1px solid $pillColor;
@@ -157,10 +158,6 @@ $base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.25);
     opacity: 0.25;
     cursor: default;
     pointer-events: none;
-  }
-
-  &:active {
-    background-color: $pillColor;
   }
 }
 

@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { SparklesIcon } from "@heroicons/react/24/solid";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
@@ -18,6 +20,16 @@ function EventEntry({ gevent, getEventsData }) {
   const [eventMatchesData, setEventMatchesData] = useState(null);
   const [selectedTeamWId, setSelectedTeamWId] = useState("");
   const [error, setError] = useState(null);
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   //console.log(gevent);
 
@@ -236,12 +248,28 @@ function EventEntry({ gevent, getEventsData }) {
 
         {showTeams && (
           <>
-            <div className="mid-bonus-info">
+            <div>
               {eventMatchesData.length !== 0 && (
-                <p>
-                  Complete {gevent.midway_matches} matches before the midpoint
-                  to get bonus points
-                </p>
+                <div className="event-info">
+                  <div
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    style={{ position: "relative", display: "inline-block" }}
+                  >
+                    <InformationCircleIcon width={25} />
+                    {showTooltip && (
+                      <div className="tooltip">
+                        Once the standings table for an event has been
+                        published, the participating teams cannot be altered
+                        anymore, unless the team is withdrawing from the event.
+                      </div>
+                    )}
+                  </div>
+                  <p>
+                    Complete {gevent.midway_matches} matches before the midpoint
+                    to get bonus points
+                  </p>
+                </div>
               )}
               <div className="line"></div>
             </div>
@@ -250,7 +278,6 @@ function EventEntry({ gevent, getEventsData }) {
               {eventMatchesData.length === 0 && (
                 <section id="create-event-table">
                   <div className="participants">
-                    <h5>Participants</h5>
                     {eventTeams.length === 0 ? (
                       <p className="text-highlight">
                         There are no participants on this event yet. To add a
@@ -259,6 +286,7 @@ function EventEntry({ gevent, getEventsData }) {
                       </p>
                     ) : (
                       <div className="list">
+                        <h5>Event Participants</h5>
                         <ul>
                           {eventTeams.map((team, index) => (
                             <li
@@ -314,6 +342,15 @@ function EventEntry({ gevent, getEventsData }) {
                           value={searchString}
                           onChange={(e) => setSearchString(e.target.value)}
                         ></input>
+
+                        <button
+                          type="submit"
+                          aria-label="Submit search"
+                          disabled={!searchString}
+                        >
+                          <MagnifyingGlassIcon width={25} />
+                          <span>search</span>
+                        </button>
                         <div className="clear-search">
                           {searchPerformed && (
                             <button
@@ -324,14 +361,6 @@ function EventEntry({ gevent, getEventsData }) {
                             </button>
                           )}
                         </div>
-                        <button
-                          type="submit"
-                          aria-label="Submit search"
-                          disabled={!searchString}
-                        >
-                          <MagnifyingGlassIcon width={25} />
-                          <span>search</span>
-                        </button>
                       </form>
                       {error && <p className="text-red-600">{error}</p>}
                     </div>
@@ -391,44 +420,26 @@ function EventEntry({ gevent, getEventsData }) {
               )}
               {eventMatchesData.length !== 0 && (
                 <section id="event-standings">
-                  <div className="my-5">
-                    <table className="table-auto border-collapse border">
+                  <div className="event-table">
+                    <table>
                       <h5 className="sr-only">Event Standings</h5>
                       <thead>
                         <tr>
-                          <th className="border-b border-slate-600" scope="col">
-                            Name
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Played
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Won
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Lost
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Sets Won
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Midway Bonus
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            All Bonus
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Challenger Bonus
-                          </th>
-                          <th className="border-b border-slate-600" scope="col">
-                            Total Points
-                          </th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Played</th>
+                          <th scope="col">Won</th>
+                          <th scope="col">Lost</th>
+                          <th scope="col">SW</th>
+                          <th scope="col">MB</th>
+                          <th scope="col">AB</th>
+                          <th scope="col">CB</th>
+                          <th scope="col">Total Points</th>
                         </tr>
                       </thead>
                       <tbody>
                         {eventTeams
                           .sort((a, b) => b.total_points - a.total_points)
-                          .map((team) => {
+                          .map((team, index) => {
                             const activeTeamsCount = eventTeams.filter(
                               (t) => !t.team_withdrawn
                             ).length;
@@ -439,32 +450,34 @@ function EventEntry({ gevent, getEventsData }) {
                             return (
                               <tr
                                 key={team.team_id}
-                                className={
-                                  team.team_withdrawn ? "bg-slate-600" : ""
-                                }
+                                className={`${
+                                  team.team_withdrawn ? "withdrawn" : ""
+                                } ${index % 2 === 0 ? "even-row" : "odd-row"}`}
                               >
                                 <td>
                                   {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
                                 </td>
                                 <td>{`${team.played_matches}/${totalMatches}`}</td>
-                                <td>{team.team_wins}</td>
-                                <td>{team.played_matches - team.team_wins}</td>
-                                <td>{team.team_sets_won}</td>
-                                <td>{team.mid_bonus}</td>
-                                <td>{team.all_bonus}</td>
-                                <td>{team.challenger_bonus}</td>
-                                <td>{team.total_points}</td>
+                                <td className="centered">{team.team_wins}</td>
+                                <td className="centered">
+                                  {team.played_matches - team.team_wins}
+                                </td>
+                                <td className="centered">
+                                  {team.team_sets_won}
+                                </td>
+                                <td className="centered">{team.mid_bonus}</td>
+                                <td className="centered">{team.all_bonus}</td>
+                                <td className="centered">
+                                  {team.challenger_bonus}
+                                </td>
+                                <td className="centered">
+                                  {team.total_points}
+                                </td>
                               </tr>
                             );
                           })}
                       </tbody>
                     </table>
-
-                    <p>
-                      Note: Once the standings table for an event has been
-                      published and the participating teams cannot be altered
-                      anymore, unless the team is withdrawing from the event.
-                    </p>
                   </div>
 
                   <StandingsReport
@@ -473,49 +486,49 @@ function EventEntry({ gevent, getEventsData }) {
                     getEventTeamsData={getEventTeamsData}
                   />
 
-                  <form id="team-withdrawal-form">
-                    <div className="mt-5">
-                      <h4>Report Player Withdrawal</h4>
-                      <p>
-                        If a player has withdrawn from this event, please report
-                        it here.
-                      </p>
-                    </div>
-
-                    <label htmlFor="withdrawal">
-                      Which player has withdrawn:
-                    </label>
-                    <select
-                      id="withdrawal"
-                      name="winner_id"
-                      value={selectedTeamWId}
-                      onChange={(e) => setSelectedTeamWId(e.target.value)}
-                      className="my-3 mx-0 py-2 px-3 rounded-xl border border-gray-200"
-                      aria-label="Select the player who has withdrawn"
-                    >
-                      <option value="">Select</option>
-                      {eventTeams
-                        .filter((team) => !team.team_withdrawn) // Filter out teams with team_withdrawal true
-                        .map((team) => (
-                          <option key={team.team_id} value={team.team_id}>
-                            {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
-                          </option>
-                        ))}
-                    </select>
-                    <button
-                      className={
-                        "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-                      }
-                      type="submit"
-                      onClick={(e) => withdrawTeam(e, selectedTeamWId)}
-                      aria-label="Report Withdrawal"
-                    >
-                      Report Withdrawal
-                    </button>
-                  </form>
-
-                  <div className="mt-5">
+                  <div id="challenger-match">
                     <h4>Add a challenger match</h4>
+                  </div>
+
+                  <div id="team-withdrawal-form">
+                    <div>
+                      <h6>Withdraw participant from event</h6>
+                    </div>
+                    <form>
+                      <select
+                        id="withdrawal"
+                        name="winner_id"
+                        value={selectedTeamWId}
+                        onChange={(e) => setSelectedTeamWId(e.target.value)}
+                        aria-label="Select the player who has withdrawn"
+                      >
+                        <option value="">Select participant</option>
+                        {eventTeams
+                          .filter((team) => !team.team_withdrawn) // Filter out teams with team_withdrawal true
+                          .map((team) => (
+                            <option key={team.team_id} value={team.team_id}>
+                              {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
+                            </option>
+                          ))}
+                      </select>
+
+                      {selectedTeamWId && (
+                        <>
+                          <button
+                            type="submit"
+                            onClick={(e) => withdrawTeam(e, selectedTeamWId)}
+                            aria-label="Report Withdrawal"
+                            disabled={!selectedTeamWId}
+                          >
+                            Complete withdrawal
+                          </button>{" "}
+                          <div className="undone">
+                            <ExclamationTriangleIcon width={25} />
+                            <span>This action cannot be undone</span>
+                          </div>
+                        </>
+                      )}
+                    </form>
                   </div>
                 </section>
               )}

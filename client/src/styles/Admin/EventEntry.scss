@@ -34,15 +34,30 @@
     }
   }
 
-  .mid-bonus-info {
+  .event-info {
+    @include flex-row(0.25rem);
+    justify-content: flex-start;
+    margin: $base-padding 0.8rem;
+
+    .tooltip {
+      position: absolute;
+      top: 100%;
+      left: 100%;
+      transform: translateY(-55%);
+      background-color: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 1rem;
+      border-radius: 5px;
+      width: 400px;
+    }
+
     p {
       font-weight: 600;
-      margin: $base-padding 0.8rem;
-      padding: $base-border-radius2D 0;
     }
-    .line {
-      border-bottom: solid 1px $color-darkgrey;
-    }
+  }
+
+  .line {
+    border-bottom: solid 1px $color-darkgrey;
   }
 
   #event-details {
@@ -178,7 +193,95 @@
     }
   }
 
+  #event-standings {
+    @include flex-col($base-padding);
+    .event-table {
+      table {
+        font-size: $base-font-size;
+        table-layout: auto;
+        border-collapse: collapse;
+        border-width: $base-border-thickness;
+
+        th,
+        td {
+          padding: 5px 10px;
+          border-top-width: 0;
+          border-left-width: 0;
+        }
+
+        thead {
+          border-bottom: solid 1px $color-olive;
+        }
+
+        tbody {
+          white-space: nowrap;
+
+          .even-row {
+            background-color: #f2f2f2;
+          }
+
+          .odd-row {
+            background-color: #ffffff;
+          }
+
+          .centered {
+            text-align: center;
+          }
+
+          .withdrawn {
+            opacity: 50%;
+            color: gray;
+            text-decoration: line-through;
+          }
+        }
+      }
+    }
+
+    #team-withdrawal-form {
+      margin-top: $base-padding;
+      border-radius: 0.25rem;
+      background-color: rgba(255, 0, 0, 0.088);
+      padding: 1rem;
+      @include flex-col(0);
+      justify-content: left;
+
+      h6 {
+        font-size: $font-size-sm;
+        color: $color-error;
+        font-weight: 600;
+        padding-left: 0.5rem;
+      }
+
+      form {
+        @include flex-row($base-padding);
+        justify-content: left;
+
+        //className="my-3 mx-0 py-2 px-3 rounded-xl border border-gray-200"
+
+        select {
+          color: $color-error;
+          border-radius: $base-border-radius;
+
+          padding: $base-padding;
+        }
+
+        button {
+          @include editButton($color-error);
+          justify-content: left;
+          font-size: $font-size-sm;
+        }
+      }
+    }
+  }
+
   .error {
     text-align: left;
+  }
+
+  .undone {
+    font-weight: 600;
+    text-decoration: underline;
+    @include flex-row(0.25rem);
+    color: $color-error;
   }
 }

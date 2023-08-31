@@ -42,17 +42,14 @@ function LeaguesLayout() {
           Skip to leagues section content
         </a>
         <section id="admin-secondary-navigation-leagues">
-          <nav
-            aria-labelledby="admin-secondary-navigation-leagues-label"
-            className=""
-          >
+          <nav aria-labelledby="admin-secondary-navigation-leagues-label">
             <div
               id="admin-secondary-navigation-leagues-label"
               className="sr-only"
             >
               Navigation for Leagues Section
             </div>
-            <ul className="flex gap-4">
+            <ul>
               <li>
                 <NavLink
                   to={"ongoing"}
