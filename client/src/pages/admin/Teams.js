@@ -27,23 +27,6 @@ function Teams() {
 
   return (
     <>
-      <button
-        onClick={() => setShowTeamsModal(true)}
-        className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
-        aria-label="Create a new team"
-      >
-        <UserPlusIcon width={20} />
-        Create Team
-      </button>
-
-      {showTeamsModal && (
-        <TeamModal
-          mode="create"
-          getTeamsData={getTeamsData}
-          setShowTeamsModal={setShowTeamsModal}
-        />
-      )}
-
       <div id="Teams-Filter-Form">
         <label htmlFor="searchInput">Filter teams by player name</label>
         <input
