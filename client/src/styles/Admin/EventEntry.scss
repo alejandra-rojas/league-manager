@@ -171,12 +171,23 @@
       }
 
       .search-results {
-        tbody {
-          font-size: $base-font-size;
+        ul {
+          gap: 0;
+          li {
+            font-size: $base-font-size;
+            @include flex-row(0);
+            column-gap: 0.25rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            padding: 0.5rem;
 
+            @include breakpoint-md {
+              column-gap: 0.5rem;
+            }
+          }
           .even-row {
             //background-color: #ffffff;
-            padding: $base-padding 0;
+            //padding: $base-padding 0;
           }
 
           .odd-row {
@@ -185,9 +196,12 @@
         }
 
         button {
-          margin-left: 1rem;
           color: $color-lightblue;
           text-decoration: underline solid $base-border-thickness;
+
+          @include breakpoint-md {
+            margin-left: 1rem;
+          }
         }
       }
     }
@@ -196,6 +210,73 @@
   #event-standings {
     @include flex-col($base-padding);
     .event-table {
+      ul {
+        gap: 0;
+
+        li {
+          @include flex-row(0);
+          grid-template-columns: 7fr 1fr 1fr;
+          column-gap: $base-padding;
+          align-items: flex-start;
+          flex-wrap: wrap;
+        }
+
+        @include breakpoint-md {
+          li {
+            @include flex-col(0);
+            font-size: $base-font-size;
+            display: grid;
+            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+            column-gap: $base-padding;
+          }
+        }
+
+        .hide {
+          display: none;
+        }
+
+        @include breakpoint-md {
+          .hide {
+            display: block;
+          }
+        }
+
+        .md-header {
+          font-weight: 600;
+          display: none;
+        }
+
+        @include breakpoint-md {
+          .md-header {
+            border-bottom: solid $base-border-thickness $color-olive;
+            display: grid;
+            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+          }
+        }
+
+        .centered {
+          display: inline;
+          align-items: center;
+        }
+
+        li:hover {
+          background-color: $color-highlight-green;
+        }
+
+        .even-row {
+          background-color: #f2f2f2;
+        }
+
+        .odd-row {
+          background-color: #ffffff;
+        }
+
+        button {
+          margin: 0.25rem;
+          @include editButton($color-olive);
+        }
+      }
+
       table {
         font-size: $base-font-size;
         table-layout: auto;

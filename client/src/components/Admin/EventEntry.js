@@ -382,14 +382,13 @@ function EventEntry({ gevent, getEventsData }) {
                               <span>
                                 {team.player2_firstname} {team.player2_lastname}
                               </span>
-                              <span>
-                                <button
-                                  onClick={() => addTeam(team.team_id)}
-                                  aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
-                                >
-                                  Add team to event
-                                </button>
-                              </span>
+
+                              <button
+                                onClick={() => addTeam(team.team_id)}
+                                aria-label={`Add team ${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname} to event`}
+                              >
+                                Add team to event
+                              </button>
                             </li>
                           ))}
                         </ul>
@@ -441,14 +440,16 @@ function EventEntry({ gevent, getEventsData }) {
                                 {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
                               </span>
                               <span>{`${team.played_matches}/${totalMatches}`}</span>
-                              <span>{team.team_wins}</span>
-                              <span>
+                              <span className="hide">{team.team_wins}</span>
+                              <span className="hide">
                                 {team.played_matches - team.team_wins}
                               </span>
-                              <span>{team.team_sets_won}</span>
-                              <span>{team.mid_bonus}</span>
-                              <span>{team.all_bonus}</span>
-                              <span>{team.challenger_bonus}</span>
+                              <span className="hide">{team.team_sets_won}</span>
+                              <span className="hide">{team.mid_bonus}</span>
+                              <span className="hide">{team.all_bonus}</span>
+                              <span className="hide">
+                                {team.challenger_bonus}
+                              </span>
                               <span>{team.total_points}</span>
                             </li>
                           );
