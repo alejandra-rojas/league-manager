@@ -5,13 +5,13 @@
   flex-direction: column-reverse;
   gap: $base-padding;
   justify-content: space-between;
-  padding: $base-padding2X 0 $base-padding;
+  padding: $base-padding2X 0;
 
   @include breakpoint-md {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
-    padding: $base-padding2X 0 0;
+    padding: 2.75rem 0;
     //border-bottom: 0.1rem solid black;
   }
 
@@ -21,10 +21,11 @@
 
   nav {
     @include flex-row($base-font-size);
+    flex-direction: row-reverse;
     font-size: $font-size-sm;
     ul {
       @include flex-row($base-padding);
-      li {
+      li:not(:last-child) {
         @include pillStyle($base-font-size, $color-green);
 
         @include breakpoint-md {

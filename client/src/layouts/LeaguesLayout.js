@@ -59,7 +59,7 @@ function LeaguesLayout() {
                   Current
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   to={"upcoming"}
                   aria-label="Go to upcoming leagues page"
@@ -67,7 +67,7 @@ function LeaguesLayout() {
                 >
                   Upcoming
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink
                   to={"finished"}
@@ -76,6 +76,17 @@ function LeaguesLayout() {
                 >
                   Finished
                 </NavLink>
+              </li>
+              <li>
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="create-league"
+                >
+                  <PlusCircleIcon width={35} />
+                  <span>
+                    New <span className="">league</span>
+                  </span>
+                </button>
               </li>
             </ul>
           </nav>

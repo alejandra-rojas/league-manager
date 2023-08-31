@@ -40,15 +40,15 @@ function Leagues() {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)} className="create-league">
+      {/* <button onClick={() => setShowModal(true)} className="create-league">
         <PlusCircleIcon width={35} />
         <span>
           New <span className="">league</span>
         </span>
-      </button>
+      </button> */}
       <section id="current-leagues">
-        <header id="league-section-header">
-          <h2 className="sr-only">Current Leagues</h2>
+        <header id="league-section-header" className="sr-only">
+          <h2>Ongoing and Future Leagues</h2>
           <p>
             Leagues that are not finished and todays date is within the range of
             the start and end date

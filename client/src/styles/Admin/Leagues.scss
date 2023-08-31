@@ -2,9 +2,9 @@
 
 // NEW LEAGUE BTN
 .create-league {
-  position: fixed;
+  /* position: fixed;
   bottom: 3vh;
-  right: 5vw;
+  right: 5vw; */
   @include flex-row(0.5rem);
   @include pillStyleSolid($font-size-sm);
   padding-right: $base-padding;
@@ -14,9 +14,9 @@
 
 @include breakpoint-md {
   .create-league {
-    position: relative;
+    /*  position: relative;
     bottom: 2.5rem;
-    right: 0;
+    right: 0; */
     @include flex-row(0.5rem);
     @include pillStyleSolid;
     padding-right: $base-padding;
