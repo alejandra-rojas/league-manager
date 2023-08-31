@@ -87,14 +87,12 @@ function RootLayout() {
                     Primary Admin Navigation
                   </h2>
 
-                  <ul className="flex gap-4">
+                  <ul>
                     <li>
                       <NavLink
                         to={"admin/leagues"}
                         aria-label="Go to leagues section"
-                        className={({ isActive }) =>
-                          isActive ? "bg-green-600" : ""
-                        }
+                        className={({ isActive }) => (isActive ? "active" : "")}
                       >
                         Leagues
                       </NavLink>
@@ -103,9 +101,7 @@ function RootLayout() {
                       <NavLink
                         to={"admin/players"}
                         aria-label="Go to players section"
-                        className={({ isActive }) =>
-                          isActive ? "bg-green-600" : ""
-                        }
+                        className={({ isActive }) => (isActive ? "active" : "")}
                       >
                         Players
                       </NavLink>
@@ -114,9 +110,7 @@ function RootLayout() {
                       <NavLink
                         to={"admin/teams"}
                         aria-label="Go to teams section"
-                        className={({ isActive }) =>
-                          isActive ? "bg-green-600" : ""
-                        }
+                        className={({ isActive }) => (isActive ? "active" : "")}
                       >
                         Teams
                       </NavLink>

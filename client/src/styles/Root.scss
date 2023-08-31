@@ -75,15 +75,38 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
-      padding: $base-padding 1rem;
+      padding: $base-padding 1rem 0;
 
       @include breakpoint-md {
         font-size: $base-font-size;
         background-color: $color-green;
         display: flex;
         gap: 1rem;
-        padding: 0 0 $base-padding;
+        padding: 0 0;
         justify-content: flex-end;
+      }
+
+      ul {
+        @include flex-row($base-padding);
+
+        li {
+          font-size: $base-font-size;
+          color: white;
+          padding: 0.4rem 0.8rem;
+          border-top-left-radius: $base-font-size;
+          border-top-right-radius: $base-font-size;
+
+          @include breakpoint-md {
+            font-size: 1.5rem;
+            padding: 0.45rem $base-padding2X 0.25rem;
+          }
+        }
+        /* Styles for the li when its child a NavLink has the "active" class */
+        li:has(a.active) {
+          font-weight: 600;
+          background-color: whitesmoke;
+          color: $color-olive;
+        }
       }
     }
   }
