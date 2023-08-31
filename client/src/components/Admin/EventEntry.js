@@ -421,63 +421,53 @@ function EventEntry({ gevent, getEventsData }) {
               {eventMatchesData.length !== 0 && (
                 <section id="event-standings">
                   <div className="event-table">
-                    <table>
-                      <h5 className="sr-only">Event Standings</h5>
-                      <thead>
-                        <tr>
-                          <th scope="col">Name</th>
-                          <th scope="col">Played</th>
-                          <th scope="col">Won</th>
-                          <th scope="col">Lost</th>
-                          <th scope="col">SW</th>
-                          <th scope="col">MB</th>
-                          <th scope="col">AB</th>
-                          <th scope="col">CB</th>
-                          <th scope="col">Total Points</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {eventTeams
-                          .sort((a, b) => b.total_points - a.total_points)
-                          .map((team, index) => {
-                            const activeTeamsCount = eventTeams.filter(
-                              (t) => !t.team_withdrawn
-                            ).length;
-                            //console.log(activeTeamsCount);
-                            const totalMatches =
-                              calculateCombinations(activeTeamsCount);
+                    <h5 className="sr-only">Event Standings</h5>
+                    <ul>
+                      <li className="md-header">
+                        <span>Participant</span>
+                        <span>Played</span>
+                        <span>Won</span>
+                        <span>Lost</span>
+                        <span>SW</span>
+                        <span>MB</span>
+                        <span>AB</span>
+                        <span>CB</span>
+                        <span>Total Points</span>
+                      </li>
+                      {eventTeams
+                        .sort((a, b) => b.total_points - a.total_points)
+                        .map((team, index) => {
+                          const activeTeamsCount = eventTeams.filter(
+                            (t) => !t.team_withdrawn
+                          ).length;
+                          //console.log(activeTeamsCount);
+                          const totalMatches =
+                            calculateCombinations(activeTeamsCount);
 
-                            return (
-                              <tr
-                                key={team.team_id}
-                                className={`${
-                                  team.team_withdrawn ? "withdrawn" : ""
-                                } ${index % 2 === 0 ? "even-row" : "odd-row"}`}
-                              >
-                                <td>
-                                  {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
-                                </td>
-                                <td>{`${team.played_matches}/${totalMatches}`}</td>
-                                <td className="centered">{team.team_wins}</td>
-                                <td className="centered">
-                                  {team.played_matches - team.team_wins}
-                                </td>
-                                <td className="centered">
-                                  {team.team_sets_won}
-                                </td>
-                                <td className="centered">{team.mid_bonus}</td>
-                                <td className="centered">{team.all_bonus}</td>
-                                <td className="centered">
-                                  {team.challenger_bonus}
-                                </td>
-                                <td className="centered">
-                                  {team.total_points}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
+                          return (
+                            <li
+                              key={team.team_id}
+                              className={`${
+                                team.team_withdrawn ? "withdrawn" : ""
+                              } ${index % 2 === 0 ? "even-row" : "odd-row"}`}
+                            >
+                              <span>
+                                {`${team.player1_firstname} ${team.player1_lastname} & ${team.player2_firstname} ${team.player2_lastname}`}
+                              </span>
+                              <span>{`${team.played_matches}/${totalMatches}`}</span>
+                              <span>{team.team_wins}</span>
+                              <span>
+                                {team.played_matches - team.team_wins}
+                              </span>
+                              <span>{team.team_sets_won}</span>
+                              <span>{team.mid_bonus}</span>
+                              <span>{team.all_bonus}</span>
+                              <span>{team.challenger_bonus}</span>
+                              <span>{team.total_points}</span>
+                            </li>
+                          );
+                        })}
+                    </ul>
                   </div>
 
                   <StandingsReport
@@ -492,7 +482,7 @@ function EventEntry({ gevent, getEventsData }) {
 
                   <div id="team-withdrawal-form">
                     <div>
-                      <h6>Withdraw participant from event</h6>
+                      <h6>Withdraw participant</h6>
                     </div>
                     <form>
                       <select
