@@ -54,6 +54,11 @@
   ul {
     @include flex-col($base-padding);
 
+    .text-highlight {
+      @include flex-row($base-padding);
+      padding: 0.05rem;
+    }
+
     .league-single-entry {
       @include cardStyle;
       background-color: white;

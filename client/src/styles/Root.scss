@@ -87,7 +87,7 @@
       }
 
       ul {
-        @include flex-row($base-padding);
+        @include flex-row(0);
 
         li {
           font-size: $base-font-size;
@@ -98,14 +98,20 @@
 
           @include breakpoint-md {
             font-size: 1.5rem;
-            padding: 0.45rem $base-padding2X 0.25rem;
+            padding: 0.5rem 1.65rem 0.25rem;
+          }
+          &:hover {
+            background-color: $color-darkgreen;
           }
         }
+
         /* Styles for the li when its child a NavLink has the "active" class */
         li:has(a.active) {
           font-weight: 600;
           background-color: whitesmoke;
           color: $color-olive;
+          text-decoration: underline;
+          text-decoration-thickness: 0.15rem;
         }
       }
     }

@@ -21,13 +21,16 @@ function TeamSearchBar({
   });
 
   return (
-    <div id="Filtered-Teams-Results">
+    <ul className="filtered-participants">
       {resultArray.length === 0 ? (
-        <p role="alert">No match for that name</p>
+        <li className="error">No match for that name</li>
       ) : (
-        <ul>
-          {resultArray.slice(0, maxSuggestions).map((team) => (
-            <li key={team.team_id}>
+        <>
+          {resultArray.slice(0, maxSuggestions).map((team, index) => (
+            <li
+              key={team.team_id}
+              className={`${index % 2 === 0 ? "even-row" : "odd-row"}`}
+            >
               <TeamEntry
                 team={team}
                 getTeamsData={getTeamsData}
@@ -35,9 +38,9 @@ function TeamSearchBar({
               />
             </li>
           ))}
-        </ul>
+        </>
       )}
-    </div>
+    </ul>
   );
 }
 

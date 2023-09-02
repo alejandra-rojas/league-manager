@@ -11,7 +11,6 @@ function MatchReportEntry({
 }) {
   const [showMatchReportModal, setShowMatchReportModal] = useState(false);
 
-  console.log(match.winner_score.trim());
   return (
     <>
       <li
@@ -34,7 +33,7 @@ function MatchReportEntry({
 
         {/* <div>{match.team1_sets === 0 ? "-" : match.team1_sets}</div>
         <div>{match.team2_sets === 0 ? "-" : match.team2_sets}</div> */}
-        <div>{match.winner_score.trim() === "0" ? "" : match.winner_score}</div>
+        <div>{match.winner_score.trim() === "1" ? "" : match.winner_score}</div>
         <button
           onClick={() => setShowMatchReportModal(true)}
           aria-label="Edit Match Details"

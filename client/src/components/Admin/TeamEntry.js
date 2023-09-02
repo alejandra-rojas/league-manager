@@ -1,43 +1,66 @@
 import React, { useState } from "react";
 import TeamModal from "./TeamModal";
 import { Link } from "react-router-dom";
-
 import { toast } from "react-toastify";
 
 function TeamEntry({ team, getTeamsData }) {
   const [showTeamsModal, setShowTeamsModal] = useState(false);
 
-  return (
-    <div>
-      <div key={team.team_id} className="flex justify-between">
-        <Link
-          to={team.team_id.toString()}
-          className="flex gap-9"
-          aria-label={`Go to ${team.player1_firstname} and ${team.player2_firstname}'s team page`}
-        >
-          <p>{team.team_id}</p>
-          <p>
-            {team.player1_firstname} {team.player1_lastname} &{" "}
-            {team.player2_firstname} {team.player2_lastname}
-          </p>
-        </Link>
-        <button
-          onClick={() => setShowTeamsModal(true)}
-          aria-label={`Edit ${team.player1_firstname} and ${team.player2_firstname}'s team`}
-        >
-          <span>Edit team</span>
-        </button>
-      </div>
+  console.log(team);
 
-      {showTeamsModal && (
-        <TeamModal
-          team={team}
-          mode={"edit"}
-          getTeamsData={getTeamsData}
-          setShowTeamsModal={setShowTeamsModal}
-        />
-      )}
-    </div>
+  return (
+    <>
+      <div
+        key={team.team_id}
+        className={`individual-entry ${showTeamsModal ? "edit" : ""}`}
+      >
+        <p className="bold">
+          <Link
+            to={team.player1_id.toString()}
+            aria-label={`Go to ${team.player1_firstname} and ${team.player2_firstname}'s team page`}
+          >
+            {team.player1_firstname} {team.player1_lastname}
+          </Link>{" "}
+          &{" "}
+          <Link
+            to={team.player1_id.toString()}
+            aria-label={`Go to ${team.player1_firstname} and ${team.player2_firstname}'s team page`}
+          >
+            {team.player2_firstname} {team.player2_lastname}
+          </Link>
+        </p>
+        {!showTeamsModal && (
+          <>
+            <p>Contact</p>
+            <p>
+              <Link
+                to={team.team_id.toString()}
+                aria-label={`Go to ${team.player1_firstname} and ${team.player2_firstname}'s team page`}
+              >
+                Team Page
+              </Link>
+            </p>
+
+            <button
+              onClick={() => setShowTeamsModal(true)}
+              className="blue"
+              aria-label={`Edit ${team.player1_firstname} and ${team.player2_firstname}'s team`}
+            >
+              <span>Edit team</span>
+            </button>
+          </>
+        )}
+
+        {showTeamsModal && (
+          <TeamModal
+            team={team}
+            mode={"edit"}
+            getTeamsData={getTeamsData}
+            setShowTeamsModal={setShowTeamsModal}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

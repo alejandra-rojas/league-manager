@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
+import { FunnelIcon } from "@heroicons/react/24/outline";
 import PlayerModal from "../../components/Admin/PlayerModal";
 import PlayerEntry from "../../components/Admin/PlayerEntry";
 import PlayerSearchBar from "../../components/Admin/PlayerSearchBar";
@@ -28,9 +28,12 @@ function Players() {
   console.log(players);
 
   return (
-    <>
-      <div className="my-5">
-        <label htmlFor="searchPlayer">Filter players by name</label>
+    <div className="database-list">
+      <div className="filter-bar">
+        <label htmlFor="searchPlayer">
+          <FunnelIcon width={35} />
+          <span className="sr-only">Filter players by name</span>
+        </label>
         <input
           id="searchPlayer"
           onChange={(e) => setSearchState(e.target.value)}
@@ -38,25 +41,39 @@ function Players() {
           type="text"
           name="player"
           value={searchState}
-          placeholder="Enter player's name"
+          placeholder="Filter list by player's name"
           aria-label="Filter players by name"
         />
       </div>
 
+      <ul className="header">
+        <li className="individual-entry">
+          <p>Name</p>
+          <p>Contact number</p>
+          <p>Email address</p>
+        </li>
+      </ul>
+
       {!searchState && (
-        <div>
-          {players?.map((player) => (
-            <PlayerEntry
+        //List of all players
+        <ul className="all-participants">
+          {players?.map((player, index) => (
+            <li
               key={player.player_id}
-              player={player}
-              getPlayersData={getPlayersData}
-              setShowPlayerModal={setShowPlayerModal}
-            />
+              className={`${index % 2 === 0 ? "even-row" : "odd-row"}`}
+            >
+              <PlayerEntry
+                player={player}
+                getPlayersData={getPlayersData}
+                setShowPlayerModal={setShowPlayerModal}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {searchState.length > 0 && (
+        //Results from the search
         <PlayerSearchBar
           players={players}
           searchState={searchState}
@@ -65,7 +82,7 @@ function Players() {
           setShowPlayerModal={setShowPlayerModal}
         />
       )}
-    </>
+    </div>
   );
 }
 

@@ -32,19 +32,21 @@ export default function PlayersLayout() {
       <section id="players-page">
         <header>
           <div>
-            <h2>Players Page</h2>
+            <h2>Players Database</h2>
             <p>
               Manage your players database and access individual player pages
             </p>
           </div>
-          <button
-            onClick={() => setShowPlayerModal(true)}
-            aria-label="Add Player"
-            className="create-participant"
-          >
-            <UserPlusIcon width={25} />
-            Create Player
-          </button>
+          {!showPlayerModal && (
+            <button
+              onClick={() => setShowPlayerModal(true)}
+              aria-label="Add Player"
+              className="create-participant"
+            >
+              <UserPlusIcon width={30} />
+              Add Player
+            </button>
+          )}
         </header>
         {showPlayerModal && (
           <PlayerModal

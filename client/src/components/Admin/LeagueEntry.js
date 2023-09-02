@@ -1,7 +1,7 @@
 import "../../styles/Admin/Leagues.scss";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-
-import React, { useEffect, useState } from "react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
 import EventModal from "./EventModal";
 import EventEntry from "./EventEntry";
@@ -53,7 +53,7 @@ export default function LeagueEntry({ league, getData }) {
   } else {
     // No days left, either league hasn't started or has already ended
     message =
-      "The end date for the league has passed. Once all the results are entered, set the league to finished via the edit modal";
+      "The league has ended. Once all the results are entered, set the league to finished via the edit league modal";
   }
 
   const getEventsData = async () => {
@@ -98,14 +98,15 @@ export default function LeagueEntry({ league, getData }) {
             <p
               className={
                 message ===
-                "The end date for the league has passed. Once all the results are entered, set the league to finished via the edit modal"
+                "The league has ended. Once all the results are entered, set the league to finished via the edit league modal"
                   ? "text-highlight"
                   : "days-left"
               }
             >
-              <span>
-                {daysLeft} {message}
-              </span>
+              {league.end_date < formattedTodaysDate && (
+                <ExclamationTriangleIcon width={30} />
+              )}
+              {daysLeft} {message}
             </p>
           )}
         </div>
@@ -131,7 +132,7 @@ export default function LeagueEntry({ league, getData }) {
             </ul>
           </div>
         )}
-        {!isFinished && (
+        {!isFinished && daysLeft >= 1 && (
           <button
             onClick={() => setShowEventModal(true)}
             aria-label="Opel Modal to add an event to this league"

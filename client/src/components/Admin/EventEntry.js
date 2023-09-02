@@ -363,7 +363,7 @@ function EventEntry({ gevent, getEventsData }) {
                           )}
                         </div>
                       </form>
-                      {error && <p className="text-red-600">{error}</p>}
+                      {error && <p className="error">{error}</p>}
                     </div>
                     {searchPerformed && teams.length >= 1 && (
                       <div className="search-results">

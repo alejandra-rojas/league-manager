@@ -18,22 +18,26 @@ function PlayerSearchBar({
   });
 
   return (
-    <div id="search-results-player">
+    <ul className="filtered-participants">
       {resultArray.length === 0 ? (
-        <span className="searchresults-text">No match for that name</span>
+        <li className="error">No match for that name</li>
       ) : (
         <>
-          {resultArray.slice(0, maxSuggestions).map((player) => (
-            <PlayerEntry
+          {resultArray.slice(0, maxSuggestions).map((player, index) => (
+            <li
               key={player.player_id}
-              player={player}
-              getPlayersData={getPlayersData}
-              setShowPlayerModal={setShowPlayerModal}
-            />
+              className={`${index % 2 === 0 ? "even-row" : "odd-row"}`}
+            >
+              <PlayerEntry
+                player={player}
+                getPlayersData={getPlayersData}
+                setShowPlayerModal={setShowPlayerModal}
+              />
+            </li>
           ))}
         </>
       )}
-    </div>
+    </ul>
   );
 }
 

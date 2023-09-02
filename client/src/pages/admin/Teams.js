@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { UserPlusIcon } from "@heroicons/react/24/solid";
+import { FunnelIcon } from "@heroicons/react/24/outline";
 import TeamModal from "../../components/Admin/TeamModal";
 import TeamEntry from "../../components/Admin/TeamEntry";
 import TeamSearchBar from "../../components/Admin/TeamSearchBar";
@@ -26,9 +26,13 @@ function Teams() {
   console.log(teams);
 
   return (
-    <>
-      <div id="Teams-Filter-Form">
-        <label htmlFor="searchInput">Filter teams by player name</label>
+    <div className="database-list">
+      <div className="filter-bar">
+        <label htmlFor="searchInput">
+          {" "}
+          <FunnelIcon width={35} />
+          <span className="sr-only">Filter teams by players name</span>
+        </label>
         <input
           id="searchInput"
           onChange={(e) => setSearchState(e.target.value)}
@@ -36,22 +40,36 @@ function Teams() {
           type="text"
           name="player"
           value={searchState}
-          placeholder="Enter player name"
-          aria-label="Filter teams by player name"
+          placeholder="Filter list by participants name"
+          aria-label="Filter list by participants name"
         />
       </div>
 
+      <ul className="header">
+        <li className="individual-entry">
+          <p>Name</p>
+          <p>Contact number</p>
+          <p>Email address</p>
+        </li>
+      </ul>
+
       {!searchState ? (
-        <div id="All-Teams">
-          {teams?.map((team) => (
-            <TeamEntry
+        //List of all teams
+        <ul className="all-participants">
+          {teams?.map((team, index) => (
+            <li
               key={team.team_id}
-              team={team}
-              getTeamsData={getTeamsData}
-              setShowTeamsModal={setShowTeamsModal}
-            />
+              className={`${index % 2 === 0 ? "even-row" : "odd-row"}`}
+            >
+              <TeamEntry
+                key={team.team_id}
+                team={team}
+                getTeamsData={getTeamsData}
+                setShowTeamsModal={setShowTeamsModal}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <div id="Filtered-Teams">
           <TeamSearchBar
@@ -63,7 +81,7 @@ function Teams() {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

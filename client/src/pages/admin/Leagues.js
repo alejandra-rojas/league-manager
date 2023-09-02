@@ -57,7 +57,7 @@ function Leagues() {
 
         <section id="current-leagues-data">
           <ul>
-            {sortedLeagues?.map((league) => (
+            {unfinishedLeagues?.map((league) => (
               <LeagueEntry key={league.id} league={league} getData={getData} />
             ))}
           </ul>

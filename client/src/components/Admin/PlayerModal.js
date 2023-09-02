@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 function PlayerModal({ player, mode, getPlayersData, setShowPlayerModal }) {
   //console.log(player);
@@ -95,85 +96,90 @@ function PlayerModal({ player, mode, getPlayersData, setShowPlayerModal }) {
   };
 
   return (
-    <div className="bg-white p-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
-      <div className="flex justify-between pb-3">
-        <h3 className="text-xl font-bold" id="modalTitle">
-          {editMode ? "Edit Player" : "Register New Player"}
-        </h3>
+    <div id="players-modal">
+      <div className="control">
+        <h3>{editMode ? "Edit player" : "Register new player"}</h3>
         <button
-          className="border"
           aria-label={`Close ${editMode ? "edit player" : "new player"} modal`}
           onClick={() => {
             setShowPlayerModal(false);
           }}
         >
-          Close
+          <XMarkIcon width={25} />
+          <span>close</span>
         </button>
       </div>
 
-      <form className="flex-col">
-        <label htmlFor="firstName">First name:</label>
-        <input
-          id="firstName"
-          required
-          maxLength={30}
-          placeholder="John"
-          name="player_firstname"
-          aria-labelledby="modalTitle"
-          value={data.player_firstname}
-          onChange={handleChange}
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-        />
+      <form>
+        <div className="input">
+          {!editMode && <label htmlFor="firstName">First name</label>}
+          <input
+            id="firstName"
+            required
+            maxLength={30}
+            placeholder="John"
+            name="player_firstname"
+            aria-labelledby="modalTitle"
+            value={data.player_firstname}
+            onChange={handleChange}
+          />
+        </div>
 
-        <label htmlFor="lastName">Last name:</label>
-        <input
-          id="lastName"
-          required
-          maxLength={30}
-          placeholder="Doe"
-          name="player_lastname"
-          value={data.player_lastname}
-          onChange={handleChange}
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-        />
+        <div className="input">
+          {!editMode && <label htmlFor="lastName">Last name</label>}
+          <input
+            id="lastName"
+            required
+            maxLength={30}
+            placeholder="Doe"
+            name="player_lastname"
+            value={data.player_lastname}
+            onChange={handleChange}
+          />
+        </div>
 
-        <label htmlFor="phone">Contact number:</label>
-        <input
-          id="phone"
-          required
-          maxLength={30}
-          placeholder="07869609041"
-          name="player_phonenumber"
-          value={data.player_phonenumber}
-          onChange={handleChange}
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-        />
+        <div className="input">
+          {!editMode && <label htmlFor="phone">Contact number</label>}
+          <input
+            id="phone"
+            required
+            maxLength={30}
+            placeholder="07869609041"
+            name="player_phonenumber"
+            value={data.player_phonenumber}
+            onChange={handleChange}
+          />
+        </div>
 
-        <label htmlFor="email">Email address:</label>
-        <input
-          id="email"
-          required
-          maxLength={30}
-          placeholder="john@doe.com"
-          name="player_email"
-          value={data.player_email}
-          onChange={handleChange}
-          className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-        />
+        <div className="input">
+          {!editMode && <label htmlFor="email">Email address</label>}
+          <input
+            id="email"
+            required
+            maxLength={30}
+            placeholder="john@doe.com"
+            name="player_email"
+            value={data.player_email}
+            onChange={handleChange}
+          />
+        </div>
 
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-3 rounded border border-blue-500 hover:border-transparent"
           type="submit"
           onClick={editMode ? editPlayer : postPlayer}
           aria-label={editMode ? "Edit Player" : "Create Player"}
         >
-          {editMode ? "Edit Player" : "Create Player"}
+          {editMode ? "update" : "Register player"}
         </button>
       </form>
 
       {editMode && (
         <div>
-          <button onClick={deletePlayer} aria-label="Delete player">
+          <button
+            onClick={deletePlayer}
+            aria-label="Delete player"
+            className="delete"
+          >
             <TrashIcon width={20} />
             <span>Delete player</span>
           </button>
