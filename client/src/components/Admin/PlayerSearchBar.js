@@ -20,7 +20,7 @@ function PlayerSearchBar({
   return (
     <ul className="filtered-participants">
       {resultArray.length === 0 ? (
-        <li className="error">No match for that name</li>
+        <li className="error">No match for that name!</li>
       ) : (
         <>
           {resultArray.slice(0, maxSuggestions).map((player, index) => (
