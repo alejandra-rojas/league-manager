@@ -109,6 +109,10 @@ function TeamModal({ team, mode, getTeamsData, setShowTeamsModal }) {
       const data = await response.json();
 
       if (data.detail) {
+        console.log("Team created");
+        toast.success(`Team has been created`);
+        setShowTeamsModal(false);
+        getTeamsData();
         setError(data.detail);
       }
     } catch (error) {
