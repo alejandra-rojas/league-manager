@@ -9,6 +9,8 @@ import { SparklesIcon } from "@heroicons/react/24/solid";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
+import { ArrowsPointingInIcon } from "@heroicons/react/24/outline";
 
 function EventEntry({ gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
@@ -217,25 +219,30 @@ function EventEntry({ gevent, getEventsData }) {
   return (
     <>
       <section id="event-entry">
-        <header>
-          <div className="event-details">
-            <h4>{gevent.event_name}</h4>
+        {!showEventModal && (
+          <header>
+            <div className="event-details">
+              <h4>{gevent.event_name}</h4>
+              <button
+                onClick={() => setShowEventModal(true)}
+                aria-label="Opel modal to edit this event"
+              >
+                Edit event
+              </button>
+            </div>
             <button
-              onClick={() => setShowEventModal(true)}
-              aria-label="Opel modal to edit this event"
-              className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
+              onClick={() => setShowTeams((prevState) => !prevState)}
+              aria-expanded={showTeams}
+              aria-controls="eventDetailsSection"
             >
-              Edit event
+              {showTeams ? (
+                <ArrowsPointingInIcon width={25} />
+              ) : (
+                <ArrowsPointingOutIcon width={25} />
+              )}
             </button>
-          </div>
-          <button
-            onClick={() => setShowTeams((prevState) => !prevState)}
-            aria-expanded={showTeams}
-            aria-controls="eventDetailsSection"
-          >
-            {showTeams ? "Close event details " : "Expand event details"}
-          </button>
-        </header>
+          </header>
+        )}
 
         {showEventModal && (
           <EventModal
