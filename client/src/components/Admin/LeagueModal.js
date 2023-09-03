@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 function LeagueModal({ mode, setShowModal, getData, league, today }) {
   const editMode = mode === "edit" ? true : false;
@@ -107,103 +109,100 @@ function LeagueModal({ mode, setShowModal, getData, league, today }) {
   };
 
   return (
-    <section className="flex justify-end absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-75 ">
-      <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
-        <div className="flex justify-between pb-3">
-          <h3 className="text-xl font-bold">
+    <section id="league-modal">
+      <div className="edit-container">
+        <div className="control">
+          <h3>
             {mode === "edit"
               ? `Edit ${data.league_name} league `
               : `Create a new league`}
           </h3>
           <button
-            className="border"
             onClick={() => {
               setShowModal(false);
             }}
             aria-label="Close Modal"
           >
-            Close
+            <XMarkIcon width={25} />
+            <span>close</span>
           </button>
         </div>
-        <form className="flex-col">
-          <fieldset>
-            <legend className="sr-only">
-              {mode === "edit" ? "Edit League" : "Create League"}
-            </legend>
-            <label htmlFor="leagueName">League name:</label>
-            <input
-              id="leagueName"
-              required
-              aria-required="true"
-              maxLength={30}
-              placeholder="Women Doubles"
-              name="league_name"
-              value={data.league_name}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
-            <br />
-            <label htmlFor="startDate">Start date:</label>
-            <input
-              id="startDate"
-              required
-              aria-required="true"
-              type="date"
-              name="starting_date"
-              value={data.starting_date}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
-            <br />
-            <label htmlFor="midPoint">Midway point:</label>
-            <input
-              id="midPoint"
-              name="midway_point"
-              required
-              type="date"
-              value={data.midway_point}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
+        <form>
+          <legend className="sr-only">
+            {mode === "edit" ? "Edit League" : "Create League"}
+          </legend>
 
-            <br />
-            <label htmlFor="endDate">End date:</label>
-            <input
-              id="endDate"
-              name="end_date"
-              required
-              aria-required="true"
-              type="date"
-              value={data.end_date}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
-            <br />
-            <br />
-            {mode === "edit" && today >= new Date(league.end_date) && (
-              <>
+          {!(mode === "edit" && today >= new Date(league.end_date)) && (
+            <>
+              <div className="input">
+                <label htmlFor="leagueName">League name:</label>
                 <input
-                  id="isFinished"
-                  type="checkbox"
-                  name="isfinished"
-                  checked={data.isfinished}
+                  id="leagueName"
+                  required
+                  aria-required="true"
+                  maxLength={30}
+                  placeholder="Women Doubles"
+                  name="league_name"
+                  value={data.league_name}
                   onChange={handleChange}
-                  aria-describedby="isFinishedDescription"
                 />
-                <label htmlFor="isFinished" id="isFinishedDescription">
-                  If the league is finished and all the results are entered
-                  check the box.
-                </label>
-              </>
-            )}
-          </fieldset>
-          <br />
-          <br />
+              </div>
+              <div className="input">
+                <label htmlFor="startDate">Start date:</label>
+                <input
+                  id="startDate"
+                  required
+                  aria-required="true"
+                  type="date"
+                  name="starting_date"
+                  value={data.starting_date}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="input">
+                <label htmlFor="midPoint">Midway point:</label>
+                <input
+                  id="midPoint"
+                  name="midway_point"
+                  required
+                  type="date"
+                  value={data.midway_point}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="input">
+                <label htmlFor="endDate">End date:</label>
+                <input
+                  id="endDate"
+                  name="end_date"
+                  required
+                  aria-required="true"
+                  type="date"
+                  value={data.end_date}
+                  onChange={handleChange}
+                />
+              </div>{" "}
+            </>
+          )}
+
+          {mode === "edit" && today >= new Date(league.end_date) && (
+            <div className="checkbox">
+              <label htmlFor="isFinished" id="isFinishedDescription">
+                Check the box if all the results have been entered
+              </label>
+              <input
+                id="isFinished"
+                type="checkbox"
+                name="isfinished"
+                checked={data.isfinished}
+                onChange={handleChange}
+                aria-describedby="isFinishedDescription"
+              />
+            </div>
+          )}
+
           {!error && (
             <button
-              className={
-                "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-              }
               type="submit"
               onClick={editMode ? editData : postData}
               aria-label={editMode ? "Edit League" : "Create new league"}
@@ -213,22 +212,21 @@ function LeagueModal({ mode, setShowModal, getData, league, today }) {
           )}
         </form>
         {error && (
-          <p className="text-red-500" role="alert">
+          <p className="error" role="alert">
             {error}
           </p>
         )}
-        {mode === "edit" && (
-          <div>
-            <button
-              onClick={() => deleteLeague()}
-              aria-label="Delete League from databse"
-              className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-            >
-              Delete
-            </button>
-          </div>
-        )}
       </div>
+      {mode === "edit" && today <= new Date(league.end_date) && (
+        <button
+          onClick={() => deleteLeague()}
+          aria-label="Delete League from databse"
+          className="delete"
+        >
+          <TrashIcon width={20} />
+          <span>Delete league</span>
+        </button>
+      )}
     </section>
   );
 }

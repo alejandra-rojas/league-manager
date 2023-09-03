@@ -65,8 +65,11 @@
       padding: 2.25rem;
 
       .league-info {
-        padding-bottom: $base-padding2X;
-        border-bottom: solid $base-border-thickness $color-grey;
+        @include flex-row;
+        align-items: flex-start;
+        justify-content: space-between;
+        //padding-bottom: $base-padding2X;
+        //border-bottom: solid $base-border-thickness $color-grey;
 
         .league-title {
           @include flex-row($base-padding2X);
@@ -74,15 +77,17 @@
           padding-bottom: $base-padding;
 
           button {
-            @include editButton;
+            @include editUnderline;
           }
         }
 
         .league-stats {
+          width: 50%;
           @include flex-row($base-padding);
-          justify-content: left;
+          justify-content: right;
           margin-top: $base-margin;
           padding: 0.25rem;
+          text-align: right;
 
           .days-left {
             font-weight: bold;
@@ -104,10 +109,111 @@
   }
   #events-section {
     padding-top: $base-padding2X;
+    @include flex-col;
 
-    .add-event {
-      margin-top: $base-padding2X;
+    #event-modal {
+      &.new {
+        border-radius: $base-border-radius;
+        padding: $base-padding2X;
+        margin-bottom: $base-padding2X;
+        background-color: $color-modalgrey;
+        border: solid 1px $color-blue;
+        box-shadow: $base-box-shadow;
+      }
+
+      &.edit {
+        padding: $base-padding2X;
+        border-radius: inherit;
+        background-color: $color-modalgrey;
+        box-shadow: $base-box-shadow;
+      }
+
+      .container {
+        @include flex-col($base-padding);
+
+        .control {
+          @include flex-row;
+          justify-content: space-between;
+
+          h3 {
+            font-size: $base-font-size;
+          }
+
+          > button {
+            @include flex-row(0.25rem);
+
+            &:hover {
+              text-decoration: underline;
+            }
+
+            &.delete {
+              color: $color-error;
+              opacity: 45%;
+
+              &:hover {
+                opacity: 100%;
+              }
+            }
+
+            &.exit {
+              color: $color-olive;
+            }
+          }
+        }
+
+        form {
+          fieldset {
+            @include flex-col($base-padding);
+            align-items: center;
+
+            @include breakpoint-md {
+              @include flex-row($base-padding);
+              justify-content: left;
+            }
+
+            .input {
+              @include flex-col(0);
+
+              label {
+                font-weight: 600;
+              }
+
+              input {
+                padding: $base-padding $base-padding;
+                border-radius: $base-border-radius2D;
+              }
+            }
+
+            > button {
+              @include pillStyleSolid;
+
+              @include breakpoint-md {
+                align-self: flex-end;
+              }
+            }
+          }
+
+          > button {
+            margin-top: $base-margin;
+            @include flex-row(0);
+            color: $color-error;
+            opacity: 45%;
+            justify-content: flex-start;
+            flex-basis: 0;
+
+            &:hover {
+              opacity: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    > button {
       @include pillStyleSolid($font-size-sm, #336dff);
+      align-self: flex-start;
+
+      flex-basis: 0;
     }
   }
 }

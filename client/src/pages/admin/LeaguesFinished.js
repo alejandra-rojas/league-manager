@@ -26,19 +26,21 @@ function LeaguesFinished() {
 
   return (
     <>
-      <div>
-        <h3>Finished Leagues</h3>
-        <p>
-          Leagues that have finished and were all scores have been reported.
-        </p>
-      </div>
+      <section id="finished-leagues">
+        <header id="league-section-header" className="sr-only">
+          <h2>Finished Leagues</h2>
+          <p>
+            Leagues that have finished and were all scores have been reported.
+          </p>
+        </header>
 
-      <section id="current-leagues" className="flex flex-col gap-20">
-        <ul className="flex flex-col gap-5">
-          {finishedLeagues?.map((league) => (
-            <LeagueEntry key={league.id} league={league} getData={getData} />
-          ))}
-        </ul>
+        <section id="current-leagues-data">
+          <ul className="flex flex-col gap-5">
+            {finishedLeagues?.map((league) => (
+              <LeagueEntry key={league.id} league={league} getData={getData} />
+            ))}
+          </ul>
+        </section>
       </section>
     </>
   );
