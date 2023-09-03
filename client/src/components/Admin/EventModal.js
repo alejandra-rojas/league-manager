@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 function EventModal({
   mode,
@@ -41,6 +44,7 @@ function EventModal({
         console.log("Created new event succesfully!");
         setShowEventModal(false);
         getEventsData();
+        toast.success(`${data.event_name} event created`);
       }
     } catch (error) {
       console.error(error);
@@ -63,6 +67,7 @@ function EventModal({
         setShowEventModal(false);
         getEventsData();
         getEventTeamsData();
+        toast.success(`${data.event_name} event edited`);
       }
     } catch (error) {
       console.error(error);
@@ -78,6 +83,7 @@ function EventModal({
         }
       );
       if (response.status === 200) {
+        toast.success(`${data.event_name} event deleted`);
         getEventsData();
       }
     } catch (error) {
@@ -86,80 +92,72 @@ function EventModal({
   };
 
   return (
-    <section
-      id="eventModal"
-      className="flex justify-end absolute top-0 left-0 h-screen w-screen bg-black bg-opacity-75 "
-    >
-      <div className="h-auto bg-white px-10 py-10 rounded-xl shadow-xl ring-1 ring-gray-900/5">
-        <div className="flex justify-between pb-3">
-          <h3 className="text-xl font-bold">{mode} group</h3>
+    <section id="event-modal" className={mode === "edit" ? "edit" : "new"}>
+      <div className="container">
+        <div className="control">
+          <h3>{mode} event</h3>
           <button
-            className="border"
             aria-label="Close new or edit event modal"
             onClick={() => {
               setShowEventModal(false);
             }}
           >
-            Close
+            <XMarkIcon width={25} />
+            <span>close</span>
           </button>
         </div>
-        <form className="flex-col">
+        <form>
           <fieldset>
             <legend className="sr-only">
-              {mode === "edit" ? "Edit event" : "Create new event"}
+              {mode === "edit" ? "Edit event" : "New event"}
             </legend>
-            <label htmlFor="eventName">Event name:</label>
-            <input
-              id="eventName"
-              required
-              aria-required="true"
-              maxLength={30}
-              placeholder="Division A"
-              name="event_name"
-              value={data.event_name}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
-            <br />
-            <label htmlFor="bonusMatches">
-              Matches to play before midpoint to acquire bonus points:
-              <span className="text-gray-500">
-                (Please enter a single digit)
-              </span>
-            </label>
-            <input
-              id="bonusMatches"
-              required
-              maxLength={1}
-              placeholder="3"
-              name="midway_matches"
-              value={data.midway_matches}
-              onChange={handleChange}
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-            />
-            <br />
+            <div className="input">
+              <label htmlFor="eventName">Event name:</label>
+              <input
+                id="eventName"
+                required
+                aria-required="true"
+                maxLength={30}
+                placeholder="Division A"
+                name="event_name"
+                value={data.event_name}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="input">
+              <label htmlFor="bonusMatches">
+                Matches to play for midpoint bonus:
+              </label>
+              <input
+                id="bonusMatches"
+                required
+                maxLength={1}
+                placeholder="3"
+                name="midway_matches"
+                value={data.midway_matches}
+                onChange={handleChange}
+              />
+            </div>
 
             <button
-              className={
-                "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-              }
               type="submit"
               onClick={editGroupMode ? editGroupData : postGroupData}
               aria-label={editGroupMode ? "Edit event" : "Create new event"}
             >
               {editGroupMode ? "Edit event" : "Create event"}
             </button>
-
-            {mode === "edit" && (
-              <button
-                onClick={() => deleteEvent()}
-                aria-label="Delete event from this league"
-                className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-500 hover:border-transparent rounded"
-              >
-                Delete event
-              </button>
-            )}
           </fieldset>
+
+          {mode === "edit" && (
+            <button
+              onClick={() => deleteEvent()}
+              aria-label="Delete event from this league"
+            >
+              <TrashIcon width={20} />
+              Delete event
+            </button>
+          )}
         </form>
       </div>
     </section>

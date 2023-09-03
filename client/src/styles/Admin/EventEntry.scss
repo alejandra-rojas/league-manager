@@ -6,7 +6,7 @@
   border-radius: $base-border-radius2D;
   background-color: #f2f2f2;
 
-  header {
+  > header {
     margin: $base-padding 0.9rem;
     @include flex-col($base-padding);
     justify-content: space-between;
@@ -25,12 +25,13 @@
       }
 
       button {
-        @include editButton;
+        @include editUnderline;
       }
     }
 
-    button {
-      @include editButton($color-darkgreen);
+    > button {
+      @include editButton;
+      border: none;
     }
   }
 
@@ -196,8 +197,7 @@
         }
 
         button {
-          color: $color-lightblue;
-          text-decoration: underline solid $base-border-thickness;
+          @include editUnderline($color-lightblue);
 
           @include breakpoint-md {
             margin-left: 1rem;
@@ -324,6 +324,11 @@
           column-gap: $base-padding;
           align-items: flex-start;
           flex-wrap: wrap;
+
+          button {
+            margin: 0.25rem;
+            @include editUnderline($color-olive);
+          }
         }
 
         @include breakpoint-md {
@@ -360,10 +365,90 @@
         .odd-row {
           background-color: #ffffff;
         }
+      }
+    }
 
-        button {
-          margin: 0.25rem;
-          @include editButton($color-olive);
+    #report-modal {
+      background-color: white;
+      @include cardStyle;
+      padding: $base-padding2X;
+
+      .control {
+        @include flex-row;
+        justify-content: space-between;
+        border-bottom: solid $base-border-thickness $color-olive;
+
+        h5 {
+          font-size: $font-size-sm;
+          font-weight: bold;
+        }
+
+        > button {
+          @include flex-row(0.25rem);
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          &.exit {
+            color: $color-olive;
+          }
+        }
+      }
+
+      .players {
+        margin: $base-padding 0;
+        h6 {
+          font-size: $base-font-size;
+        }
+      }
+
+      form {
+        @include flex-col($base-padding);
+        align-items: flex-start;
+        justify-content: center;
+        padding: $base-padding 0;
+
+        .grouped-inputs {
+          @include flex-col;
+        }
+
+        @include breakpoint-md {
+          .grouped-inputs {
+            @include flex-row;
+          }
+        }
+
+        .input {
+          @include flex-col(0);
+
+          label {
+            font-weight: 600;
+          }
+
+          input,
+          select {
+            border: solid $base-border-thickness $color-grey;
+            padding: $base-padding $base-padding;
+            border-radius: $base-border-radius2D;
+            width: 100%;
+          }
+        }
+
+        .checkbox {
+          @include flex-col(0.5rem);
+          margin-right: 2rem;
+
+          input[type="checkbox"] {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+
+        > button {
+          @include pillStyleSolid;
+          align-self: flex-start;
+          margin-top: $base-padding;
         }
       }
     }
