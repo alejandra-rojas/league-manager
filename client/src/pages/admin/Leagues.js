@@ -40,12 +40,50 @@ function Leagues() {
 
   return (
     <>
-      {/* <button onClick={() => setShowModal(true)} className="create-league">
-        <PlusCircleIcon width={35} />
-        <span>
-          New <span className="">league</span>
-        </span>
-      </button> */}
+      <section id="leagues-layout-header">
+        <a href="#leaguescontent" className="sr-only">
+          Skip to leagues section content
+        </a>
+        <section id="admin-secondary-navigation-leagues">
+          <nav aria-labelledby="admin-secondary-navigation-leagues-label">
+            <div
+              id="admin-secondary-navigation-leagues-label"
+              className="sr-only"
+            >
+              Navigation for Leagues Section
+            </div>
+            <ul>
+              <li>
+                <a to={"ongoing"} aria-label="Go to ongoing leagues page">
+                  Current
+                </a>
+              </li>
+              <li>
+                <a to={"finished"} aria-label="Go to finished leagues page">
+                  Finished
+                </a>
+              </li>
+
+              <li>
+                <a onClick={() => setShowModal(true)} className="create-league">
+                  <PlusCircleIcon width={35} />
+                  <span>
+                    New <span className="">league</span>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+      </section>
+
+      {showModal && (
+        <LeagueModal
+          mode={"create"}
+          setShowModal={setShowModal}
+          getData={getData}
+        />
+      )}
       <section id="current-leagues">
         <header id="league-section-header" className="sr-only">
           <h2>Ongoing and Future Leagues</h2>
@@ -62,13 +100,6 @@ function Leagues() {
             ))}
           </ul>
         </section>
-        {showModal && (
-          <LeagueModal
-            mode={"create"}
-            setShowModal={setShowModal}
-            getData={getData}
-          />
-        )}
       </section>
     </>
   );

@@ -28,15 +28,8 @@ function LeaguesLayout() {
 
   return (
     <>
-      <section id="leagues-layout-header">
-        {/* <h2>Leagues admin page</h2> */}
-
-        {/* <button onClick={() => setShowModal(true)}>
-          <PlusCircleIcon width={35} />
-          <span>
-            New <span className="">league</span>
-          </span>
-        </button> */}
+      {/* <section id="leagues-layout-header">
+        <h2>Leagues admin page</h2>
 
         <a href="#leaguescontent" className="sr-only">
           Skip to leagues section content
@@ -59,7 +52,7 @@ function LeaguesLayout() {
                   Current
                 </NavLink>
               </li>
-              {/* <li>
+              <li>
                 <NavLink
                   to={"upcoming"}
                   aria-label="Go to upcoming leagues page"
@@ -67,7 +60,7 @@ function LeaguesLayout() {
                 >
                   Upcoming
                 </NavLink>
-              </li> */}
+              </li>
               <li>
                 <NavLink
                   to={"finished"}
@@ -99,7 +92,7 @@ function LeaguesLayout() {
           setShowModal={setShowModal}
           getData={getData}
         />
-      )}
+      )} */}
       <section id="leagues-layout-content">
         <Outlet />
       </section>
