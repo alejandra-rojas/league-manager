@@ -53,7 +53,7 @@ export default function LeagueEntry({ league, getData }) {
   } else {
     // No days left, either league hasn't started or has already ended
     message =
-      "The league has ended. Once all the results are entered, set the league to finished via the edit league modal";
+      "Once all the results are entered, set the league to finished via the edit league modal.";
   }
 
   const getEventsData = async () => {
@@ -71,46 +71,49 @@ export default function LeagueEntry({ league, getData }) {
 
   return (
     <li className="league-single-entry">
-      <header className="league-info">
-        <div className="league-title">
-          <h3>{league.league_name}</h3>
-          <button
-            onClick={() => setShowModal(true)}
-            aria-label="Show 'Edit League' Modal"
-          >
-            Edit league
-          </button>
-        </div>
-        <div className="league-dates">
-          <p>
-            {startDate.toDateString()} to {endDate.toDateString()}
-          </p>
-          <p>Midpoint: {midDate.toDateString()}</p>
-        </div>
-
-        <div className="league-stats">
-          {/*           <p>
+      {!showModal && (
+        <header className="league-info">
+          <div>
+            <div className="league-title">
+              <h3>{league.league_name}</h3>
+              <button
+                onClick={() => setShowModal(true)}
+                aria-label="Show 'Edit League' Modal"
+              >
+                Edit league
+              </button>
+            </div>
+            <div className="league-dates">
+              <p>
+                {startDate.toDateString()} to {endDate.toDateString()}
+              </p>
+              <p>Midpoint: {midDate.toDateString()}</p>
+            </div>
+          </div>
+          <div className="league-stats">
+            {/*           <p>
             {leagueEvents.length}{" "}
             {leagueEvents.length === 1 ? "event" : "events"}
           </p> */}
 
-          {!isFinished && (
-            <p
-              className={
-                message ===
-                "The league has ended. Once all the results are entered, set the league to finished via the edit league modal"
-                  ? "text-highlight"
-                  : "days-left"
-              }
-            >
-              {league.end_date < formattedTodaysDate && (
-                <ExclamationTriangleIcon width={30} />
-              )}
-              {daysLeft} {message}
-            </p>
-          )}
-        </div>
-      </header>
+            {!isFinished && (
+              <p
+                className={
+                  message ===
+                  "Once all the results are entered, set the league to finished via the edit league modal."
+                    ? "text-highlight"
+                    : "days-left"
+                }
+              >
+                {league.end_date < formattedTodaysDate && (
+                  <ExclamationTriangleIcon width={40} />
+                )}
+                {daysLeft} {message}
+              </p>
+            )}
+          </div>
+        </header>
+      )}
       {showModal && (
         <LeagueModal
           mode={"edit"}
@@ -122,7 +125,7 @@ export default function LeagueEntry({ league, getData }) {
       )}
       <section id="events-section">
         {leagueEvents && (
-          <div>
+          <div className="event-container">
             <ul>
               {leagueEvents.map((gevent) => (
                 <li key={gevent.event_id}>
@@ -131,6 +134,15 @@ export default function LeagueEntry({ league, getData }) {
               ))}
             </ul>
           </div>
+        )}
+        {showEventModal && (
+          <EventModal
+            mode={"new"}
+            setShowEventModal={setShowEventModal}
+            league={league}
+            getEventsData={getEventsData}
+            leagueEvents={leagueEvents}
+          />
         )}
         {!isFinished && daysLeft >= 1 && (
           <button
@@ -143,15 +155,6 @@ export default function LeagueEntry({ league, getData }) {
           </button>
         )}
       </section>
-      {showEventModal && (
-        <EventModal
-          mode={"new"}
-          setShowEventModal={setShowEventModal}
-          league={league}
-          getEventsData={getEventsData}
-          leagueEvents={leagueEvents}
-        />
-      )}
     </li>
   );
 }
