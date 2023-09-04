@@ -10,5 +10,5 @@ The idea for this project comes from a real necessity of the Highbury and Isling
 
 Once I complete this project, I would like to use this to start a tennis league in Stockholm.
 
-The project tech stack: React, Tailwind, Express and Postgres.
+The project tech stack: React, SCSS, Express and Postgres.
 
