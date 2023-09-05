@@ -2,7 +2,6 @@ import "../../styles/Admin/Leagues.scss";
 import { useEffect, useState } from "react";
 import LeagueEntry from "../../components/Admin/LeagueEntry";
 import { useTitle } from "../../App";
-//import LeagueModal from "../../components/Admin/LeagueModal";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import LeagueModal from "../../components/Admin/LeagueModal";
 
@@ -25,7 +24,15 @@ function Leagues() {
     }
   };
 
+  // useEffect(() => {
+  //   if (authToken){
+  //     getData()
+  //   }
+  // }, []);
+
   useEffect(() => getData, []);
+
+  //console.log(leagues);
 
   //Not finished leagues
   const unfinishedLeagues = leagues?.filter((league) => !league.isfinished);

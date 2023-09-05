@@ -58,6 +58,10 @@
     @include pillStyle($font-size-sm, white);
     @include flex-row(0.5rem);
     padding: 0 $base-padding;
+
+    &:hover {
+      color: $color-olive;
+    }
   }
 
   @include breakpoint-md {

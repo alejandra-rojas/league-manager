@@ -7,9 +7,9 @@ import { useTitle } from "../App";
 
 function AdminLayout() {
   useTitle("Admin Section");
-
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const authToken = cookies.AuthToken;
+  console.log(authToken);
 
   return (
     <>

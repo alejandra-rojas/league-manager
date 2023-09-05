@@ -39,7 +39,7 @@ function MatchReportEntry({
           aria-label="Edit Match Details"
           disabled={match.withdrawal}
         >
-          Edit
+          match report
         </button>
       </li>
 

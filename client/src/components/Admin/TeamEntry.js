@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 function TeamEntry({ team, getTeamsData }) {
   const [showTeamsModal, setShowTeamsModal] = useState(false);
 
-  console.log(team);
+  //console.log(team);
 
   return (
     <>

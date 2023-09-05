@@ -26,7 +26,7 @@ function Players() {
   };
 
   useEffect(() => getPlayersData, []);
-  console.log(players);
+  //console.log(players);
 
   return (
     <>

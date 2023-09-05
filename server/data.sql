@@ -5,6 +5,7 @@ CREATE TABLE admin_users (
     hashed_password VARCHAR(255));
 
 INSERT INTO admin_users  (admin_email, hashed_password) VALUES($1, $2)
+
 INSERT INTO leagues(league_name, starting_date, midway_point, end_date) VALUES ('WOMENS DOUBLES', '2023-08-01', '2023-08-15', '2023-08-29');
 
 

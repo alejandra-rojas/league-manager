@@ -25,7 +25,7 @@ function Teams() {
   };
 
   useEffect(() => getTeamsData, []);
-  console.log(teams);
+  //console.log(teams);
 
   return (
     <>
