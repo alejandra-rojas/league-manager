@@ -6,6 +6,7 @@
     "node": "18.x"
   },
   "scripts": {
+    "start": "cd server && npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "if-env TYPE=server && (cd server && npm install) || (cd client & npm install)",
     "server": "cd server && npm start",
