@@ -631,6 +631,45 @@ app.get("/matches", async (req, res) => {
   }
 });
 
+// GET ALL CHALLENGER MATCHES
+app.get("/challengers", async (req, res) => {
+  try {
+    const matches = await pool.query("SELECT * FROM challenger_matches");
+    res.json(matches.rows);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+// GET CHALLENGER MATCHES FOR LEAGUE
+app.get("/league/:id/challengers", async (req, res) => {
+  const leagueId = req.params.id;
+
+  if (!/^\d+$/.test(leagueId)) {
+    return res.status(400).json({ error: "Invalid league ID" });
+  }
+
+  try {
+    const challengers = await pool.query(
+      "SELECT * FROM challenger_matches WHERE league_id = $1",
+      [leagueId]
+    );
+
+    if (challengers.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No challenger matches found for this league ID" });
+    }
+
+    res.json(challengers.rows);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving matches." });
+  }
+});
+
 // GET MATCHES FROM EVENT
 app.get("/events/:id/matches", async (req, res) => {
   const event_id = req.params.id;
