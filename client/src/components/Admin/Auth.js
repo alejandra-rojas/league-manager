@@ -82,17 +82,16 @@ function Auth() {
               autoComplete="password"
             />
           </div>
-          {/* {!isLogIn && (
-          <>
-            <label htmlFor="confirm-password">Confirm Password:</label>
-            <input
-              type="password"
-              placeholder="confirm password"
-              className="my-3 mx-0 py-3 px-4 rounded-xl border border-gray-200"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </>
-        )} */}
+          {!isLogIn && (
+            <div className="form-input">
+              <label htmlFor="confirm-password">Confirm Password:</label>
+              <input
+                type="password"
+                placeholder="Confirm password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+          )}
           {error && <p className="error">{error}</p>}
           <button
             type="submit"
@@ -105,28 +104,26 @@ function Auth() {
           </button>
         </form>
 
-        {/*       <div className="flex justify-end">
-        {isLogIn && (
-          <button
-            className={` hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-l `}
-            onClick={() => viewLogin(false)}
-            aria-label="Switch to Amin Sign Up"
-            aria-pressed={!isLogIn}
-          >
-            Sign Up
-          </button>
-        )}
-        {!isLogIn && (
-          <button
-            className={` hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 `}
-            onClick={() => viewLogin(true)}
-            aria-label="Switch to Admin Login"
-            aria-pressed={isLogIn}
-          >
-            Admin Login
-          </button>
-        )}
-      </div> */}
+        <div className="change-auth">
+          {isLogIn && (
+            <button
+              onClick={() => viewLogin(false)}
+              aria-label="Switch to Amin Sign Up"
+              aria-pressed={!isLogIn}
+            >
+              Sign Up
+            </button>
+          )}
+          {!isLogIn && (
+            <button
+              onClick={() => viewLogin(true)}
+              aria-label="Switch to Admin Login"
+              aria-pressed={isLogIn}
+            >
+              Admin Login
+            </button>
+          )}
+        </div>
       </div>
     </section>
   );
