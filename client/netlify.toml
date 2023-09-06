@@ -1,4 +1,4 @@
 [[redirects]]
   from = "/*"
-  to = "/"
+  to = "https://tleague-server-922655bfefc8.herokuapp.com/"
   status = 200
