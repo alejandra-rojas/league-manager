@@ -12,7 +12,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { ArrowsPointingInIcon } from "@heroicons/react/24/outline";
 
-function EventEntry({ gevent, getEventsData }) {
+function EventEntry({ league, gevent, getEventsData }) {
   const [eventTeams, setEventTeams] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
@@ -21,6 +21,7 @@ function EventEntry({ gevent, getEventsData }) {
   // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
+  const [challengerMatchesData, setChallengerMatchesData] = useState(null);
   const [selectedTeamWId, setSelectedTeamWId] = useState("");
   const [error, setError] = useState(null);
 
@@ -215,6 +216,24 @@ function EventEntry({ gevent, getEventsData }) {
       console.error(error);
     }
   };
+
+  console.log(eventTeams);
+
+  const getChallengersData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/league/${league.id}/challengers`
+      );
+      const json = await response.json();
+      setChallengerMatchesData(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => getChallengersData, []);
+
+  console.log(challengerMatchesData);
 
   return (
     <>
@@ -476,6 +495,35 @@ function EventEntry({ gevent, getEventsData }) {
                       <PlusIcon width={25} />
                       <h6>Add a challenger match</h6>
                     </button>
+
+                    {Array.isArray(challengerMatchesData) &&
+                    challengerMatchesData.length > 0 ? (
+                      <div>
+                        <p>Challenger matches</p>
+                        <ul>
+                          {challengerMatchesData.map((match, index) => (
+                            <li
+                              key={match.match_id}
+                              className={
+                                index % 2 === 0 ? "even-row" : "odd-row"
+                              }
+                            >
+                              <p>
+                                <span>{match.team1_id}</span>{" "}
+                                <span>VS {match.team2_id}</span>
+                              </p>
+
+                              <p>Winner: {match.winner_id}</p>
+                              <p>Score: {match.winner_score}</p>
+                              <p>Date: {match.match_date}</p>
+                              <p>Team bonus: {match.team1_bonus}</p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : (
+                      <p>No challenger matches available</p>
+                    )}
                   </div>
 
                   <div id="team-withdrawal-form">
