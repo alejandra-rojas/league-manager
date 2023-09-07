@@ -1,17 +1,22 @@
 import "../../styles/Admin/Leagues.scss";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { PlusIcon } from "@heroicons/react/24/solid";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import LeagueModal from "./LeagueModal";
 import EventModal from "./EventModal";
 import EventEntry from "./EventEntry";
+import ChallengerMatchModal from "./ChallengerMatchReportModal";
 
 export default function LeagueEntry({ league, getData }) {
   const [showModal, setShowModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [showChallengerModal, setShowChallengerModal] = useState(false);
+
   const lowercaseTitle = league.league_name.toLowerCase();
   const [leagueEvents, setLeagueEvents] = useState(null);
   //console.log(league);
+  const [challengerMatchesData, setChallengerMatchesData] = useState([]);
 
   const isFinished = league.isfinished;
   const startDate = new Date(league.starting_date);
@@ -22,6 +27,7 @@ export default function LeagueEntry({ league, getData }) {
   registrationCutoff.setDate(startDate.getDate() - 2); // Two days before the start
   let daysLeft;
   let message;
+  const hasStarted = today >= startDate;
 
   function formatDateToYYYYMMDD(date) {
     const year = date.getFullYear();
@@ -56,6 +62,7 @@ export default function LeagueEntry({ league, getData }) {
       "Once all the results are entered, set the league to finished via the edit league modal.";
   }
 
+  //Getting the events for each particular league
   const getEventsData = async () => {
     try {
       const response = await fetch(
@@ -68,6 +75,20 @@ export default function LeagueEntry({ league, getData }) {
     }
   };
   useEffect(() => getEventsData, []);
+
+  //Getting all challenger matches for the league
+  const getChallengersData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVERURL}/leagues/${league.id}/challengers`
+      );
+      const json = await response.json();
+      setChallengerMatchesData(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => getChallengersData, []);
 
   return (
     <li className="league-single-entry">
@@ -129,11 +150,33 @@ export default function LeagueEntry({ league, getData }) {
             <ul>
               {leagueEvents.map((gevent) => (
                 <li key={gevent.event_id}>
-                  <EventEntry gevent={gevent} getEventsData={getEventsData} />
+                  <EventEntry
+                    league={league}
+                    gevent={gevent}
+                    getEventsData={getEventsData}
+                    getChallengersData={getChallengersData}
+                    challengerMatchesData={challengerMatchesData}
+                  />
                 </li>
               ))}
             </ul>
           </div>
+        )}
+        {!showChallengerModal && hasStarted && (
+          <button
+            onClick={() => setShowChallengerModal(true)}
+            className="add-challenger"
+          >
+            <PlusIcon width={25} />
+            <h6>Add a challenger match</h6>
+          </button>
+        )}
+        {showChallengerModal && (
+          <ChallengerMatchModal
+            league={league}
+            setShowChallengerModal={setShowChallengerModal}
+            getChallengersData={getChallengersData}
+          />
         )}
         {showEventModal && (
           <EventModal
@@ -144,7 +187,7 @@ export default function LeagueEntry({ league, getData }) {
             leagueEvents={leagueEvents}
           />
         )}
-        {!isFinished && daysLeft >= 1 && (
+        {!hasStarted && (
           <button
             onClick={() => setShowEventModal(true)}
             aria-label="Opel Modal to add an event to this league"
