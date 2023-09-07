@@ -51,8 +51,8 @@
 
 //LEAGUE ENTRY
 #current-leagues-data {
-  ul {
-    @include flex-col($base-padding);
+  > ul {
+    @include flex-col($base-padding2X);
 
     .text-highlight {
       @include flex-row($base-padding);
@@ -110,6 +110,12 @@
   #events-section {
     padding-top: $base-padding2X;
     @include flex-col;
+
+    .event-container {
+      ul {
+        @include flex-col(0.5rem);
+      }
+    }
 
     #event-modal {
       &.new {
@@ -214,6 +220,13 @@
       align-self: flex-start;
 
       flex-basis: 0;
+    }
+
+    button {
+      &.add-challenger {
+        @include pillStyle;
+        align-self: flex-start;
+      }
     }
   }
 }
