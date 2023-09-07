@@ -11,8 +11,16 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { ArrowsPointingInIcon } from "@heroicons/react/24/outline";
+import ChallengerReportEntry from "./ChallengerReportEntry";
 
-function EventEntry({ league, gevent, getEventsData }) {
+function EventEntry({
+  league,
+  gevent,
+  getEventsData,
+  getChallengersData,
+  challengerMatchesData,
+}) {
+  //console.log(gevent);
   const [eventTeams, setEventTeams] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTeams, setShowTeams] = useState(false);
@@ -21,7 +29,6 @@ function EventEntry({ league, gevent, getEventsData }) {
   // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
-  const [challengerMatchesData, setChallengerMatchesData] = useState(null);
   const [selectedTeamWId, setSelectedTeamWId] = useState("");
   const [error, setError] = useState(null);
 
@@ -34,8 +41,6 @@ function EventEntry({ league, gevent, getEventsData }) {
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
-
-  //console.log(gevent);
 
   function calculateCombinations(n) {
     return n - 1;
@@ -217,24 +222,26 @@ function EventEntry({ league, gevent, getEventsData }) {
     }
   };
 
-  console.log(eventTeams);
+  console.log("Participant team objects:", eventTeams);
 
-  const getChallengersData = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVERURL}/league/${league.id}/challengers`
+  const teamIds = eventTeams ? eventTeams.map((team) => team.team_id) : [];
+  console.log("Participant team ids:", teamIds);
+
+  console.log("Challenger matches:", challengerMatchesData);
+
+  let filteredChallengerMatches = [];
+
+  if (
+    Array.isArray(challengerMatchesData) &&
+    challengerMatchesData.length > 0
+  ) {
+    filteredChallengerMatches = challengerMatchesData.filter((match) => {
+      // Check if either team1_id or team2_id is included in teamIds
+      return (
+        teamIds.includes(match.team1_id) || teamIds.includes(match.team2_id)
       );
-      const json = await response.json();
-      setChallengerMatchesData(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => getChallengersData, []);
-
-  console.log(challengerMatchesData);
-
+    });
+  }
   return (
     <>
       <section id="event-entry">
@@ -490,41 +497,35 @@ function EventEntry({ league, gevent, getEventsData }) {
                     getEventTeamsData={getEventTeamsData}
                   />
 
-                  <div id="challenger-matches">
-                    <button>
-                      <PlusIcon width={25} />
-                      <h6>Add a challenger match</h6>
-                    </button>
-
-                    {Array.isArray(challengerMatchesData) &&
-                    challengerMatchesData.length > 0 ? (
+                  {filteredChallengerMatches.length > 0 && (
+                    <div id="challenger-matches">
                       <div>
-                        <p>Challenger matches</p>
-                        <ul>
-                          {challengerMatchesData.map((match, index) => (
-                            <li
-                              key={match.match_id}
-                              className={
-                                index % 2 === 0 ? "even-row" : "odd-row"
-                              }
-                            >
-                              <p>
-                                <span>{match.team1_id}</span>{" "}
-                                <span>VS {match.team2_id}</span>
-                              </p>
-
-                              <p>Winner: {match.winner_id}</p>
-                              <p>Score: {match.winner_score}</p>
-                              <p>Date: {match.match_date}</p>
-                              <p>Team bonus: {match.team1_bonus}</p>
+                        <h6>Challenger matches</h6>
+                        <section id="challengers-reports-table">
+                          <ul>
+                            <li className="md-header">
+                              <span>P1</span>
+                              <span>P2</span>
+                              <span>Match Date</span>
+                              <span>Finished</span>
+                              <span>Winner Score</span>
+                              <span>P1 bonus</span>
+                              <span>P2 bonus</span>
+                              <span>Action</span>
                             </li>
-                          ))}
-                        </ul>
+                            {filteredChallengerMatches?.map((match, index) => (
+                              <ChallengerReportEntry
+                                index={index}
+                                key={match.match_id}
+                                match={match}
+                                getChallengersData={getChallengersData}
+                              />
+                            ))}
+                          </ul>
+                        </section>
                       </div>
-                    ) : (
-                      <p>No challenger matches available</p>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div id="team-withdrawal-form">
                     <div>
