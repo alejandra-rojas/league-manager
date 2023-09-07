@@ -642,7 +642,7 @@ app.get("/challengers", async (req, res) => {
 });
 
 // GET CHALLENGER MATCHES FOR LEAGUE
-app.get("/league/:id/challengers", async (req, res) => {
+app.get("/leagues/:id/challengers", async (req, res) => {
   const leagueId = req.params.id;
 
   if (!/^\d+$/.test(leagueId)) {
@@ -651,7 +651,21 @@ app.get("/league/:id/challengers", async (req, res) => {
 
   try {
     const challengers = await pool.query(
-      "SELECT * FROM challenger_matches WHERE league_id = $1",
+      "SELECT cm.*, " +
+        "t1.player1_id AS player1_id_1, t1.player2_id AS player2_id_1, " +
+        "t2.player1_id AS player1_id_2, t2.player2_id AS player2_id_2, " +
+        "p1.player_firstname AS player1_firstname_1, p1.player_lastname AS player1_lastname_1, " +
+        "p2.player_firstname AS player2_firstname_1, p2.player_lastname AS player2_lastname_1, " +
+        "p3.player_firstname AS player1_firstname_2, p3.player_lastname AS player1_lastname_2, " +
+        "p4.player_firstname AS player2_firstname_2, p4.player_lastname AS player2_lastname_2 " +
+        "FROM challenger_matches cm " +
+        "INNER JOIN teams t1 ON cm.team1_id = t1.team_id " +
+        "INNER JOIN teams t2 ON cm.team2_id = t2.team_id " +
+        "INNER JOIN players p1 ON t1.player1_id = p1.player_id " +
+        "INNER JOIN players p2 ON t1.player2_id = p2.player_id " +
+        "INNER JOIN players p3 ON t2.player1_id = p3.player_id " +
+        "INNER JOIN players p4 ON t2.player2_id = p4.player_id " +
+        "WHERE cm.league_id = $1",
       [leagueId]
     );
 
@@ -667,6 +681,73 @@ app.get("/league/:id/challengers", async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while retrieving matches." });
+  }
+});
+
+//CREATE NEW CHALLENGER MATCH
+app.post("/leagues/:id/challengers", async (req, res) => {
+  const {
+    team1_id,
+    team2_id,
+    isfinished,
+    match_date,
+    winner_id,
+    winner_score,
+    team1_bonus,
+    team2_bonus,
+  } = req.body;
+  console.log(req.body);
+  const league_id = req.params.id; // Extract the league ID from the request URL
+  try {
+    const newChallenge = await pool.query(
+      "INSERT INTO challenger_matches(league_id, team1_id, team2_id, isfinished, match_date, winner_id, winner_score, team1_bonus, team2_bonus) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+      [
+        league_id,
+        team1_id,
+        team2_id,
+        isfinished,
+        match_date,
+        winner_id,
+        winner_score,
+        team1_bonus,
+        team2_bonus,
+      ]
+    );
+    res.json(newChallenge);
+  } catch (error) {
+    console.log("NEW CHALLENGER ERROR");
+    console.error(error);
+  }
+});
+
+//UPDATE CHALLENGER MATCH
+app.put("/challengers/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    isfinished,
+    match_date,
+    winner_id,
+    winner_score,
+    team1_bonus,
+    team2_bonus,
+  } = req.body;
+  try {
+    const editChallengerMatch = await pool.query(
+      "UPDATE challenger_matches SET isfinished= $1,  match_date = $2, winner_id = $3,  winner_score = $4, team1_bonus = $5, team2_bonus = $6 WHERE match_id = $7;",
+      [
+        isfinished,
+        match_date,
+        winner_id,
+        winner_score,
+        team1_bonus,
+        team2_bonus,
+        id,
+      ]
+    );
+    res.json(editChallengerMatch);
+  } catch (error) {
+    console.log("UPDATE ERROR");
+    console.error(error);
   }
 });
 
