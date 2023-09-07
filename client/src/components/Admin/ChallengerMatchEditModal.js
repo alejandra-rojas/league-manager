@@ -6,7 +6,6 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
 function ChallengerMatchEditModal({
-  mode,
   match,
   getChallengersData,
   setShowMatchReportModal,
@@ -188,33 +187,6 @@ function ChallengerMatchEditModal({
           </form>
         </div>
       </div>
-
-      {/* <div className="container">
-        <div className="control">
-          <h3>{mode} challenger match</h3>
-          <button
-            aria-label="Close new or edit challenger modal"
-            onClick={() => {
-              setShowChallengerModal(false);
-            }}
-          >
-            <XMarkIcon width={25} />
-            <span>close</span>
-          </button>
-        </div>
-        <div className="players">
-          <h6>
-            T1: {match.team1_player1_firstname} {match.team1_player1_lastname} &{" "}
-            {match.team1_player2_firstname} {match.team1_player2_lastname}
-          </h6>
-          <h6>
-            T2: {match.team2_player1_firstname} {match.team2_player1_lastname} &{" "}
-            {match.team2_player2_firstname} {match.team2_player2_lastname}
-          </h6>
-        </div>
-
-        
-      </div> */}
     </section>
   );
 }
