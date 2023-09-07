@@ -454,14 +454,28 @@
     }
 
     #challenger-matches {
-      button {
-        margin: 0 auto;
-        @include pillStyle(1rem, $color-olive);
-        @include flex-row(0.25rem);
-        opacity: 50%;
+      h6 {
+        font-weight: bold;
+        text-align: center;
+        border-bottom: solid 1px $color-darkgrey;
       }
 
-      @include breakpoint-md {
+      ul {
+        @include flex-col(0);
+
+        .md-header {
+          font-weight: 600;
+          display: none;
+        }
+
+        @include breakpoint-md {
+          .md-header {
+            display: grid;
+            grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr 2fr 2fr;
+            column-gap: $base-padding;
+            align-items: center;
+          }
+        }
       }
     }
 
