@@ -9,6 +9,18 @@ function StandingsReport({
 }) {
   const [showMatchReportModal, setShowMatchReportModal] = useState(false);
 
+  //Sorting matches by match data and isFinished condition
+  const sortedEventMatchesData = eventMatchesData.slice().sort((a, b) => {
+    const conditionA = a.isfinished ? 0 : a.withdrawal ? 2 : 1;
+    const conditionB = b.isfinished ? 0 : b.withdrawal ? 2 : 1;
+
+    if (conditionA !== conditionB) {
+      return conditionA - conditionB;
+    }
+
+    return new Date(a.match_date) - new Date(b.match_date);
+  });
+
   return (
     <section id="match-reports-table">
       <ul>
@@ -22,7 +34,7 @@ function StandingsReport({
           <span>Winner Score</span>
           <span>Action</span>
         </li>
-        {eventMatchesData?.map((match, index) => (
+        {sortedEventMatchesData?.map((match, index) => (
           <MatchReportEntry
             index={index}
             key={match.match_id}
