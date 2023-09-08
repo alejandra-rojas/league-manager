@@ -592,18 +592,19 @@ app.put("/events/:id/teams/:tid", async (req, res) => {
   const { id, tid } = req.params;
 
   try {
-    // Update matches for withdrawn team
+    // Update matches for withdrawn team in the specific event
     await pool.query(
       "UPDATE matches m " +
         "SET team1_sets = 0, team2_sets = 0, withdrawal = true " +
         "FROM event_teams et " +
-        "WHERE m.event_id = et.event_id " +
+        "WHERE m.event_id = $1 " +
         "AND (m.team1_id = et.team_id OR m.team2_id = et.team_id) " +
-        "AND et.team_id = $1",
-      [tid]
+        "AND et.event_id = $1 " +
+        "AND et.team_id = $2",
+      [id, tid]
     );
 
-    // Update event_teams table to mark team as withdrawn
+    // Update event_teams table to mark team as withdrawn for that specific event
     await pool.query(
       "UPDATE event_teams " +
         "SET team_withdrawn = true " +
