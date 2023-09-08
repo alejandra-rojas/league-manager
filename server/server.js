@@ -526,16 +526,13 @@ app.get("/events/:id/teams", async (req, res) => {
         team.total_matches > 0 &&
         team.completed_notwithdrawnmatches >= team.notwithdrawn_totalmatches
     );
+
     for (const team of teamsToUpdate) {
-      if (team.team_withdrawn) {
-        // If team is withdrawn, set all_bonus to 0
-        await pool.query(
-          "UPDATE event_teams SET all_bonus = 0 WHERE event_id = $1 AND team_id = $2",
-          [eventId, team.team_id]
-        );
-        team.all_bonus = 0;
-      } else {
-        // If team is not withdrawn
+      if (
+        !team.team_withdrawn &&
+        team.completed_notwithdrawnmatches === team.notwithdrawn_totalmatches
+      ) {
+        // If team is not withdrawn and has completed all non-withdrawn matches
         await pool.query(
           "UPDATE event_teams SET all_bonus = 1 WHERE event_id = $1 AND team_id = $2",
           [eventId, team.team_id]
