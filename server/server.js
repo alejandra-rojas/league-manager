@@ -592,6 +592,33 @@ app.put("/events/:id/teams/:tid", async (req, res) => {
   const { id, tid } = req.params;
 
   try {
+    // Check if the withdrawn team was the last opponent for any other team
+    const lastOpponentQuery = `
+      SELECT et.team_id
+      FROM event_teams et
+      WHERE et.event_id = $1
+        AND NOT et.team_withdrawn
+        AND et.team_id != $2
+        AND et.team_id NOT IN (
+          SELECT DISTINCT CASE WHEN m.team1_id = $2 THEN m.team2_id ELSE m.team1_id END
+          FROM matches m
+          WHERE m.event_id = $1
+            AND NOT m.withdrawal
+        )
+    `;
+    const lastOpponentResult = await pool.query(lastOpponentQuery, [id, tid]);
+
+    if (lastOpponentResult.rows.length > 0) {
+      // if the withdrawn team was the last opponent for other team(s)
+      // update those team(s) as if they have completed all non-withdrawn matches
+      for (const row of lastOpponentResult.rows) {
+        await pool.query(
+          "UPDATE event_teams SET completed_notwithdrawnmatches = notwithdrawn_totalmatches WHERE event_id = $1 AND team_id = $2",
+          [id, row.team_id]
+        );
+      }
+    }
+
     // Update matches for withdrawn team in the specific event
     await pool.query(
       "UPDATE matches m " +
@@ -599,12 +626,12 @@ app.put("/events/:id/teams/:tid", async (req, res) => {
         "FROM event_teams et " +
         "WHERE m.event_id = $1 " +
         "AND (m.team1_id = et.team_id OR m.team2_id = et.team_id) " +
-        "AND et.event_id = $1 " +
+        "AND et.event_id = $1 " + // Add this condition to filter by event_id
         "AND et.team_id = $2",
       [id, tid]
     );
 
-    // Update event_teams table to mark team as withdrawn for that specific event
+    // Update event_teams table to mark team as withdrawn for the specific event
     await pool.query(
       "UPDATE event_teams " +
         "SET team_withdrawn = true " +
