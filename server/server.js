@@ -487,13 +487,15 @@ app.get("/events/:id/teams", async (req, res) => {
 
     // Calculate total_points based on team_sets_won * 2 + mid_bonus + all_bonus + challenger_bonus
     for (const row of result.rows) {
-      // Calculate team_sets_won, mid_bonus, and all_bonus
+      // Calculate team_sets_won, mid_bonus, all_bonus, and challenger_bonus
       const teamSetsWon = parseInt(row.team_sets_won);
       const midBonus = parseInt(row.mid_bonus);
       const allBonus = parseInt(row.all_bonus);
+      const challengerBonus = parseInt(row.challenger_bonus);
 
-      // Calculate total_points based on the formula: team_sets_won * 2 + mid_bonus + all_bonus
-      const totalPoints = teamSetsWon * 2 + midBonus + allBonus;
+      // Calculate total_points based on the formula: team_sets_won * 2 + mid_bonus + all_bonus + challenger_bonus
+      const totalPoints =
+        teamSetsWon * 2 + midBonus + allBonus + challengerBonus;
 
       // Update total_points in the event_teams table
       await pool.query(
