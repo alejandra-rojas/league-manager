@@ -721,15 +721,39 @@ app.post("/leagues/:id/challengers", async (req, res) => {
     team1_bonus,
     team2_bonus,
   } = req.body;
-  console.log(req.body);
+
   const league_id = req.params.id; // Extract the league ID from the request URL
+
   try {
-    const newChallenge = await pool.query(
-      "INSERT INTO challenger_matches(league_id, team1_id, team2_id, isfinished, match_date, winner_id, winner_score, team1_bonus, team2_bonus) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+    // Retrieve the event_id for both teams
+    const eventQuery = `
+      SELECT et.event_id, et.team_id
+      FROM event_teams et
+      JOIN events e ON et.event_id = e.event_id
+      WHERE e.league_id = $1 AND et.team_id = ANY($2)
+    `;
+    const { rows } = await pool.query(eventQuery, [
+      league_id,
+      [team1_id, team2_id],
+    ]);
+
+    // Extract the event_id values for team1_id and team2_id
+    const team1_event_id = rows.find(
+      (row) => row.team_id === team1_id
+    )?.event_id;
+    const team2_event_id = rows.find(
+      (row) => row.team_id === team2_id
+    )?.event_id;
+
+    // Insert the challenger match into the challenger_matches table
+    await pool.query(
+      "INSERT INTO challenger_matches(league_id, team1_id, team2_id, team1_event_id, team2_event_id, isfinished, match_date, winner_id, winner_score, team1_bonus, team2_bonus) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
       [
         league_id,
         team1_id,
         team2_id,
+        team1_event_id, // Assign event_id for team1
+        team2_event_id, // Assign event_id for team2
         isfinished,
         match_date,
         winner_id,
@@ -738,10 +762,47 @@ app.post("/leagues/:id/challengers", async (req, res) => {
         team2_bonus,
       ]
     );
-    res.json(newChallenge);
+
+    // Calculate total bonuses for team1 and team2
+    const team1TotalBonusQuery = `
+      SELECT SUM(team1_bonus) AS total_bonus
+      FROM challenger_matches
+      WHERE team1_id = $1 AND league_id = $2 AND isfinished = true
+    `;
+    const team2TotalBonusQuery = `
+      SELECT SUM(team2_bonus) AS total_bonus
+      FROM challenger_matches
+      WHERE team2_id = $1 AND league_id = $2 AND isfinished = true
+    `;
+
+    const team1TotalBonusResult = await pool.query(team1TotalBonusQuery, [
+      team1_id,
+      league_id,
+    ]);
+    const team2TotalBonusResult = await pool.query(team2TotalBonusQuery, [
+      team2_id,
+      league_id,
+    ]);
+
+    const team1TotalBonus = team1TotalBonusResult.rows[0]?.total_bonus || 0;
+    const team2TotalBonus = team2TotalBonusResult.rows[0]?.total_bonus || 0;
+
+    // Update the challenger_bonus in event_teams for both teams
+    await pool.query(
+      "UPDATE event_teams SET challenger_bonus = $1 WHERE event_id = $2 AND team_id = $3",
+      [team1TotalBonus, team1_event_id, team1_id]
+    );
+
+    await pool.query(
+      "UPDATE event_teams SET challenger_bonus = $1 WHERE event_id = $2 AND team_id = $3",
+      [team2TotalBonus, team2_event_id, team2_id]
+    );
+
+    res.json({ message: "Challenger match results updated successfully" });
   } catch (error) {
-    console.log("NEW CHALLENGER ERROR");
+    console.log("CHALLENGER MATCH ERROR");
     console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -756,7 +817,21 @@ app.put("/challengers/:id", async (req, res) => {
     team1_bonus,
     team2_bonus,
   } = req.body;
+
   try {
+    // Retrieve the existing team1_bonus and team2_bonus
+    const existingBonus = await pool.query(
+      "SELECT team1_bonus, team2_bonus, team1_id, team2_id, league_id FROM challenger_matches WHERE match_id = $1",
+      [id]
+    );
+
+    const existingTeam1Bonus = existingBonus.rows[0].team1_bonus;
+    const existingTeam2Bonus = existingBonus.rows[0].team2_bonus;
+    const team1_id = existingBonus.rows[0].team1_id;
+    const team2_id = existingBonus.rows[0].team2_id;
+    const league_id = existingBonus.rows[0].league_id;
+
+    // Update the challenger match
     const editChallengerMatch = await pool.query(
       "UPDATE challenger_matches SET isfinished= $1,  match_date = $2, winner_id = $3,  winner_score = $4, team1_bonus = $5, team2_bonus = $6 WHERE match_id = $7;",
       [
@@ -769,6 +844,66 @@ app.put("/challengers/:id", async (req, res) => {
         id,
       ]
     );
+
+    // Check if team1_bonus or team2_bonus has changed
+    if (
+      team1_bonus !== existingTeam1Bonus ||
+      team2_bonus !== existingTeam2Bonus
+    ) {
+      // Retrieve the event_id for both teams
+      const eventQuery = `
+        SELECT et.event_id 
+        FROM event_teams et
+        JOIN events e ON et.event_id = e.event_id
+        WHERE e.league_id = $1 AND et.team_id IN ($2, $3)
+      `;
+      const eventRows = await pool.query(eventQuery, [
+        league_id,
+        team1_id,
+        team2_id,
+      ]);
+
+      // Calculate total bonuses for team1 and team2
+      const team1TotalBonusQuery = `
+        SELECT SUM(team1_bonus) AS total_bonus
+        FROM challenger_matches
+        WHERE team1_id = $1 AND league_id = $2 AND isfinished = true
+      `;
+      const team2TotalBonusQuery = `
+        SELECT SUM(team2_bonus) AS total_bonus
+        FROM challenger_matches
+        WHERE team2_id = $1 AND league_id = $2 AND isfinished = true
+      `;
+
+      const team1TotalBonusResult = await pool.query(team1TotalBonusQuery, [
+        team1_id,
+        league_id,
+      ]);
+      const team2TotalBonusResult = await pool.query(team2TotalBonusQuery, [
+        team2_id,
+        league_id,
+      ]);
+
+      const team1TotalBonus = team1TotalBonusResult.rows[0]?.total_bonus || 0;
+      const team2TotalBonus = team2TotalBonusResult.rows[0]?.total_bonus || 0;
+
+      // Update the challenger_bonus in event_teams for both teams in their respective events
+      for (const row of eventRows.rows) {
+        const event_id = row.event_id;
+
+        // Update the challenger_bonus for each team in their respective event
+        await pool.query(
+          "UPDATE event_teams SET challenger_bonus = $1 WHERE event_id = $2 AND team_id = $3",
+          [team1TotalBonus, event_id, team1_id]
+        );
+
+        await pool.query(
+          "UPDATE event_teams SET challenger_bonus = $1 WHERE event_id = $2 AND team_id = $3",
+          [team2TotalBonus, event_id, team2_id]
+        );
+      }
+    }
+
     res.json(editChallengerMatch);
   } catch (error) {
     console.log("UPDATE ERROR");
