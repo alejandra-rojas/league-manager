@@ -26,7 +26,6 @@ function EventEntry({
   const [showTeams, setShowTeams] = useState(false);
   const [searchString, setSearchString] = useState("");
   const [searchPerformed, setSearchPerformed] = useState(false);
-  // const [players, setPlayers] = useState([]);
   const [teams, setTeams] = useState([]);
   const [eventMatchesData, setEventMatchesData] = useState(null);
   const [selectedTeamWId, setSelectedTeamWId] = useState("");
@@ -59,21 +58,6 @@ function EventEntry({
   };
   useEffect(() => getEventTeamsData, []);
   //console.log(eventTeams);
-
-  /*   const onSubmitForm = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVERURL}/searchplayers/?name=${name}`
-      );
-
-      const parseResponse = await response.json();
-
-      setPlayers(parseResponse);
-    } catch (err) {
-      console.error(err.message);
-    }
-  }; */
 
   const onSubmitTeamsForm = async (e) => {
     e.preventDefault();
@@ -186,6 +170,7 @@ function EventEntry({
     }
   };
 
+  //TABLE WITH STADISTICS
   const getEventMatchesData = async () => {
     try {
       const response = await fetch(
@@ -198,7 +183,6 @@ function EventEntry({
     }
   };
   useEffect(() => getEventMatchesData, []);
-  //console.log(eventMatchesData);
 
   const withdrawTeam = async (e, team_id) => {
     e.preventDefault();
@@ -499,7 +483,7 @@ function EventEntry({
 
                   {filteredChallengerMatches.length > 0 && (
                     <div id="challenger-matches">
-                      <div>
+                      <div className="standings-report">
                         <h6>Challenger matches</h6>
                         <section id="challengers-reports-table">
                           <ul>
@@ -519,6 +503,7 @@ function EventEntry({
                                 key={match.match_id}
                                 match={match}
                                 getChallengersData={getChallengersData}
+                                getEventTeamsData={getEventTeamsData}
                               />
                             ))}
                           </ul>
