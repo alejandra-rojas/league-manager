@@ -42,7 +42,6 @@ function ChallengerReportEntry({ index, match, getChallengersData }) {
 
       {showMatchReportModal && (
         <ChallengerMatchEditModal
-          mode={"edit"}
           match={match}
           setShowMatchReportModal={setShowMatchReportModal}
           getChallengersData={getChallengersData}
