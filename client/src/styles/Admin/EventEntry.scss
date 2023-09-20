@@ -226,8 +226,9 @@
             @include flex-col(0);
             font-size: $base-font-size;
             display: grid;
-            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 2fr;
             column-gap: $base-padding;
+            justify-items: center;
           }
         }
 
@@ -250,7 +251,7 @@
           .md-header {
             border-bottom: solid $base-border-thickness $color-olive;
             display: grid;
-            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+            grid-template-columns: 7fr 2fr 1fr 1fr 1fr 1fr 1fr 2fr;
           }
         }
 
@@ -358,6 +359,10 @@
           background-color: $color-highlight-yellow;
         }
 
+        li.withdrawn:hover {
+          background-color: $color-grey;
+        }
+
         .even-row {
           background-color: #f2f2f2;
         }
@@ -454,26 +459,31 @@
     }
 
     #challenger-matches {
-      h6 {
-        font-weight: bold;
-        text-align: center;
-        border-bottom: solid 1px $color-darkgrey;
-      }
-
-      ul {
-        @include flex-col(0);
-
-        .md-header {
+      .standings-report {
+        > h6 {
+          font-size: $font-size-sm;
           font-weight: 600;
-          display: none;
+          text-align: center;
+          text-transform: uppercase;
+          padding-bottom: 0.15rem;
+          border-bottom: solid $base-border-thickness $color-olive;
         }
 
-        @include breakpoint-md {
+        ul {
+          @include flex-col(0);
+
           .md-header {
-            display: grid;
-            grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr 2fr 2fr;
-            column-gap: $base-padding;
-            align-items: center;
+            font-weight: 600;
+            display: none;
+          }
+
+          @include breakpoint-md {
+            .md-header {
+              display: grid;
+              grid-template-columns: 3fr 3fr 2fr 1fr 2fr 2fr 2fr 2fr;
+              column-gap: $base-padding;
+              align-items: center;
+            }
           }
         }
       }
@@ -530,8 +540,10 @@
   }
 
   .withdrawn {
-    opacity: 50%;
-    color: gray;
+    opacity: 40%;
+    color: $color-error;
+    font-style: italic;
     text-decoration: line-through;
+    background-color: rgba(255, 0, 0, 0.088);
   }
 }

@@ -2,21 +2,19 @@
 
 .new-challenge {
   border: solid 1px $color-blue;
-  margin-top: $base-padding2X;
   border-radius: $base-border-radius;
   background-color: $color-modalgrey;
-  padding: 1rem;
+  padding: 1.5rem;
   @include flex-col(0);
   justify-content: left;
 
   .header {
     @include flex-row;
     justify-content: space-between;
-    margin: $base-padding 1rem;
     border-bottom: solid $base-border-thickness $color-olive;
 
     h4 {
-      font-size: $base-font-size;
+      font-size: $font-size-sm;
       font-weight: 600;
     }
 
@@ -78,6 +76,7 @@
       form {
         @include flex-col(0.25rem);
         align-items: center;
+        padding-top: $base-padding2X;
 
         @include breakpoint-md {
           @include flex-row(0.3rem);
@@ -161,8 +160,6 @@
     form {
       @include flex-col($base-padding2X);
       justify-content: flex-start;
-      padding: $base-padding 0;
-      margin: $base-padding 1rem;
 
       @include breakpoint-md {
         align-items: flex-start;
@@ -172,8 +169,30 @@
         @include flex-col($base-padding);
 
         .grouped-inputs {
-          @include flex-row($base-padding);
+          @include flex-col($base-padding);
           justify-content: flex-start;
+
+          .players {
+            padding: $base-padding 0;
+
+            h6 {
+              font-size: 1.25rem;
+            }
+          }
+        }
+
+        @include breakpoint-md {
+          .grouped-inputs {
+            @include flex-row($base-padding);
+            justify-content: flex-start;
+          }
+        }
+
+        .participants {
+          font-size: $base-font-size;
+          @include flex-col(0);
+          align-items: flex-start;
+          margin: $base-padding 0;
         }
 
         .input {
