@@ -244,6 +244,7 @@ function EventEntry({
               onClick={() => setShowTeams((prevState) => !prevState)}
               aria-expanded={showTeams}
               aria-controls="eventDetailsSection"
+              aria-label={showTeams ? "Collapse Teams" : "Expand Teams"}
             >
               {showTeams ? (
                 <ArrowsPointingInIcon width={25} />
@@ -430,11 +431,11 @@ function EventEntry({
                         <span>Participant</span>
                         <span>Played</span>
                         <span>Won</span>
-                        <span>Lost</span>
-                        <span>SW</span>
-                        <span>MB</span>
-                        <span>AB</span>
-                        <span>CB</span>
+                        {/* <span>Lost</span> */}
+                        <span>Sets</span>
+                        <span>MidB</span>
+                        <span>AllB</span>
+                        <span>ChB</span>
                         <span>Total Points</span>
                       </li>
                       {eventTeams
@@ -459,9 +460,9 @@ function EventEntry({
                               </span>
                               <span>{`${team.played_matches}/${totalMatches}`}</span>
                               <span className="hide">{team.team_wins}</span>
-                              <span className="hide">
+                              {/* <span className="hide">
                                 {team.played_matches - team.team_wins}
-                              </span>
+                              </span> */}
                               <span className="hide">{team.team_sets_won}</span>
                               <span className="hide">{team.mid_bonus}</span>
                               <span className="hide">{team.all_bonus}</span>
@@ -504,6 +505,7 @@ function EventEntry({
                                 match={match}
                                 getChallengersData={getChallengersData}
                                 getEventTeamsData={getEventTeamsData}
+                                getEventMatchesData={getEventMatchesData}
                               />
                             ))}
                           </ul>
