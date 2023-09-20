@@ -9,6 +9,8 @@ function ChallengerMatchEditModal({
   match,
   getChallengersData,
   setShowMatchReportModal,
+  getEventMatchesData,
+  getEventTeamsData,
 }) {
   const [error, setError] = useState(null);
 
@@ -50,6 +52,8 @@ function ChallengerMatchEditModal({
         setShowMatchReportModal(false);
         getChallengersData();
         toast.success(`Challenger match has been edited`);
+        getEventMatchesData();
+        getEventTeamsData();
       }
     } catch (error) {
       console.error(error);

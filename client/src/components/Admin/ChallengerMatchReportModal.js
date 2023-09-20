@@ -268,12 +268,12 @@ function ChallengerMatchModal({
           <div className="match-report">
             <form>
               <div className="all-inputs">
-                <div className="grouped-inputs">
+                <div className="grouped-inputs participants">
                   {selectedPlayers.map((player, index) => (
-                    <div className="input" key={index}>
-                      P{index + 1}: {player[`player1_firstname`]} &
+                    <h6 className="input" key={index}>
+                      P{index + 1}: {player[`player1_firstname`]} &{" "}
                       {player[`player2_firstname`]}
-                    </div>
+                    </h6>
                   ))}
                 </div>
 

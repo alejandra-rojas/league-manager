@@ -4,7 +4,13 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import ChallengerMatchEditModal from "./ChallengerMatchEditModal";
 
-function ChallengerReportEntry({ index, match, getChallengersData }) {
+function ChallengerReportEntry({
+  index,
+  match,
+  getChallengersData,
+  getEventMatchesData,
+  getEventTeamsData,
+}) {
   const [showMatchReportModal, setShowMatchReportModal] = useState(false);
 
   return (
@@ -45,6 +51,8 @@ function ChallengerReportEntry({ index, match, getChallengersData }) {
           match={match}
           setShowMatchReportModal={setShowMatchReportModal}
           getChallengersData={getChallengersData}
+          getEventTeamsData={getEventTeamsData}
+          getEventMatchesData={getEventMatchesData}
         />
       )}
     </>
