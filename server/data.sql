@@ -4,6 +4,8 @@ CREATE TABLE admin_users (
     admin_email VARCHAR (255) PRIMARY KEY,
     hashed_password VARCHAR(255));
 
+
+
 INSERT INTO admin_users  (admin_email, hashed_password) VALUES('alerojasmal@gmail.com', '$2b$10$GAJMhAmO7U5QcucFZuL29.3UXZPlHBKRVAbInqX2eTiQ/sNYiAQim');
 
 
@@ -37,45 +39,55 @@ CREATE TABLE teams (
 CREATE UNIQUE INDEX unique_player_order_idx ON teams (LEAST(player1_id, player2_id), GREATEST(player1_id, player2_id));
 
 CREATE TABLE events (
-    league_id INTEGER REFERENCES leagues(id) ON DELETE CASCADE,
+    league_id integer REFERENCES leagues(id) ON DELETE CASCADE REFERENCES leagues(id) ON DELETE CASCADE REFERENCES leagues(id) ON DELETE CASCADE,
     event_id SERIAL PRIMARY KEY,
-    event_name VARCHAR(40));
+    event_name character varying(40),
+    midway_matches integer
+);
 
 CREATE TABLE event_teams (
     event_id integer REFERENCES events(event_id) ON DELETE CASCADE,
     team_id integer REFERENCES teams(team_id),
-    team_points integer,
-    team_bonuspoints integer,
+    challenger_bonus integer DEFAULT 0,
+    all_bonus integer DEFAULT 0,
     team_withdrawn boolean DEFAULT false,
-    CONSTRAINT event_teams_pkey PRIMARY KEY (event_id, team_id));
+    mid_bonus integer DEFAULT 0,
+    set_points integer DEFAULT 0,
+    total_points integer DEFAULT 0,
+    CONSTRAINT event_teams_pkey PRIMARY KEY (event_id, team_id)
+);
 
 CREATE TABLE matches (
-    event_id INTEGER REFERENCES events(event_id),
+    event_id integer REFERENCES events(event_id) ON DELETE CASCADE,
     match_id SERIAL PRIMARY KEY,
-    team1_id INTEGER REFERENCES teams(team_id),
-    team2_id INTEGER REFERENCES teams(team_id),
-    isFinished BOOLEAN,
-    withdrawal BOOLEAN,
-    match_date DATE,
-    winner_id INTEGER REFERENCES teams(team_id),
-    winner_score VARCHAR(40),
-    team1_sets INTEGER,
-    team2_sets INTEGER);
+    team1_id integer REFERENCES teams(team_id),
+    team2_id integer REFERENCES teams(team_id),
+    isfinished boolean DEFAULT false,
+    withdrawal boolean DEFAULT false,
+    match_date character varying(10) DEFAULT NULL::character varying,
+    winner_id integer REFERENCES teams(team_id),
+    winner_score character varying(40) DEFAULT '""'::character varying,
+    team1_sets integer DEFAULT 0,
+    team2_sets integer DEFAULT 0,
+    bymidpoint boolean DEFAULT false
+);
 
 INSERT INTO matches (event_id, team1_id, team2_id) VALUES ($1, $2, $3)
 
 CREATE TABLE challenger_matches (
-    league_id INTEGER REFERENCES leagues(id),
+    league_id integer REFERENCES leagues(id),
     match_id SERIAL PRIMARY KEY,
-    team1_id INTEGER REFERENCES teams(team_id),
-    team2_id INTEGER REFERENCES teams(team_id),
-    isFinished BOOLEAN,
-    match_date DATE,
-    winner_id INTEGER REFERENCES teams(team_id),
-    winner_score VARCHAR(40),
-    team1_bonus INTEGER,
-    team2_bonus INTEGER);
-
+    team1_id integer REFERENCES teams(team_id),
+    team2_id integer REFERENCES teams(team_id),
+    isfinished boolean,
+    match_date character varying(10) DEFAULT NULL::character varying,
+    winner_id integer REFERENCES teams(team_id),
+    winner_score character varying(40),
+    team1_bonus integer,
+    team2_bonus integer,
+    team1_event_id integer REFERENCES events(event_id),
+    team2_event_id integer REFERENCES events(event_id)
+);
 
 
 DROP TABLE named;
