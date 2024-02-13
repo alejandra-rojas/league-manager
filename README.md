@@ -1,4 +1,4 @@
-Tennis League Manager Web App
+# Tennis League Manager Web App
 
 User-friendly web application designed to streamline the creation, organization, and management of the club tennis leagues. This tool simplifies the entire process, from setting up a league to adding players and effortlessly updating scores.
 
